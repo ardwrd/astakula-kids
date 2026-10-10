@@ -3,49 +3,36 @@ import type { CSSProperties } from 'react'
 import rawContent from './data/content.json'
 import audioManifest from './data/audioManifest.json'
 import audioRevision from './data/audioRevision.json'
-import type { LearningContent, World } from './data/types'
+import type { LearningContent, World, Question } from './data/types'
 
 const content = rawContent as unknown as LearningContent
 const audioKeys = new Set<string>(audioManifest.keys)
-const STORAGE_KEY = 'astakula-kids:progress:v1'
+const LEGACY_PROGRESS_KEY = 'astakula-kids:progress:v1'
 const AUDIO_RATE_STORAGE_KEY = audioRevision.id === 'legacy-v2'
   ? 'astakula-kids:audio-rate:v1'
   : 'astakula-kids:audio-rate:' + audioRevision.id
-type Progress = Record<string, string[]>
 type Feedback = 'correct' | 'retry' | null
 
-// Keep age-bucketed content internally as a gentle difficulty progression,
-// but never ask children to select an age or display ages in the interface.
-function questionsForWorld(world: World) {
-  return [...world.levels['3'], ...world.levels['5']]
+// Content is grouped by introductory/advanced difficulty internally.
+// Neither age groups nor completion percentages are shown to children.
+function shuffle<T>(items: readonly T[]): T[] {
+  const result = [...items]
+  for (let index = result.length - 1; index > 0; index--) {
+    const other = Math.floor(Math.random() * (index + 1))
+    ;[result[index], result[other]] = [result[other], result[index]]
+  }
+  return result
 }
 
-function readProgress(): Progress {
-  try {
-    const raw = localStorage.getItem(STORAGE_KEY)
-    if (!raw) return {}
-    const parsed: unknown = JSON.parse(raw)
-    if (typeof parsed !== 'object' || parsed === null || Array.isArray(parsed)) return {}
-    const stored: Progress = Object.fromEntries(
-      Object.entries(parsed)
-        .filter(([, value]) => Array.isArray(value))
-        .map(([key, value]) => [key, (value as unknown[]).filter((v): v is string => typeof v === 'string')]),
-    )
-    // Migrate existing 3:warna / 5:warna records without losing progress.
-    for (const world of content.worlds) {
-      const oldKeys = ['3:' + world.id, '5:' + world.id]
-      const validIds = new Set(questionsForWorld(world).map((question) => question.id))
-      const completed = Array.from(new Set([
-        ...(stored[world.id] || []),
-        ...oldKeys.flatMap((key) => stored[key] || []),
-      ])).filter((id) => validIds.has(id))
-      if (completed.length > 0) stored[world.id] = completed
-      for (const key of oldKeys) delete stored[key]
-    }
-    return stored
-  } catch {
-    return {}
-  }
+function newPlayRound(world: World): Question[] {
+  const questions = [
+    ...shuffle(world.levels['3']),
+    ...shuffle(world.levels['5']),
+  ]
+  return questions.map((question) => ({
+    ...question,
+    options: shuffle(question.options),
+  }))
 }
 
 function readAudioRate(): number {
@@ -100,10 +87,10 @@ function useNarration(speed: number) {
 export default function App() {
   const [world, setWorld] = useState<World | null>(null)
   const [step, setStep] = useState(0)
+  const [round, setRound] = useState<Question[]>([])
   const [feedback, setFeedback] = useState<Feedback>(null)
-  const [finished, setFinished] = useState(false)
-  const [progress, setProgress] = useState<Progress>(readProgress)
   const [parentsOpen, setParentsOpen] = useState(false)
+  const [legacyCleared, setLegacyCleared] = useState(false)
   const [audioRate, setAudioRate] = useState<number>(readAudioRate)
   const { speak, stop } = useNarration(audioRate)
 
@@ -111,41 +98,28 @@ export default function App() {
     try { localStorage.setItem(AUDIO_RATE_STORAGE_KEY, String(audioRate)) } catch { /* local storage may be disabled */ }
   }, [audioRate])
 
-  useEffect(() => {
-    try { localStorage.setItem(STORAGE_KEY, JSON.stringify(progress)) } catch { /* storage may be disabled */ }
-  }, [progress])
-
   const openWorld = (nextWorld: World) => {
     setWorld(nextWorld)
+    setRound(newPlayRound(nextWorld))
     setStep(0)
     setFeedback(null)
-    setFinished(false)
     speak('worlds/' + nextWorld.id + '/intro', nextWorld.intro)
   }
 
   const goHome = () => {
     stop()
     setWorld(null)
+    setRound([])
+    setStep(0)
     setFeedback(null)
-    setFinished(false)
   }
 
-  const questions = world ? questionsForWorld(world) : []
-  const currentQuestion = questions[step] ?? null
-  const gameKey = world?.id ?? ''
-  const completedCount = world ? (progress[gameKey] || []).filter(
-    (id) => questions.some((question) => question.id === id),
-  ).length : 0
+  const currentQuestion = round[step] ?? null
 
   const chooseAnswer = (answer: string) => {
     if (!currentQuestion || !world || feedback === 'correct') return
     if (answer === currentQuestion.answer) {
       setFeedback('correct')
-      setProgress((previous) => {
-        const known = previous[gameKey] || []
-        if (known.includes(currentQuestion.id)) return previous
-        return { ...previous, [gameKey]: [...known, currentQuestion.id] }
-      })
       speak('global/correct', content.correct)
     } else {
       setFeedback('retry')
@@ -154,23 +128,30 @@ export default function App() {
   }
 
   const nextQuestion = () => {
-    if (!world) return
-    if (step + 1 >= questions.length) {
-      setFinished(true)
-      setFeedback(null)
+    if (!world || feedback !== 'correct') return
+    let next: Question
+    if (step + 1 >= round.length) {
+      // Never finish the world; after each full round, reshuffle and play again.
+      const nextRound = newPlayRound(world)
+      setRound(nextRound)
+      setStep(0)
+      next = nextRound[0]
     } else {
       setStep(step + 1)
-      setFeedback(null)
-      const next = questions[step + 1]
-      speak('questions/' + next.id, next.prompt)
+      next = round[step + 1]
     }
+    setFeedback(null)
+    speak('questions/' + next.id, next.prompt)
   }
 
-  const resetProgress = () => {
-    if (!window.confirm('Hapus semua progres yang tersimpan di perangkat ini?')) return
-    setProgress({})
-    setParentsOpen(false)
-    goHome()
+  const clearLegacyHistory = () => {
+    if (!window.confirm('Hapus riwayat jawaban yang tersimpan dari versi Astakula Kids sebelumnya?')) return
+    try {
+      localStorage.removeItem(LEGACY_PROGRESS_KEY)
+      setLegacyCleared(true)
+    } catch {
+      window.alert('Penyimpanan browser tidak dapat diakses saat ini.')
+    }
   }
 
   return (
@@ -197,28 +178,22 @@ export default function App() {
               <div className="heading-doodle" aria-hidden="true">✦</div>
             </div>
             <div className="world-grid">
-              {content.worlds.map((item, index) => {
-                const itemQuestions = questionsForWorld(item)
-                const questionIds = new Set(itemQuestions.map((question) => question.id))
-                const count = (progress[item.id] || []).filter((id) => questionIds.has(id)).length
-                return (
-                  <button key={item.id} type="button" className={'world-card world-' + item.tint} onClick={() => openWorld(item)}>
-                    <div className="world-card-top">
-                      <span className="world-number">0{index + 1}</span>
-                      <span className="world-icon" aria-hidden="true">{item.icon}</span>
-                    </div>
-                    <h2>{item.title}</h2>
-                    <p>{item.short}</p>
-                    <div className="world-card-bottom">
-                      <span className="world-status">{count}/{itemQuestions.length} kegiatan</span>
-                      <span className="arrow-circle" aria-hidden="true">↗</span>
-                    </div>
-                    <div className="progress-track"><span style={{ width: (count / itemQuestions.length) * 100 + '%' }} /></div>
-                  </button>
-                )
-              })}
+              {content.worlds.map((item, index) => (
+                <button key={item.id} type="button" className={'world-card world-' + item.tint} onClick={() => openWorld(item)}>
+                  <div className="world-card-top">
+                    <span className="world-number">0{index + 1}</span>
+                    <span className="world-icon" aria-hidden="true">{item.icon}</span>
+                  </div>
+                  <h2>{item.title}</h2>
+                  <p>{item.short}</p>
+                  <div className="world-card-bottom">
+                    <span className="world-status">Bisa dimainkan kapan saja</span>
+                    <span className="arrow-circle" aria-hidden="true">↗</span>
+                  </div>
+                </button>
+              ))}
             </div>
-            <p className="small-note">Progres tersimpan di browser perangkat ini, bukan di server.</p>
+            <p className="small-note">Bermain sesukamu, tanpa batas waktu, nilai, atau status tamat.</p>
           </section>
         ) : (
           <section className="game-screen">
@@ -226,14 +201,11 @@ export default function App() {
               <button className="back-button" type="button" onClick={goHome}>← Semua dunia</button>
               <span className="game-world-name">{world.icon} {world.title}</span>
             </nav>
-            {!finished && currentQuestion ? (
+            {currentQuestion && (
               <div className={'question-panel game-' + world.tint}>
                 <div className="question-header">
-                  <span className="question-count">TANTANGAN {step + 1} DARI {questions.length}</span>
-                  <span className="question-badge">✦ {completedCount} selesai</span>
-                </div>
-                <div className="question-progress" aria-hidden="true">
-                  {questions.map((q, index) => <span key={q.id} className={index <= step ? 'active' : ''} />)}
+                  <span className="question-count">AYO COBA!</span>
+                  <span className="question-badge">✦ Bermain sesukamu</span>
                 </div>
                 <div className="question-center">
                   <span className="question-mascot" aria-hidden="true">{world.icon}</span>
@@ -263,22 +235,13 @@ export default function App() {
                     <>
                       <span>🌟 Hebat! Jawabanmu tepat!</span>
                       <button type="button" className="continue-button" onClick={nextQuestion}>
-                        {step + 1 === questions.length ? 'Selesai!' : 'Lanjut'} →
+                        Lanjut bermain →
                       </button>
                     </>
                   ) : feedback === 'retry' ? (
                     <span>💛 Belum tepat. Coba pilihan lainnya, yuk!</span>
                   ) : <span>Pelan-pelan saja, tidak perlu buru-buru.</span>}
                 </div>
-              </div>
-            ) : (
-              <div className="finish-panel">
-                <div className="finish-sparkle" aria-hidden="true">🌈</div>
-                <p className="eyebrow">KAMU HEBAT!</p>
-                <h1>Satu petualangan <em>selesai!</em></h1>
-                <p>Terima kasih sudah mencoba semua kegiatan di {world.title}. Mau ke dunia lainnya?</p>
-                <button className="primary-button" type="button" onClick={goHome}>Pilih dunia lainnya →</button>
-                <button className="plain-button" type="button" onClick={() => openWorld(world)}>Main lagi</button>
               </div>
             )}
           </section>
@@ -297,8 +260,8 @@ export default function App() {
               <h2 id="parents-title">Catatan untuk orang tua</h2>
               <button type="button" className="modal-close" onClick={() => setParentsOpen(false)} aria-label="Tutup">✕</button>
             </div>
-            <p>Astakula Kids adalah permainan edukasi prasekolah, bukan alat untuk menilai perkembangan anak. Setiap dunia dimulai dari kegiatan yang sederhana dan berlanjut ke tantangan berikutnya tanpa perlu memilih usia. Dampingi saat bermain, ajak berdiskusi, dan lanjutkan belajar menggunakan benda nyata.</p>
-            <p>Progres disimpan hanya di browser ini. Narasi memakai file audio lokal jika tersedia; jika belum, browser akan mencoba suara bawaan perangkat. Tidak semua perangkat mendukung suara bahasa Indonesia secara offline.</p>
+            <p>Astakula Kids adalah permainan edukasi prasekolah, bukan alat untuk menilai perkembangan anak. Setiap dunia bisa dimainkan berulang kali tanpa status tamat. Soal dimulai dari pengenalan yang mudah, kemudian tantangan yang lebih sulit. Setelah satu putaran, soal dan posisi jawaban diacak ulang.</p>
+            <p>Aplikasi tidak menyimpan skor atau riwayat jawaban baru. Hanya pengaturan kecepatan narasi yang disimpan di perangkat. Narasi memakai MP3 lokal; suara bawaan browser digunakan jika file tidak tersedia. Dampingi anak ketika bermain dan lanjutkan belajar menggunakan benda nyata.</p>
             <div className="voice-rate-settings">
               <p className="voice-rate-title">Kecepatan narasi</p>
               <div className="voice-rate-options" role="group" aria-label="Kecepatan narasi">
@@ -320,7 +283,8 @@ export default function App() {
               </div>
               <p className="rate-hint">Standar: Santai (0,85x). Pengaturan disimpan di perangkat ini.</p>
             </div>
-            <button className="reset-button" type="button" onClick={resetProgress}>Hapus progres lokal</button>
+            <button className="reset-button" type="button" onClick={clearLegacyHistory}>Hapus riwayat versi lama</button>
+            {legacyCleared && <p className="legacy-note" role="status">Riwayat dari versi sebelumnya sudah dihapus dari perangkat ini.</p>}
           </section>
         </div>
       )}
