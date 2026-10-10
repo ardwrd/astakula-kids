@@ -3,7 +3,7 @@ import type { CSSProperties } from 'react'
 import rawContent from './data/content.json'
 import audioManifest from './data/audioManifest.json'
 import audioRevision from './data/audioRevision.json'
-import type { AgeMode, LearningContent, World } from './data/types'
+import type { LearningContent, World } from './data/types'
 
 const content = rawContent as unknown as LearningContent
 const audioKeys = new Set<string>(audioManifest.keys)
@@ -14,17 +14,35 @@ const AUDIO_RATE_STORAGE_KEY = audioRevision.id === 'legacy-v2'
 type Progress = Record<string, string[]>
 type Feedback = 'correct' | 'retry' | null
 
+// Keep age-bucketed content internally as a gentle difficulty progression,
+// but never ask children to select an age or display ages in the interface.
+function questionsForWorld(world: World) {
+  return [...world.levels['3'], ...world.levels['5']]
+}
+
 function readProgress(): Progress {
   try {
     const raw = localStorage.getItem(STORAGE_KEY)
     if (!raw) return {}
     const parsed: unknown = JSON.parse(raw)
     if (typeof parsed !== 'object' || parsed === null || Array.isArray(parsed)) return {}
-    return Object.fromEntries(
+    const stored: Progress = Object.fromEntries(
       Object.entries(parsed)
         .filter(([, value]) => Array.isArray(value))
         .map(([key, value]) => [key, (value as unknown[]).filter((v): v is string => typeof v === 'string')]),
     )
+    // Migrate existing 3:warna / 5:warna records without losing progress.
+    for (const world of content.worlds) {
+      const oldKeys = ['3:' + world.id, '5:' + world.id]
+      const validIds = new Set(questionsForWorld(world).map((question) => question.id))
+      const completed = Array.from(new Set([
+        ...(stored[world.id] || []),
+        ...oldKeys.flatMap((key) => stored[key] || []),
+      ])).filter((id) => validIds.has(id))
+      if (completed.length > 0) stored[world.id] = completed
+      for (const key of oldKeys) delete stored[key]
+    }
+    return stored
   } catch {
     return {}
   }
@@ -80,7 +98,6 @@ function useNarration(speed: number) {
 }
 
 export default function App() {
-  const [age, setAge] = useState<AgeMode | null>(null)
   const [world, setWorld] = useState<World | null>(null)
   const [step, setStep] = useState(0)
   const [feedback, setFeedback] = useState<Feedback>(null)
@@ -98,12 +115,6 @@ export default function App() {
     try { localStorage.setItem(STORAGE_KEY, JSON.stringify(progress)) } catch { /* storage may be disabled */ }
   }, [progress])
 
-  const chooseAge = (nextAge: AgeMode) => {
-    setAge(nextAge)
-    setWorld(null)
-    speak('global/welcome', content.welcome)
-  }
-
   const openWorld = (nextWorld: World) => {
     setWorld(nextWorld)
     setStep(0)
@@ -119,14 +130,15 @@ export default function App() {
     setFinished(false)
   }
 
-  const currentQuestion = world && age ? world.levels[age][step] : null
-  const gameKey = world && age ? age + ':' + world.id : ''
-  const completedCount = world && age ? (progress[gameKey] || []).filter(
-    (id) => world.levels[age].some((q) => q.id === id),
+  const questions = world ? questionsForWorld(world) : []
+  const currentQuestion = questions[step] ?? null
+  const gameKey = world?.id ?? ''
+  const completedCount = world ? (progress[gameKey] || []).filter(
+    (id) => questions.some((question) => question.id === id),
   ).length : 0
 
   const chooseAnswer = (answer: string) => {
-    if (!currentQuestion || !age || !world || feedback === 'correct') return
+    if (!currentQuestion || !world || feedback === 'correct') return
     if (answer === currentQuestion.answer) {
       setFeedback('correct')
       setProgress((previous) => {
@@ -142,14 +154,14 @@ export default function App() {
   }
 
   const nextQuestion = () => {
-    if (!world || !age) return
-    if (step + 1 >= world.levels[age].length) {
+    if (!world) return
+    if (step + 1 >= questions.length) {
       setFinished(true)
       setFeedback(null)
     } else {
       setStep(step + 1)
       setFeedback(null)
-      const next = world.levels[age][step + 1]
+      const next = questions[step + 1]
       speak('questions/' + next.id, next.prompt)
     }
   }
@@ -164,64 +176,31 @@ export default function App() {
   return (
     <div className="app-shell">
       <header className="app-header">
-        <button className="brand" type="button" onClick={() => { goHome(); setAge(null) }} aria-label="Astakula Kids — pilih usia">
+        <button className="brand" type="button" onClick={goHome} aria-label="Astakula Kids — semua dunia">
           <span className="brand-mark">a<span>✳</span></span>
           <span className="brand-name">astakula<span>kids</span></span>
         </button>
         <div className="header-actions">
-          {age && (
-            <button className="age-pill" type="button" onClick={() => { goHome(); setAge(null) }}>
-              <span aria-hidden="true">✦</span> {age} tahun <span aria-hidden="true">⌄</span>
-            </button>
-          )}
           <button className="parent-button" type="button" onClick={() => setParentsOpen(true)} aria-label="Informasi untuk orang tua">Untuk orang tua</button>
         </div>
       </header>
 
       <main className="container">
-        {!age ? (
-          <section className="welcome-screen">
-            <div className="welcome-graphic" aria-hidden="true">
-              <span className="orbit-dot dot-one">●</span>
-              <span className="orbit-dot dot-two">▲</span>
-              <span className="orbit-dot dot-three">★</span>
-              <span className="hero-smile">☺</span>
-            </div>
-            <p className="eyebrow">HALO, PETUALANG KECIL!</p>
-            <h1>Hari ini kita <em>belajar apa?</em></h1>
-            <p className="lead">Banyak hal seru menunggumu. Pilih usiamu untuk mulai bermain!</p>
-            <div className="age-grid">
-              <button className="age-card age-three" type="button" onClick={() => chooseAge('3')}>
-                <span className="age-illustration" aria-hidden="true">🐻</span>
-                <span className="age-label">Petualang Kecil</span>
-                <strong>3 tahun</strong>
-                <span className="age-hint">Lihat, dengar & temukan</span>
-                <span className="age-action">Ayo mulai <span aria-hidden="true">→</span></span>
-              </button>
-              <button className="age-card age-five" type="button" onClick={() => chooseAge('5')}>
-                <span className="age-illustration" aria-hidden="true">🦊</span>
-                <span className="age-label">Penjelajah Hebat</span>
-                <strong>5 tahun</strong>
-                <span className="age-hint">Pikir, susun & pecahkan</span>
-                <span className="age-action">Ayo mulai <span aria-hidden="true">→</span></span>
-              </button>
-            </div>
-            <p className="small-note">Belajar dengan santai, tanpa timer atau nilai. Orang tua mendampingi, ya.</p>
-          </section>
-        ) : !world ? (
+        {!world ? (
           <section className="worlds-screen">
             <div className="section-heading">
               <div>
-                <p className="eyebrow">PILIH PETUALANGAN</p>
-                <h1>Lima dunia, <em>banyak cerita!</em></h1>
-                <p className="lead">Mau bermain di dunia yang mana hari ini?</p>
+                <p className="eyebrow">HALO, PETUALANG KECIL!</p>
+                <h1>Hari ini kita <em>belajar apa?</em></h1>
+                <p className="lead">Pilih dunia yang kamu suka, lalu bermain dan belajar bersama. Yuk, mulai petualangannya!</p>
               </div>
               <div className="heading-doodle" aria-hidden="true">✦</div>
             </div>
             <div className="world-grid">
               {content.worlds.map((item, index) => {
-                const questionIds = new Set(item.levels[age].map((q) => q.id))
-                const count = (progress[age + ':' + item.id] || []).filter((id) => questionIds.has(id)).length
+                const itemQuestions = questionsForWorld(item)
+                const questionIds = new Set(itemQuestions.map((question) => question.id))
+                const count = (progress[item.id] || []).filter((id) => questionIds.has(id)).length
                 return (
                   <button key={item.id} type="button" className={'world-card world-' + item.tint} onClick={() => openWorld(item)}>
                     <div className="world-card-top">
@@ -231,10 +210,10 @@ export default function App() {
                     <h2>{item.title}</h2>
                     <p>{item.short}</p>
                     <div className="world-card-bottom">
-                      <span className="world-status">{count}/{item.levels[age].length} kegiatan</span>
+                      <span className="world-status">{count}/{itemQuestions.length} kegiatan</span>
                       <span className="arrow-circle" aria-hidden="true">↗</span>
                     </div>
-                    <div className="progress-track"><span style={{ width: (count / item.levels[age].length) * 100 + '%' }} /></div>
+                    <div className="progress-track"><span style={{ width: (count / itemQuestions.length) * 100 + '%' }} /></div>
                   </button>
                 )
               })}
@@ -250,11 +229,11 @@ export default function App() {
             {!finished && currentQuestion ? (
               <div className={'question-panel game-' + world.tint}>
                 <div className="question-header">
-                  <span className="question-count">TANTANGAN {step + 1} DARI {world.levels[age].length}</span>
+                  <span className="question-count">TANTANGAN {step + 1} DARI {questions.length}</span>
                   <span className="question-badge">✦ {completedCount} selesai</span>
                 </div>
                 <div className="question-progress" aria-hidden="true">
-                  {world.levels[age].map((q, index) => <span key={q.id} className={index <= step ? 'active' : ''} />)}
+                  {questions.map((q, index) => <span key={q.id} className={index <= step ? 'active' : ''} />)}
                 </div>
                 <div className="question-center">
                   <span className="question-mascot" aria-hidden="true">{world.icon}</span>
@@ -284,7 +263,7 @@ export default function App() {
                     <>
                       <span>🌟 Hebat! Jawabanmu tepat!</span>
                       <button type="button" className="continue-button" onClick={nextQuestion}>
-                        {step + 1 === world.levels[age].length ? 'Selesai!' : 'Lanjut'} →
+                        {step + 1 === questions.length ? 'Selesai!' : 'Lanjut'} →
                       </button>
                     </>
                   ) : feedback === 'retry' ? (
@@ -318,7 +297,7 @@ export default function App() {
               <h2 id="parents-title">Catatan untuk orang tua</h2>
               <button type="button" className="modal-close" onClick={() => setParentsOpen(false)} aria-label="Tutup">✕</button>
             </div>
-            <p>Astakula Kids adalah permainan edukasi awal, bukan alat untuk menilai perkembangan anak. Dampingi saat bermain, ajak berdiskusi, dan lanjutkan belajar menggunakan benda nyata.</p>
+            <p>Astakula Kids adalah permainan edukasi prasekolah, bukan alat untuk menilai perkembangan anak. Setiap dunia dimulai dari kegiatan yang sederhana dan berlanjut ke tantangan berikutnya tanpa perlu memilih usia. Dampingi saat bermain, ajak berdiskusi, dan lanjutkan belajar menggunakan benda nyata.</p>
             <p>Progres disimpan hanya di browser ini. Narasi memakai file audio lokal jika tersedia; jika belum, browser akan mencoba suara bawaan perangkat. Tidak semua perangkat mendukung suara bahasa Indonesia secara offline.</p>
             <div className="voice-rate-settings">
               <p className="voice-rate-title">Kecepatan narasi</p>
