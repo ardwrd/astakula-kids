@@ -103,6 +103,10 @@ export default function App() {
       play('activities/instructions/' + cue)
       if (next === 'trace') {
         const firstOutline: Record<string, string> = { bentuk: 'lingkaran', hewan: 'ikan', huruf: 'a' }
+        play('activities/trace/' + firstOutline[world.id], true)
+      }
+      if (next === 'trace') {
+        const firstOutline: Record<string, string> = { bentuk: 'lingkaran', hewan: 'ikan', huruf: 'a' }
         const outline = firstOutline[world.id]
         if (outline) play('activities/trace/' + outline, true)
       }
