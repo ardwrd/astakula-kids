@@ -17,7 +17,7 @@ Children should recognize the primary action by its **shape, color, and spoken i
 - **DONE (prior work):** `Paku` now uses a local drawing of a *nail*, not the `🔩` bolt emoji.
 - **DONE (prior work):** six questions per session, explicit `Main lagi` / `Pilih dunia lain`; no involuntary session loop.
 - **KEEP:** approved 38/38 Indonesian Eleven v4 recordings; avoid regeneration until text/audio requirements change.
-- **KEEP:** no account, no ads, no permanent scores or completion locks; parents can still access audio-rate setting.
+- **KEEP:** no account, no ads, no permanent scores or completion locks. The child-facing parent button and its settings panel have since been removed.
 
 ## Findings and recommended backlog
 
@@ -31,7 +31,7 @@ Children should recognize the primary action by its **shape, color, and spoken i
 | P1 | Replay value | A session repeats the same six question IDs with a different order and answer positions. | Add substantive task variants/content, not just shuffling. Do not create infinite loops or claim that repeated questions are new. |
 | P1 | Audio coordination | A new `speak()` interrupts the previous clip, including praise if the child advances rapidly. There is no pause/stop UI on the game view. | Praise and next prompt never overlap or get cut unexpectedly; replay and sound controls are easy to discover. |
 | P2 | Session end | Current end screen gives replay and exit, which is appropriate, but wording `sudah mencoba semuanya` may imply permanent completion. | End is framed as a break between sessions, not a permanently completed world; retain clear optional replay/exit. |
-| P2 | Parent controls | Parent settings button opens a modal immediately from the child-facing header. | Keep it visually subordinate and consider a simple adult-only affordance (non-PII), without turning the app into a signup flow. |
+| DONE | Parent controls | Parent settings button originally competed with child-focused navigation. | Button and modal removed; no new browser preference data is stored. |
 | P2 | Motion + reduced motion | There is a `prefers-reduced-motion` rule but effectively no meaningful state transition. | Add short 120–220ms interaction states only where feedback is useful; turn off nonessential motion under reduced-motion preference. |
 
 ## Suggested world-specific interaction specification
@@ -72,6 +72,17 @@ These mechanics are **proposals, not implemented features**. Preserve existing q
 - Starting a world leads to a valid playable screen even when audio fails.
 - Each existing world stops after exactly six responses and requires explicit replay.
 - Incorrect response allows retry; correct response has one path to the next question.
-- Parent settings, audio speed, and legacy progress deletion remain functional.
+- Parent settings and button are intentionally absent. Past alpha browser storage is no longer accessed; clearing it remains the browser user's choice.
 - `Paku` shows an actual nail, all color answers fill their touch surface, and other answer IDs map to the correct visuals.
 - The original and approved Eleven v4 MP3 collections stay intact.
+
+## Implemented interaction update — 10 October 2026
+
+- World cards now open an activity selector instead of routing immediately to the same quiz. The text-only wordmark remains.
+- World-specific activities: color mixing (Warna), outline tracing (Bentuk), matching card pairs and tracing (Hewan), touch-to-count (Angka), tracing letters and assembling syllables (Huruf).
+- All five worlds retain their original six-question quiz for optional play. Each quiz session still stops and offers an explicit replay decision.
+- Outline tracing supports both direct finger drawing and an ordered dot-by-dot mode for children who find free tracing difficult. Content includes simple shapes, animals, and letters.
+- Basic interactions use flat colors and minimal motion; new animal image choices use consistent locally authored SVGs instead of operating-system-dependent emoji.
+- UI wording shortened to natural action-oriented Indonesian; removed repetitive hype language, mascot icon and parent/settings chrome.
+- Existing Eleven v4 recordings are unchanged for the original lessons. New activity instructions have optional browser Indonesian speech synthesis; dedicated Eleven v4 recordings are **not yet generated**.
+- Build-time checks confirm TypeScript compiles and the original question/audio manifests remain intact. A physical-device touch/usability test is still required, especially tracing at 320–430 CSS-pixel widths.
