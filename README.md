@@ -23,7 +23,7 @@ npm run build
 The site is static, with no analytics or backend. There are **no scores, completion percentages, end screens, or stored answer histories** for new play. Children can re-enter any world and play again indefinitely. Only the preferred audio playback speed is stored in the browser. Historical answer records from earlier alpha versions are not used or changed; parents can choose to delete them in the parent settings. No child names, photos, ages, or accounts are required.
 
 ## Indonesian audio
-Text is always available. Initially, the app can use browser speech synthesis as a fallback (availability and offline support vary). Pre-rendered ElevenLabs MP3 assets take precedence once generated.
+Text is always available. **The approved Indonesian Eleven v4 narrator is active**, using Voice Design `wtqqNhC5H27DEv1Ojo4B` and 38/38 pre-rendered MP3 files in `public/audio/candidates/indo-v4-v1/`. The original Multilingual v2 recordings remain intact in `public/audio/generated/` for rollback. `src/data/audioRevision.json` controls the active narrator; the build and deploy workflows verify its files. Browser speech synthesis is only a fallback (availability and offline support vary).
 
 1. Create a repository Actions secret named `ELEVENLABS_API_KEY` (never place keys in frontend code).
 2. For Free-tier API usage, use a **Voice Design** voice saved in ElevenLabs **My Voices**. Voices copied from the community **Voice Library** are not usable through the API on Free. Default voices are only available on older accounts and expire on 31 December 2026.
@@ -36,6 +36,8 @@ Suggested Voice Design prompt: `Warm adult Indonesian female educator with a cle
 **Audio attribution:** Narration generated using [ElevenLabs](https://elevenlabs.io/) (elevenlabs.io), on its Free plan. These recordings are restricted to **non-commercial use with attribution**; do not assume they are covered by any future MIT license for the application code. Confirm current terms before republishing, remixing, or commercial use.
 
 No key is needed at runtime. ElevenLabs consumes credits **only during audio generation**.
+
+One voice-comparison page remains at `/audio/candidates/indo-v4-v1/index.html`. The earlier experimental sample page was removed to avoid duplicates.
 
 ## Privacy and safety
 - No cookies for tracking, analytics, ads, signup or user profiling.
