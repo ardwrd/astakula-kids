@@ -112,10 +112,15 @@ def write_manifest(narration, expected):
                 "bytes": len(raw),
                 "kind": narration["clips"][key]["kind"],
             }
+    # Approval belongs to the app revision switch, not to the TTS generator.
+    active = json.loads((ROOT / "src/data/audioRevision.json").read_text(encoding="utf-8"))
+    status = ("APPROVED_ACTIVE" if active.get("id") == "indo-v4-v1"
+              and active.get("approved") is True and len(entries) == len(expected)
+              else "CANDIDATE_ONLY_NOT_APPROVED")
     manifest = {
         "version": narration["version"], "model": "eleven_v4",
         "voice_id": VOICE_ID, "language_code": "id",
-        "status": "CANDIDATE_ONLY_NOT_APPROVED",
+        "status": status,
         "generated_count": len(entries), "required_count": len(expected),
         "entries": entries,
     }
