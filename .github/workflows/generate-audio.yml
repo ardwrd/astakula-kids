@@ -4,10 +4,10 @@ on:
   workflow_dispatch:
     inputs:
       voice_id:
-        description: 'ElevenLabs voice ID selected in your ElevenLabs account'
+        description: 'auto discovers an eligible Voice Design or Default voice; alternatively enter a Voice ID'
         type: string
         required: true
-        default: 'U3dExJoUNcmTY5H6GMuG'
+        default: 'auto'
       limit:
         description: 'Maximum clips this run (1-100; default 3)'
         type: string
