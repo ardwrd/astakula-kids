@@ -1,0 +1,31 @@
+{
+  "version": "indonesian-v4-v1",
+  "model": "eleven_v4",
+  "voice_id": "wtqqNhC5H27DEv1Ojo4B",
+  "language_code": "id",
+  "status": "CANDIDATE_ONLY_NOT_APPROVED",
+  "generated_count": 4,
+  "required_count": 38,
+  "entries": {
+    "global/welcome": {
+      "sha256": "874fd85d565868138754dea8b04cdbeec5d3ed106f6749378c8088a765d84897",
+      "bytes": 84471,
+      "kind": "sambutan"
+    },
+    "global/correct": {
+      "sha256": "41a2ee928f9961dace30884dae3c165bf147373d3b6c3483dea9eb5f62853de8",
+      "bytes": 63991,
+      "kind": "pujian"
+    },
+    "questions/warna-3-1": {
+      "sha256": "5dadb38e8a3a2aaf4c9745e556ec15a3f0da54912fff774879c6231656267466",
+      "bytes": 35570,
+      "kind": "perintah"
+    },
+    "questions/warna-3-2": {
+      "sha256": "87f69ed71b282e6f8cac6a466beac6c992ce8c3d86a7083d1a6c2a6a8de4d426",
+      "bytes": 63991,
+      "kind": "pertanyaan"
+    }
+  }
+}
