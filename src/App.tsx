@@ -89,6 +89,7 @@ export default function App() {
   const [step, setStep] = useState(0)
   const [round, setRound] = useState<Question[]>([])
   const [feedback, setFeedback] = useState<Feedback>(null)
+  const [roundFinished, setRoundFinished] = useState(false)
   const [parentsOpen, setParentsOpen] = useState(false)
   const [legacyCleared, setLegacyCleared] = useState(false)
   const [audioRate, setAudioRate] = useState<number>(readAudioRate)
@@ -103,6 +104,7 @@ export default function App() {
     setRound(newPlayRound(nextWorld))
     setStep(0)
     setFeedback(null)
+    setRoundFinished(false)
     speak('worlds/' + nextWorld.id + '/intro', nextWorld.intro)
   }
 
@@ -112,12 +114,13 @@ export default function App() {
     setRound([])
     setStep(0)
     setFeedback(null)
+    setRoundFinished(false)
   }
 
   const currentQuestion = round[step] ?? null
 
   const chooseAnswer = (answer: string) => {
-    if (!currentQuestion || !world || feedback === 'correct') return
+    if (!currentQuestion || !world || roundFinished || feedback === 'correct') return
     if (answer === currentQuestion.answer) {
       setFeedback('correct')
       speak('global/correct', content.correct)
@@ -128,18 +131,16 @@ export default function App() {
   }
 
   const nextQuestion = () => {
-    if (!world || feedback !== 'correct') return
-    let next: Question
+    if (!world || roundFinished || feedback !== 'correct') return
     if (step + 1 >= round.length) {
-      // Never finish the world; after each full round, reshuffle and play again.
-      const nextRound = newPlayRound(world)
-      setRound(nextRound)
-      setStep(0)
-      next = nextRound[0]
-    } else {
-      setStep(step + 1)
-      next = round[step + 1]
+      // Finish this play session only. A new session starts when the child chooses "Main lagi".
+      stop()
+      setFeedback(null)
+      setRoundFinished(true)
+      return
     }
+    const next = round[step + 1]
+    setStep(step + 1)
     setFeedback(null)
     speak('questions/' + next.id, next.prompt)
   }
@@ -201,7 +202,19 @@ export default function App() {
               <button className="back-button" type="button" onClick={goHome}>← Semua dunia</button>
               <span className="game-world-name">{world.icon} {world.title}</span>
             </nav>
-            {currentQuestion && (
+            {roundFinished ? (
+              <div className="session-finish-panel">
+                <span className="session-finish-icon" aria-hidden="true">🌈</span>
+                <p className="eyebrow">HEBAT, PETUALANG KECIL!</p>
+                <h1>Asyik, sudah mencoba <em>semuanya!</em></h1>
+                <p>Kamu sudah bermain di {world.title} hari ini. Mau coba lagi dengan susunan yang berbeda atau pilih dunia lainnya?</p>
+                <div className="session-actions">
+                  <button className="continue-button" type="button" onClick={() => openWorld(world)}>Main lagi ↻</button>
+                  <button className="secondary-button" type="button" onClick={goHome}>Pilih dunia lain →</button>
+                </div>
+                <p className="session-note">Dunia ini tetap bisa dimainkan kapan saja.</p>
+              </div>
+            ) : currentQuestion ? (
               <div className={'question-panel game-' + world.tint}>
                 <div className="question-header">
                   <span className="question-count">AYO COBA!</span>
@@ -219,13 +232,13 @@ export default function App() {
                   {currentQuestion.options.map((answer) => (
                     <button
                       key={answer.id}
-                      className={'answer-card' + (feedback === 'correct' && answer.id === currentQuestion.answer ? ' chosen' : '')}
+                      className={'answer-card' + (world.id === 'warna' ? ' color-answer-card' : '') + (feedback === 'correct' && answer.id === currentQuestion.answer ? ' chosen' : '')}
                       style={{ '--option-color': answer.color || '#f4eee5' } as CSSProperties}
                       type="button"
                       disabled={feedback === 'correct'}
                       onClick={() => chooseAnswer(answer.id)}
                     >
-                      <span className="answer-visual" aria-hidden="true">{answer.visual}</span>
+                      {world.id !== 'warna' && <span className="answer-visual" aria-hidden="true">{answer.visual}</span>}
                       <span className="answer-label">{answer.label}</span>
                     </button>
                   ))}
@@ -235,7 +248,7 @@ export default function App() {
                     <>
                       <span>🌟 Hebat! Jawabanmu tepat!</span>
                       <button type="button" className="continue-button" onClick={nextQuestion}>
-                        Lanjut bermain →
+                        {step + 1 >= round.length ? 'Lihat hasil bermain →' : 'Lanjut →'}
                       </button>
                     </>
                   ) : feedback === 'retry' ? (
@@ -243,7 +256,7 @@ export default function App() {
                   ) : <span>Pelan-pelan saja, tidak perlu buru-buru.</span>}
                 </div>
               </div>
-            )}
+            ) : null}
           </section>
         )}
       </main>
@@ -260,7 +273,7 @@ export default function App() {
               <h2 id="parents-title">Catatan untuk orang tua</h2>
               <button type="button" className="modal-close" onClick={() => setParentsOpen(false)} aria-label="Tutup">✕</button>
             </div>
-            <p>Astakula Kids adalah permainan edukasi prasekolah, bukan alat untuk menilai perkembangan anak. Setiap dunia bisa dimainkan berulang kali tanpa status tamat. Soal dimulai dari pengenalan yang mudah, kemudian tantangan yang lebih sulit. Setelah satu putaran, soal dan posisi jawaban diacak ulang.</p>
+            <p>Astakula Kids adalah permainan edukasi prasekolah, bukan alat untuk menilai perkembangan anak. Setiap sesi berisi enam pertanyaan yang dimulai dari pengenalan mudah lalu tantangan berikutnya. Setelah sesi berakhir, anak bebas memilih untuk bermain lagi dengan urutan dan posisi jawaban berbeda, atau berpindah dunia. Tidak ada status tamat permanen.</p>
             <p>Aplikasi tidak menyimpan skor atau riwayat jawaban baru. Hanya pengaturan kecepatan narasi yang disimpan di perangkat. Narasi memakai MP3 lokal; suara bawaan browser digunakan jika file tidak tersedia. Dampingi anak ketika bermain dan lanjutkan belajar menggunakan benda nyata.</p>
             <div className="voice-rate-settings">
               <p className="voice-rate-title">Kecepatan narasi</p>
