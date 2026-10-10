@@ -1,0 +1,4 @@
+Astakula Kids — Indonesian Eleven v4 candidates
+Voice ID: wtqqNhC5H27DEv1Ojo4B
+Four samples generated: global/welcome; global/correct; questions/warna-3-1; questions/warna-3-2.
+All files are for human quality review. Production audio in audio/generated is unchanged.
