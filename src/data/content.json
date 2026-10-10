@@ -1,0 +1,778 @@
+{
+  "welcome": "Halo, Petualang Kecil! Ayo belajar sambil bermain!",
+  "correct": "Hebat! Jawabanmu tepat!",
+  "retry": "Hampir benar. Coba lagi, yuk!",
+  "worlds": [
+    {
+      "id": "warna",
+      "title": "Dunia Warna",
+      "icon": "🎨",
+      "short": "Kenali semua warna",
+      "description": "Temukan warna-warna di sekeliling kita.",
+      "tint": "rose",
+      "intro": "Selamat datang di Dunia Warna! Siap menemukan warna?",
+      "levels": {
+        "3": [
+          {
+            "id": "warna-3-1",
+            "prompt": "Sentuh warna merah!",
+            "options": [
+              {
+                "id": "merah",
+                "label": "Merah",
+                "visual": "●",
+                "color": "#f16b67"
+              },
+              {
+                "id": "biru",
+                "label": "Biru",
+                "visual": "●",
+                "color": "#6396e9"
+              },
+              {
+                "id": "kuning",
+                "label": "Kuning",
+                "visual": "●",
+                "color": "#f5ca57"
+              }
+            ],
+            "answer": "merah"
+          },
+          {
+            "id": "warna-3-2",
+            "prompt": "Di mana warna biru?",
+            "options": [
+              {
+                "id": "kuning",
+                "label": "Kuning",
+                "visual": "●",
+                "color": "#f5ca57"
+              },
+              {
+                "id": "biru",
+                "label": "Biru",
+                "visual": "●",
+                "color": "#6396e9"
+              },
+              {
+                "id": "hijau",
+                "label": "Hijau",
+                "visual": "●",
+                "color": "#61b887"
+              }
+            ],
+            "answer": "biru"
+          },
+          {
+            "id": "warna-3-3",
+            "prompt": "Coba temukan warna kuning!",
+            "options": [
+              {
+                "id": "merah",
+                "label": "Merah",
+                "visual": "●",
+                "color": "#f16b67"
+              },
+              {
+                "id": "kuning",
+                "label": "Kuning",
+                "visual": "●",
+                "color": "#f5ca57"
+              },
+              {
+                "id": "ungu",
+                "label": "Ungu",
+                "visual": "●",
+                "color": "#ad8cd7"
+              }
+            ],
+            "answer": "kuning"
+          }
+        ],
+        "5": [
+          {
+            "id": "warna-5-1",
+            "prompt": "Merah dan kuning jika dicampur menjadi warna apa?",
+            "options": [
+              {
+                "id": "jingga",
+                "label": "Jingga",
+                "visual": "●",
+                "color": "#ed9b53"
+              },
+              {
+                "id": "hijau",
+                "label": "Hijau",
+                "visual": "●",
+                "color": "#61b887"
+              },
+              {
+                "id": "ungu",
+                "label": "Ungu",
+                "visual": "●",
+                "color": "#ad8cd7"
+              }
+            ],
+            "answer": "jingga"
+          },
+          {
+            "id": "warna-5-2",
+            "prompt": "Biru dan kuning jika dicampur menjadi warna apa?",
+            "options": [
+              {
+                "id": "ungu",
+                "label": "Ungu",
+                "visual": "●",
+                "color": "#ad8cd7"
+              },
+              {
+                "id": "hijau",
+                "label": "Hijau",
+                "visual": "●",
+                "color": "#61b887"
+              },
+              {
+                "id": "merah",
+                "label": "Merah",
+                "visual": "●",
+                "color": "#f16b67"
+              }
+            ],
+            "answer": "hijau"
+          },
+          {
+            "id": "warna-5-3",
+            "prompt": "Merah dan biru jika dicampur menjadi warna apa?",
+            "options": [
+              {
+                "id": "hijau",
+                "label": "Hijau",
+                "visual": "●",
+                "color": "#61b887"
+              },
+              {
+                "id": "jingga",
+                "label": "Jingga",
+                "visual": "●",
+                "color": "#ed9b53"
+              },
+              {
+                "id": "ungu",
+                "label": "Ungu",
+                "visual": "●",
+                "color": "#ad8cd7"
+              }
+            ],
+            "answer": "ungu"
+          }
+        ]
+      }
+    },
+    {
+      "id": "bentuk",
+      "title": "Dunia Bentuk",
+      "icon": "🔷",
+      "short": "Ayo cari bentuk",
+      "description": "Lingkaran, segitiga, dan teman-temannya.",
+      "tint": "blue",
+      "intro": "Selamat datang di Dunia Bentuk! Ayo kenali bentuk-bentuk!",
+      "levels": {
+        "3": [
+          {
+            "id": "bentuk-3-1",
+            "prompt": "Pilih bentuk lingkaran!",
+            "options": [
+              {
+                "id": "segitiga",
+                "label": "Segitiga",
+                "visual": "▲",
+                "color": "#f2ba56"
+              },
+              {
+                "id": "lingkaran",
+                "label": "Lingkaran",
+                "visual": "●",
+                "color": "#ef927f"
+              },
+              {
+                "id": "persegi",
+                "label": "Persegi",
+                "visual": "■",
+                "color": "#80adf0"
+              }
+            ],
+            "answer": "lingkaran"
+          },
+          {
+            "id": "bentuk-3-2",
+            "prompt": "Mana yang berbentuk segitiga?",
+            "options": [
+              {
+                "id": "persegi",
+                "label": "Persegi",
+                "visual": "■",
+                "color": "#80adf0"
+              },
+              {
+                "id": "bintang",
+                "label": "Bintang",
+                "visual": "★",
+                "color": "#a78bd1"
+              },
+              {
+                "id": "segitiga",
+                "label": "Segitiga",
+                "visual": "▲",
+                "color": "#f2ba56"
+              }
+            ],
+            "answer": "segitiga"
+          },
+          {
+            "id": "bentuk-3-3",
+            "prompt": "Sentuh bentuk persegi!",
+            "options": [
+              {
+                "id": "persegi",
+                "label": "Persegi",
+                "visual": "■",
+                "color": "#80adf0"
+              },
+              {
+                "id": "lingkaran",
+                "label": "Lingkaran",
+                "visual": "●",
+                "color": "#ef927f"
+              },
+              {
+                "id": "bintang",
+                "label": "Bintang",
+                "visual": "★",
+                "color": "#a78bd1"
+              }
+            ],
+            "answer": "persegi"
+          }
+        ],
+        "5": [
+          {
+            "id": "bentuk-5-1",
+            "prompt": "Bentuk apa yang memiliki tiga sisi?",
+            "options": [
+              {
+                "id": "persegi",
+                "label": "Persegi",
+                "visual": "■",
+                "color": "#80adf0"
+              },
+              {
+                "id": "segitiga",
+                "label": "Segitiga",
+                "visual": "▲",
+                "color": "#f2ba56"
+              },
+              {
+                "id": "lingkaran",
+                "label": "Lingkaran",
+                "visual": "●",
+                "color": "#ef927f"
+              }
+            ],
+            "answer": "segitiga"
+          },
+          {
+            "id": "bentuk-5-2",
+            "prompt": "Bentuk mana yang tidak memiliki sudut?",
+            "options": [
+              {
+                "id": "bintang",
+                "label": "Bintang",
+                "visual": "★",
+                "color": "#a78bd1"
+              },
+              {
+                "id": "lingkaran",
+                "label": "Lingkaran",
+                "visual": "●",
+                "color": "#ef927f"
+              },
+              {
+                "id": "persegi",
+                "label": "Persegi",
+                "visual": "■",
+                "color": "#80adf0"
+              }
+            ],
+            "answer": "lingkaran"
+          },
+          {
+            "id": "bentuk-5-3",
+            "prompt": "Bentuk mana yang memiliki empat sisi sama panjang?",
+            "options": [
+              {
+                "id": "segitiga",
+                "label": "Segitiga",
+                "visual": "▲",
+                "color": "#f2ba56"
+              },
+              {
+                "id": "persegi",
+                "label": "Persegi",
+                "visual": "■",
+                "color": "#80adf0"
+              },
+              {
+                "id": "lingkaran",
+                "label": "Lingkaran",
+                "visual": "●",
+                "color": "#ef927f"
+              }
+            ],
+            "answer": "persegi"
+          }
+        ]
+      }
+    },
+    {
+      "id": "hewan",
+      "title": "Dunia Hewan",
+      "icon": "🐾",
+      "short": "Temui teman satwa",
+      "description": "Kenali nama, ciri, dan tempat tinggal hewan.",
+      "tint": "green",
+      "intro": "Selamat datang di Dunia Hewan! Yuk, bertemu teman satwa!",
+      "levels": {
+        "3": [
+          {
+            "id": "hewan-3-1",
+            "prompt": "Hewan mana yang bernama kucing?",
+            "options": [
+              {
+                "id": "sapi",
+                "label": "Sapi",
+                "visual": "🐮"
+              },
+              {
+                "id": "kucing",
+                "label": "Kucing",
+                "visual": "🐱"
+              },
+              {
+                "id": "ayam",
+                "label": "Ayam",
+                "visual": "🐔"
+              }
+            ],
+            "answer": "kucing"
+          },
+          {
+            "id": "hewan-3-2",
+            "prompt": "Mana gambar ayam?",
+            "options": [
+              {
+                "id": "ayam",
+                "label": "Ayam",
+                "visual": "🐔"
+              },
+              {
+                "id": "ikan",
+                "label": "Ikan",
+                "visual": "🐟"
+              },
+              {
+                "id": "burung",
+                "label": "Burung",
+                "visual": "🐦"
+              }
+            ],
+            "answer": "ayam"
+          },
+          {
+            "id": "hewan-3-3",
+            "prompt": "Sentuh gambar sapi!",
+            "options": [
+              {
+                "id": "kelinci",
+                "label": "Kelinci",
+                "visual": "🐰"
+              },
+              {
+                "id": "sapi",
+                "label": "Sapi",
+                "visual": "🐮"
+              },
+              {
+                "id": "kucing",
+                "label": "Kucing",
+                "visual": "🐱"
+              }
+            ],
+            "answer": "sapi"
+          }
+        ],
+        "5": [
+          {
+            "id": "hewan-5-1",
+            "prompt": "Hewan mana yang hidup di dalam air?",
+            "options": [
+              {
+                "id": "burung",
+                "label": "Burung",
+                "visual": "🐦"
+              },
+              {
+                "id": "ikan",
+                "label": "Ikan",
+                "visual": "🐟"
+              },
+              {
+                "id": "kelinci",
+                "label": "Kelinci",
+                "visual": "🐰"
+              }
+            ],
+            "answer": "ikan"
+          },
+          {
+            "id": "hewan-5-2",
+            "prompt": "Hewan mana yang memiliki sayap dan bisa terbang?",
+            "options": [
+              {
+                "id": "sapi",
+                "label": "Sapi",
+                "visual": "🐮"
+              },
+              {
+                "id": "burung",
+                "label": "Burung",
+                "visual": "🐦"
+              },
+              {
+                "id": "ikan",
+                "label": "Ikan",
+                "visual": "🐟"
+              }
+            ],
+            "answer": "burung"
+          },
+          {
+            "id": "hewan-5-3",
+            "prompt": "Hewan mana yang memiliki telinga panjang?",
+            "options": [
+              {
+                "id": "kelinci",
+                "label": "Kelinci",
+                "visual": "🐰"
+              },
+              {
+                "id": "ayam",
+                "label": "Ayam",
+                "visual": "🐔"
+              },
+              {
+                "id": "sapi",
+                "label": "Sapi",
+                "visual": "🐮"
+              }
+            ],
+            "answer": "kelinci"
+          }
+        ]
+      }
+    },
+    {
+      "id": "angka",
+      "title": "Dunia Angka",
+      "icon": "🔢",
+      "short": "Hitung bareng, yuk!",
+      "description": "Belajar menghitung benda dan bermain angka.",
+      "tint": "yellow",
+      "intro": "Selamat datang di Dunia Angka! Yuk, berhitung bersama!",
+      "levels": {
+        "3": [
+          {
+            "id": "angka-3-1",
+            "prompt": "Ada satu apel: 🍎. Pilih angka satu!",
+            "options": [
+              {
+                "id": "2",
+                "label": "2",
+                "visual": "2"
+              },
+              {
+                "id": "1",
+                "label": "1",
+                "visual": "1"
+              },
+              {
+                "id": "3",
+                "label": "3",
+                "visual": "3"
+              }
+            ],
+            "answer": "1"
+          },
+          {
+            "id": "angka-3-2",
+            "prompt": "Ada dua bintang: ⭐ ⭐. Pilih angka dua!",
+            "options": [
+              {
+                "id": "3",
+                "label": "3",
+                "visual": "3"
+              },
+              {
+                "id": "2",
+                "label": "2",
+                "visual": "2"
+              },
+              {
+                "id": "4",
+                "label": "4",
+                "visual": "4"
+              }
+            ],
+            "answer": "2"
+          },
+          {
+            "id": "angka-3-3",
+            "prompt": "Ada tiga bola: ⚽ ⚽ ⚽. Pilih angka tiga!",
+            "options": [
+              {
+                "id": "1",
+                "label": "1",
+                "visual": "1"
+              },
+              {
+                "id": "4",
+                "label": "4",
+                "visual": "4"
+              },
+              {
+                "id": "3",
+                "label": "3",
+                "visual": "3"
+              }
+            ],
+            "answer": "3"
+          }
+        ],
+        "5": [
+          {
+            "id": "angka-5-1",
+            "prompt": "Dua ditambah tiga hasilnya berapa?",
+            "options": [
+              {
+                "id": "4",
+                "label": "4",
+                "visual": "4"
+              },
+              {
+                "id": "5",
+                "label": "5",
+                "visual": "5"
+              },
+              {
+                "id": "6",
+                "label": "6",
+                "visual": "6"
+              }
+            ],
+            "answer": "5"
+          },
+          {
+            "id": "angka-5-2",
+            "prompt": "Empat ditambah dua hasilnya berapa?",
+            "options": [
+              {
+                "id": "6",
+                "label": "6",
+                "visual": "6"
+              },
+              {
+                "id": "7",
+                "label": "7",
+                "visual": "7"
+              },
+              {
+                "id": "5",
+                "label": "5",
+                "visual": "5"
+              }
+            ],
+            "answer": "6"
+          },
+          {
+            "id": "angka-5-3",
+            "prompt": "Delapan dikurangi tiga hasilnya berapa?",
+            "options": [
+              {
+                "id": "4",
+                "label": "4",
+                "visual": "4"
+              },
+              {
+                "id": "6",
+                "label": "6",
+                "visual": "6"
+              },
+              {
+                "id": "5",
+                "label": "5",
+                "visual": "5"
+              }
+            ],
+            "answer": "5"
+          }
+        ]
+      }
+    },
+    {
+      "id": "huruf",
+      "title": "Dunia Huruf",
+      "icon": "🔤",
+      "short": "Ayo kenal huruf",
+      "description": "Dengarkan bunyi huruf, lalu temukan jawabannya.",
+      "tint": "lavender",
+      "intro": "Selamat datang di Dunia Huruf! Ayo bermain dengan abjad!",
+      "levels": {
+        "3": [
+          {
+            "id": "huruf-3-1",
+            "prompt": "Huruf A untuk apel. Mana huruf A?",
+            "options": [
+              {
+                "id": "b",
+                "label": "B",
+                "visual": "B"
+              },
+              {
+                "id": "a",
+                "label": "A",
+                "visual": "A"
+              },
+              {
+                "id": "c",
+                "label": "C",
+                "visual": "C"
+              }
+            ],
+            "answer": "a"
+          },
+          {
+            "id": "huruf-3-2",
+            "prompt": "Huruf B untuk bola. Mana huruf B?",
+            "options": [
+              {
+                "id": "a",
+                "label": "A",
+                "visual": "A"
+              },
+              {
+                "id": "b",
+                "label": "B",
+                "visual": "B"
+              },
+              {
+                "id": "d",
+                "label": "D",
+                "visual": "D"
+              }
+            ],
+            "answer": "b"
+          },
+          {
+            "id": "huruf-3-3",
+            "prompt": "Huruf C untuk cicak. Mana huruf C?",
+            "options": [
+              {
+                "id": "c",
+                "label": "C",
+                "visual": "C"
+              },
+              {
+                "id": "m",
+                "label": "M",
+                "visual": "M"
+              },
+              {
+                "id": "p",
+                "label": "P",
+                "visual": "P"
+              }
+            ],
+            "answer": "c"
+          }
+        ],
+        "5": [
+          {
+            "id": "huruf-5-1",
+            "prompt": "Kata bola diawali dengan huruf apa?",
+            "options": [
+              {
+                "id": "d",
+                "label": "D",
+                "visual": "D"
+              },
+              {
+                "id": "b",
+                "label": "B",
+                "visual": "B"
+              },
+              {
+                "id": "m",
+                "label": "M",
+                "visual": "M"
+              }
+            ],
+            "answer": "b"
+          },
+          {
+            "id": "huruf-5-2",
+            "prompt": "Kata mata dimulai dengan huruf apa?",
+            "options": [
+              {
+                "id": "m",
+                "label": "M",
+                "visual": "M"
+              },
+              {
+                "id": "a",
+                "label": "A",
+                "visual": "A"
+              },
+              {
+                "id": "p",
+                "label": "P",
+                "visual": "P"
+              }
+            ],
+            "answer": "m"
+          },
+          {
+            "id": "huruf-5-3",
+            "prompt": "Suku kata PA dan GI membentuk kata apa?",
+            "options": [
+              {
+                "id": "pagi",
+                "label": "Pagi",
+                "visual": "🌅"
+              },
+              {
+                "id": "padi",
+                "label": "Padi",
+                "visual": "🌾"
+              },
+              {
+                "id": "paku",
+                "label": "Paku",
+                "visual": "🔩"
+              }
+            ],
+            "answer": "pagi"
+          }
+        ]
+      }
+    }
+  ]
+}

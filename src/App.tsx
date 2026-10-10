@@ -1,0 +1,308 @@
+import { useCallback, useEffect, useRef, useState } from 'react'
+import type { CSSProperties } from 'react'
+import rawContent from './data/content.json'
+import audioManifest from './data/audioManifest.json'
+import type { AgeMode, LearningContent, World } from './data/types'
+
+const content = rawContent as unknown as LearningContent
+const audioKeys = new Set<string>(audioManifest.keys)
+const STORAGE_KEY = 'astakula-kids:progress:v1'
+type Progress = Record<string, string[]>
+type Feedback = 'correct' | 'retry' | null
+
+function readProgress(): Progress {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY)
+    if (!raw) return {}
+    const parsed: unknown = JSON.parse(raw)
+    if (typeof parsed !== 'object' || parsed === null || Array.isArray(parsed)) return {}
+    return Object.fromEntries(
+      Object.entries(parsed)
+        .filter(([, value]) => Array.isArray(value))
+        .map(([key, value]) => [key, (value as unknown[]).filter((v): v is string => typeof v === 'string')]),
+    )
+  } catch {
+    return {}
+  }
+}
+
+function useNarration() {
+  const activeAudio = useRef<HTMLAudioElement | null>(null)
+
+  const stop = useCallback(() => {
+    activeAudio.current?.pause()
+    activeAudio.current = null
+    if ('speechSynthesis' in window) window.speechSynthesis.cancel()
+  }, [])
+
+  const fallback = useCallback((text: string) => {
+    if (!('speechSynthesis' in window)) return
+    const utterance = new SpeechSynthesisUtterance(text)
+    utterance.lang = 'id-ID'
+    utterance.rate = 0.88
+    utterance.pitch = 1.05
+    const voices = window.speechSynthesis.getVoices()
+    const indonesian = voices.find((voice) => voice.lang.toLowerCase().startsWith('id'))
+    if (indonesian) utterance.voice = indonesian
+    window.speechSynthesis.speak(utterance)
+  }, [])
+
+  const speak = useCallback((key: string, text: string) => {
+    stop()
+    if (!audioKeys.has(key)) {
+      fallback(text)
+      return
+    }
+    const player = new Audio(import.meta.env.BASE_URL + 'audio/generated/' + key + '.mp3')
+    activeAudio.current = player
+    player.addEventListener('error', () => fallback(text), { once: true })
+    void player.play().catch(() => fallback(text))
+  }, [fallback, stop])
+
+  useEffect(() => stop, [stop])
+  return { speak, stop }
+}
+
+export default function App() {
+  const [age, setAge] = useState<AgeMode | null>(null)
+  const [world, setWorld] = useState<World | null>(null)
+  const [step, setStep] = useState(0)
+  const [feedback, setFeedback] = useState<Feedback>(null)
+  const [finished, setFinished] = useState(false)
+  const [progress, setProgress] = useState<Progress>(readProgress)
+  const [parentsOpen, setParentsOpen] = useState(false)
+  const { speak, stop } = useNarration()
+
+  useEffect(() => {
+    try { localStorage.setItem(STORAGE_KEY, JSON.stringify(progress)) } catch { /* storage may be disabled */ }
+  }, [progress])
+
+  const chooseAge = (nextAge: AgeMode) => {
+    setAge(nextAge)
+    setWorld(null)
+    speak('global/welcome', content.welcome)
+  }
+
+  const openWorld = (nextWorld: World) => {
+    setWorld(nextWorld)
+    setStep(0)
+    setFeedback(null)
+    setFinished(false)
+    speak('worlds/' + nextWorld.id + '/intro', nextWorld.intro)
+  }
+
+  const goHome = () => {
+    stop()
+    setWorld(null)
+    setFeedback(null)
+    setFinished(false)
+  }
+
+  const currentQuestion = world && age ? world.levels[age][step] : null
+  const gameKey = world && age ? age + ':' + world.id : ''
+  const completedCount = world && age ? (progress[gameKey] || []).filter(
+    (id) => world.levels[age].some((q) => q.id === id),
+  ).length : 0
+
+  const chooseAnswer = (answer: string) => {
+    if (!currentQuestion || !age || !world || feedback === 'correct') return
+    if (answer === currentQuestion.answer) {
+      setFeedback('correct')
+      setProgress((previous) => {
+        const known = previous[gameKey] || []
+        if (known.includes(currentQuestion.id)) return previous
+        return { ...previous, [gameKey]: [...known, currentQuestion.id] }
+      })
+      speak('global/correct', content.correct)
+    } else {
+      setFeedback('retry')
+      speak('global/retry', content.retry)
+    }
+  }
+
+  const nextQuestion = () => {
+    if (!world || !age) return
+    if (step + 1 >= world.levels[age].length) {
+      setFinished(true)
+      setFeedback(null)
+    } else {
+      setStep(step + 1)
+      setFeedback(null)
+      const next = world.levels[age][step + 1]
+      speak('questions/' + next.id, next.prompt)
+    }
+  }
+
+  const resetProgress = () => {
+    if (!window.confirm('Hapus semua progres yang tersimpan di perangkat ini?')) return
+    setProgress({})
+    setParentsOpen(false)
+    goHome()
+  }
+
+  return (
+    <div className="app-shell">
+      <header className="app-header">
+        <button className="brand" type="button" onClick={() => { goHome(); setAge(null) }} aria-label="Astakula Kids — pilih usia">
+          <span className="brand-mark">a<span>✳</span></span>
+          <span className="brand-name">astakula<span>kids</span></span>
+        </button>
+        <div className="header-actions">
+          {age && (
+            <button className="age-pill" type="button" onClick={() => { goHome(); setAge(null) }}>
+              <span aria-hidden="true">✦</span> {age} tahun <span aria-hidden="true">⌄</span>
+            </button>
+          )}
+          <button className="parent-button" type="button" onClick={() => setParentsOpen(true)} aria-label="Informasi untuk orang tua">Untuk orang tua</button>
+        </div>
+      </header>
+
+      <main className="container">
+        {!age ? (
+          <section className="welcome-screen">
+            <div className="welcome-graphic" aria-hidden="true">
+              <span className="orbit-dot dot-one">●</span>
+              <span className="orbit-dot dot-two">▲</span>
+              <span className="orbit-dot dot-three">★</span>
+              <span className="hero-smile">☺</span>
+            </div>
+            <p className="eyebrow">HALO, PETUALANG KECIL!</p>
+            <h1>Hari ini kita <em>belajar apa?</em></h1>
+            <p className="lead">Banyak hal seru menunggumu. Pilih usiamu untuk mulai bermain!</p>
+            <div className="age-grid">
+              <button className="age-card age-three" type="button" onClick={() => chooseAge('3')}>
+                <span className="age-illustration" aria-hidden="true">🐻</span>
+                <span className="age-label">Petualang Kecil</span>
+                <strong>3 tahun</strong>
+                <span className="age-hint">Lihat, dengar & temukan</span>
+                <span className="age-action">Ayo mulai <span aria-hidden="true">→</span></span>
+              </button>
+              <button className="age-card age-five" type="button" onClick={() => chooseAge('5')}>
+                <span className="age-illustration" aria-hidden="true">🦊</span>
+                <span className="age-label">Penjelajah Hebat</span>
+                <strong>5 tahun</strong>
+                <span className="age-hint">Pikir, susun & pecahkan</span>
+                <span className="age-action">Ayo mulai <span aria-hidden="true">→</span></span>
+              </button>
+            </div>
+            <p className="small-note">Belajar dengan santai, tanpa timer atau nilai. Orang tua mendampingi, ya.</p>
+          </section>
+        ) : !world ? (
+          <section className="worlds-screen">
+            <div className="section-heading">
+              <div>
+                <p className="eyebrow">PILIH PETUALANGAN</p>
+                <h1>Lima dunia, <em>banyak cerita!</em></h1>
+                <p className="lead">Mau bermain di dunia yang mana hari ini?</p>
+              </div>
+              <div className="heading-doodle" aria-hidden="true">✦</div>
+            </div>
+            <div className="world-grid">
+              {content.worlds.map((item, index) => {
+                const questionIds = new Set(item.levels[age].map((q) => q.id))
+                const count = (progress[age + ':' + item.id] || []).filter((id) => questionIds.has(id)).length
+                return (
+                  <button key={item.id} type="button" className={'world-card world-' + item.tint} onClick={() => openWorld(item)}>
+                    <div className="world-card-top">
+                      <span className="world-number">0{index + 1}</span>
+                      <span className="world-icon" aria-hidden="true">{item.icon}</span>
+                    </div>
+                    <h2>{item.title}</h2>
+                    <p>{item.short}</p>
+                    <div className="world-card-bottom">
+                      <span className="world-status">{count}/{item.levels[age].length} kegiatan</span>
+                      <span className="arrow-circle" aria-hidden="true">↗</span>
+                    </div>
+                    <div className="progress-track"><span style={{ width: (count / item.levels[age].length) * 100 + '%' }} /></div>
+                  </button>
+                )
+              })}
+            </div>
+            <p className="small-note">Progres tersimpan di browser perangkat ini, bukan di server.</p>
+          </section>
+        ) : (
+          <section className="game-screen">
+            <nav className="game-nav" aria-label="Navigasi permainan">
+              <button className="back-button" type="button" onClick={goHome}>← Semua dunia</button>
+              <span className="game-world-name">{world.icon} {world.title}</span>
+            </nav>
+            {!finished && currentQuestion ? (
+              <div className={'question-panel game-' + world.tint}>
+                <div className="question-header">
+                  <span className="question-count">TANTANGAN {step + 1} DARI {world.levels[age].length}</span>
+                  <span className="question-badge">✦ {completedCount} selesai</span>
+                </div>
+                <div className="question-progress" aria-hidden="true">
+                  {world.levels[age].map((q, index) => <span key={q.id} className={index <= step ? 'active' : ''} />)}
+                </div>
+                <div className="question-center">
+                  <span className="question-mascot" aria-hidden="true">{world.icon}</span>
+                  <h1>{currentQuestion.prompt}</h1>
+                  <button className="listen-button" type="button" onClick={() => speak('questions/' + currentQuestion.id, currentQuestion.prompt)}>
+                    <span aria-hidden="true">♪</span> Dengarkan pertanyaan
+                  </button>
+                  <p className="tap-helper">Sentuh satu jawaban di bawah ini</p>
+                </div>
+                <div className="answer-grid" aria-label="Pilihan jawaban">
+                  {currentQuestion.options.map((answer) => (
+                    <button
+                      key={answer.id}
+                      className={'answer-card' + (feedback === 'correct' && answer.id === currentQuestion.answer ? ' chosen' : '')}
+                      style={{ '--option-color': answer.color || '#f4eee5' } as CSSProperties}
+                      type="button"
+                      disabled={feedback === 'correct'}
+                      onClick={() => chooseAnswer(answer.id)}
+                    >
+                      <span className="answer-visual" aria-hidden="true">{answer.visual}</span>
+                      <span className="answer-label">{answer.label}</span>
+                    </button>
+                  ))}
+                </div>
+                <div className={'feedback-row' + (feedback ? ' visible' : '')} aria-live="polite">
+                  {feedback === 'correct' ? (
+                    <>
+                      <span>🌟 Hebat! Jawabanmu tepat!</span>
+                      <button type="button" className="continue-button" onClick={nextQuestion}>
+                        {step + 1 === world.levels[age].length ? 'Selesai!' : 'Lanjut'} →
+                      </button>
+                    </>
+                  ) : feedback === 'retry' ? (
+                    <span>💛 Belum tepat. Coba pilihan lainnya, yuk!</span>
+                  ) : <span>Pelan-pelan saja, tidak perlu buru-buru.</span>}
+                </div>
+              </div>
+            ) : (
+              <div className="finish-panel">
+                <div className="finish-sparkle" aria-hidden="true">🌈</div>
+                <p className="eyebrow">KAMU HEBAT!</p>
+                <h1>Satu petualangan <em>selesai!</em></h1>
+                <p>Terima kasih sudah mencoba semua kegiatan di {world.title}. Mau ke dunia lainnya?</p>
+                <button className="primary-button" type="button" onClick={goHome}>Pilih dunia lainnya →</button>
+                <button className="plain-button" type="button" onClick={() => openWorld(world)}>Main lagi</button>
+              </div>
+            )}
+          </section>
+        )}
+      </main>
+
+      <footer className="site-footer">
+        <span>Made with care by Astakula · Family Alpha 0.1.0</span>
+        <span>Tanpa iklan · Tanpa akun · Berbahasa Indonesia</span>
+      </footer>
+
+      {parentsOpen && (
+        <div className="modal-backdrop" role="presentation" onClick={() => setParentsOpen(false)}>
+          <section role="dialog" aria-modal="true" aria-labelledby="parents-title" className="parent-modal" onClick={(event) => event.stopPropagation()}>
+            <div className="modal-header">
+              <h2 id="parents-title">Catatan untuk orang tua</h2>
+              <button type="button" className="modal-close" onClick={() => setParentsOpen(false)} aria-label="Tutup">✕</button>
+            </div>
+            <p>Astakula Kids adalah permainan edukasi awal, bukan alat untuk menilai perkembangan anak. Dampingi saat bermain, ajak berdiskusi, dan lanjutkan belajar menggunakan benda nyata.</p>
+            <p>Progres disimpan hanya di browser ini. Narasi memakai file audio lokal jika tersedia; jika belum, browser akan mencoba suara bawaan perangkat. Tidak semua perangkat mendukung suara bahasa Indonesia secara offline.</p>
+            <button className="reset-button" type="button" onClick={resetProgress}>Hapus progres lokal</button>
+          </section>
+        </div>
+      )}
+    </div>
+  )
+}
