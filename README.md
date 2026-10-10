@@ -9,7 +9,7 @@
 - Dunia Angka
 - Dunia Huruf
 
-Each world includes **six activities in a gradual sequence**, with **30 activities total**. The original age-grouped questions are retained internally as content sets only; no ages are displayed or requested in the interface. Activities are illustrations of playful early learning, **not developmental tests** or mandatory milestones. Adults should accompany children and support offline play, especially for younger children.
+Each world currently includes **six different questions per repeatable round**, with **30 unique questions across five worlds**. Questions progress from simple to more challenging, but every round cycles into another shuffled round rather than ending. Answer positions are also reshuffled. The original age-grouped question sets remain internal for difficulty sequencing; no ages are shown. This is an initial content bank that should expand over time—not an infinite supply of unique questions. Activities are not developmental tests or mandatory milestones. Adults should accompany children and support offline play.
 
 ## Getting started
 Requires Node.js 22+.
@@ -20,7 +20,7 @@ npm run dev
 npm run build
 ```
 
-The site is static, with no analytics or backend. Progress is stored in this browser only. No child names, photos, ages, or accounts are required. Previously saved progress from the former age-selection version is merged automatically into each learning world without losing completed activities.
+The site is static, with no analytics or backend. There are **no scores, completion percentages, end screens, or stored answer histories** for new play. Children can re-enter any world and play again indefinitely. Only the preferred audio playback speed is stored in the browser. Historical answer records from earlier alpha versions are not used or changed; parents can choose to delete them in the parent settings. No child names, photos, ages, or accounts are required.
 
 ## Indonesian audio
 Text is always available. Initially, the app can use browser speech synthesis as a fallback (availability and offline support vary). Pre-rendered ElevenLabs MP3 assets take precedence once generated.
@@ -39,7 +39,7 @@ No key is needed at runtime. ElevenLabs consumes credits **only during audio gen
 
 ## Privacy and safety
 - No cookies for tracking, analytics, ads, signup or user profiling.
-- Progress is stored in `localStorage` on the device; parents can reset it.
+- New play sessions do not persist results or scores. Audio speed preference is stored in `localStorage`; old progress records can be cleared explicitly by a parent.
 - Never commit personal data of children or API credentials.
 - Audio or illustration assets may have their own licenses. Do not assume they are covered by a future MIT license for the code.
 
@@ -47,4 +47,4 @@ No key is needed at runtime. ElevenLabs consumes credits **only during audio gen
 GitHub Pages is deployed automatically from `main` via GitHub Actions. Site: https://ardwrd.github.io/astakula-kids/. CI checks the build, all 38 narration scripts, and the currently approved audio revision on pushes.
 
 ## Roadmap
-WP001 project foundation, WP002 design system, WP003 single preschool learning journey, WP004 five learning worlds, WP005 narration, WP006 local progress migration, WP007 offline PWA, WP008 QA + public release.
+WP001 project foundation, WP002 design system, WP003 age-free preschool experience, WP004 five replayable learning worlds, WP005 narration, WP006 shuffle and repeatable rounds without completion tracking, WP007 offline PWA, WP008 QA + public release.
