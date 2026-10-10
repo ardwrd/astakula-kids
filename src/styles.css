@@ -21,36 +21,15 @@ button:disabled { cursor: default; }
 .brand-name { font-size: 21px; font-weight: 900; letter-spacing: -1.1px; }
 .brand-name span { color: #d57d6d; }
 .header-actions { display: flex; align-items: center; gap: 12px; }
-.age-pill, .parent-button { border: 1px solid #e5ded4; border-radius: 999px; padding: 11px 16px; background: #fffdf9; color: #454b50; font-size: 13px; font-weight: 800; white-space: nowrap; }
-.age-pill { background: #e7f3e7; border-color: #d2e8d1; }
+.parent-button { border: 1px solid #e5ded4; border-radius: 999px; padding: 11px 16px; background: #fffdf9; color: #454b50; font-size: 13px; font-weight: 800; white-space: nowrap; }
 .container { width: min(1100px, 100% - 40px); margin: 0 auto; flex: 1; }
 .eyebrow { font-size: 12px; font-weight: 900; color: #c47c66; letter-spacing: 2.1px; margin: 0 0 15px; }
 h1, h2, p { margin-top: 0; }
 h1 { font-size: clamp(35px, 5vw, 60px); line-height: 1.08; letter-spacing: -2.5px; font-weight: 900; margin-bottom: 18px; }
 h1 em { font-style: normal; color: #cc7966; }
 .lead { font-size: clamp(16px, 2vw, 19px); line-height: 1.7; font-weight: 500; color: #777d84; max-width: 540px; }
-.welcome-screen { display: flex; flex-direction: column; align-items: center; text-align: center; padding: 20px 0 64px; }
-.welcome-screen .lead { margin-bottom: 30px; }
-.welcome-graphic { width: 152px; height: 152px; position: relative; margin-bottom: 21px; display: grid; place-items: center; }
-.hero-smile { width: 112px; height: 112px; border-radius: 35px; transform: rotate(-9deg); background: #ffd67e; display: grid; place-items: center; font-family: system-ui, sans-serif; font-size: 86px; line-height: 1; color: #6b5541; box-shadow: 0 12px 0 #f5be64; }
-.orbit-dot { position: absolute; font-size: 30px; }
-.dot-one { left: 1px; top: 17px; color: #88c8ad; }
-.dot-two { right: 0; top: 11px; color: #ea9b92; }
-.dot-three { right: 1px; bottom: 10px; color: #8b9fd4; }
-.age-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); width: min(690px, 100%); gap: 18px; margin-top: 8px; }
-.age-card { text-align: left; display: flex; flex-direction: column; border: 2px solid transparent; border-radius: 24px; padding: 23px 25px 20px; min-height: 255px; transition: transform .2s, border-color .2s; color: #32404a; }
-.age-card:hover, .world-card:hover, .answer-card:hover:not(:disabled) { transform: translateY(-3px); }
-.age-three { background: #fde9d8; }
-.age-five { background: #dff0e9; }
-.age-card:focus-visible { border-color: #346eff; }
-.age-illustration { font-size: 61px; height: 91px; display: flex; align-items: center; }
-.age-label { font-size: 13px; font-weight: 800; opacity: .65; }
-.age-card strong { font-size: 32px; letter-spacing: -.8px; }
-.age-hint { font-size: 13px; margin-top: 6px; }
-.age-action { display: flex; justify-content: space-between; margin-top: auto; padding-top: 14px; font-size: 14px; font-weight: 900; }
-.age-action span { font-size: 25px; line-height: .8; }
 .small-note { margin: 24px auto; text-align: center; font-size: 12px; color: #92908c; line-height: 1.6; }
-.worlds-screen { padding: 48px 0 35px; }
+.worlds-screen { padding: 24px 0 35px; }
 .section-heading { display: flex; align-items: center; justify-content: space-between; padding: 0 6px 22px; }
 .section-heading h1 { font-size: clamp(32px, 4.4vw, 52px); }
 .section-heading .lead { margin-bottom: 0; }
@@ -124,17 +103,10 @@ h1 em { font-style: normal; color: #cc7966; }
   .brand-name { font-size: 19px; }
   .brand-mark { width: 38px; height: 38px; font-size: 26px; }
   .parent-button { font-size: 11px; padding: 10px; }
-  .age-pill { padding: 10px; }
   .container { width: calc(100% - 28px); }
-  .welcome-screen { padding-top: 9px; }
-  .welcome-graphic { transform: scale(.8); height: 125px; margin-bottom: 8px; }
-  .welcome-screen h1 { font-size: 39px; }
   h1 { letter-spacing: -1.5px; }
-  .age-grid { gap: 12px; }
-  .age-card { padding: 18px; border-radius: 20px; min-height: 233px; }
-  .age-card strong { font-size: 26px; }
-  .age-illustration { font-size: 50px; height: 78px; }
-  .worlds-screen { padding-top: 25px; }
+  .worlds-screen { padding-top: 18px; }
+  .section-heading h1 { font-size: clamp(32px, 8.5vw, 44px); }
   .world-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
   .world-card { padding: 15px; min-height: 223px; border-radius: 19px; }
   .world-icon { width: 57px; height: 57px; font-size: 34px; border-radius: 18px; }
@@ -156,9 +128,6 @@ h1 em { font-style: normal; color: #cc7966; }
   .brand-name { font-size: 17px; }
   .header-actions { gap: 6px; }
   .parent-button { max-width: 81px; white-space: normal; line-height: 1.1; }
-  .age-card { padding: 13px; }
-  .age-card strong { font-size: 23px; }
-  .age-hint { font-size: 11px; }
   .world-grid { gap: 9px; }
   .answer-grid { grid-template-columns: repeat(3, minmax(0,1fr)); }
 }
