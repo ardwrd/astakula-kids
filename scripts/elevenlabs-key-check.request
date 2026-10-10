@@ -1,1 +1,3 @@
 Check updated ElevenLabs Actions key for API connectivity and voice access. Read-only, no TTS generation.
+
+Recheck API error status codes after scoped diagnostics update.
