@@ -10,6 +10,8 @@ import urllib.error
 import urllib.request
 from pathlib import Path
 
+from discover_elevenlabs_voice import VoiceDiscoveryError, select_free_candidate
+
 ROOT = Path(__file__).resolve().parents[1]
 CONTENT = ROOT / "src/data/content.json"
 MANIFEST = ROOT / "src/data/audioManifest.json"
@@ -92,7 +94,13 @@ def main():
     api_key = os.environ.get("ELEVENLABS_API_KEY", "")
     if not api_key:
         sys.exit("ELEVENLABS_API_KEY secret is missing.")
-    if not re.fullmatch(r"[a-zA-Z0-9_-]{8,80}", args.voice_id):
+    voice_id = args.voice_id
+    if voice_id.strip().lower() == "auto":
+        try:
+            voice_id = select_free_candidate(api_key)
+        except VoiceDiscoveryError as error:
+            sys.exit(str(error))
+    if not re.fullmatch(r"[a-zA-Z0-9_-]{8,80}", voice_id):
         sys.exit("Invalid voice ID.")
     try:
         limit = int(args.limit)
@@ -113,7 +121,7 @@ def main():
         if count >= limit:
             break
         destination.parent.mkdir(parents=True, exist_ok=True)
-        audio = speak(key, message, args.voice_id, api_key)
+        audio = speak(key, message, voice_id, api_key)
         destination.write_bytes(audio)
         generated.add(key)
         count += 1
