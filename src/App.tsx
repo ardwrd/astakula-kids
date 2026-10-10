@@ -5,6 +5,7 @@ import audioManifest from './data/audioManifest.json'
 import audioRevision from './data/audioRevision.json'
 import { PlayActivity } from './PlayActivities'
 import { AnimalIcon } from './AnimalIcon'
+import { WorldArt } from './WorldArt'
 import type { ActivityKind, ActivityWorld } from './PlayActivities'
 import type { LearningContent, World, Question } from './data/types'
 
@@ -181,7 +182,7 @@ export default function App() {
                 <button key={item.id} type="button" className={'world-card world-' + item.tint} onClick={() => openWorld(item)}>
                   <div className="world-card-top">
                     <span className="world-number">{String(index + 1).padStart(2, '0')}</span>
-                    <span className="world-card-direction" aria-hidden="true">↗</span>
+                    <WorldArt id={item.id} />
                   </div>
                   <h2>{item.title}</h2>
                   <p>{item.id === 'warna' ? 'Kenali dan campur warna.' : item.id === 'bentuk' ? 'Kenali dan tebalkan bentuk.' :
