@@ -20,6 +20,7 @@ jobs:
       - run: npm install --no-audit --no-fund
       - run: python3 -m py_compile scripts/generate_audio.py scripts/discover_elevenlabs_voice.py scripts/generate_prosody_previews.py scripts/generate_v4_candidates.py
       - run: python3 scripts/generate_v4_candidates.py --validate
+      - run: python3 scripts/validate_active_audio.py
       - run: npm run build
         env:
           GITHUB_PAGES: 'true'
