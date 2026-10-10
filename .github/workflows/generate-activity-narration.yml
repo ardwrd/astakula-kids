@@ -30,6 +30,14 @@ jobs:
         env:
           ELEVENLABS_API_KEY: ${{ secrets.ELEVENLABS_API_KEY }}
         run: python scripts/generate_activity_narration.py --limit 22
+      - name: Preserve generated clips in Actions artifact
+        if: ${{ always() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: eleven-v4-activity-audio
+          path: public/audio/activities/indo-v4-v1
+          if-no-files-found: ignore
+          retention-days: 14
       - name: Save partial or complete generated audio
         if: ${{ success() || failure() }}
         run: |
