@@ -281,7 +281,7 @@ export default function App() {
                   </button>
                 ))}
               </div>
-              <p className="rate-hint">Standar: Santai (0,85x). Pengaturan disimpan di perangkat ini.</p>
+              <p className="rate-hint">Standar narator baru: Normal (1x). Pengaturan disimpan di perangkat ini.</p>
             </div>
             <button className="reset-button" type="button" onClick={clearLegacyHistory}>Hapus riwayat versi lama</button>
             {legacyCleared && <p className="legacy-note" role="status">Riwayat dari versi sebelumnya sudah dihapus dari perangkat ini.</p>}
