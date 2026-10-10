@@ -75,8 +75,8 @@ def speak(key, message, voice_id, api_key):
             except (ValueError, UnicodeError, AttributeError):
                 pass
             error_message = error_message.replace(api_key, "[REDACTED]")
-            error_message = re.sub(r"(?i)(xi-api-key|authorization|api.key)\\s*[:=]\\s*[^\\s,;]+", r"\\1=[REDACTED]", error_message)
-            error_message = re.sub(r"[\\r\\n\\t]+", " ", error_message)[:350]
+            error_message = re.sub(r"(?i)(xi-api-key|authorization|api.key)\s*[:=]\s*[^\s,;]+", r"\1=[REDACTED]", error_message)
+            error_message = re.sub(r"[\r\n\t]+", " ", error_message)[:350]
             raise RuntimeError(
                 "ElevenLabs rejected clip " + key + " (HTTP " + str(error.code)
                 + ", code=" + error_code + "): " + error_message
