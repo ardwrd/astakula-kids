@@ -1,8 +1,7 @@
-import { useCallback, useEffect, useRef, useState } from 'react'
+import { useState } from 'react'
 import type { CSSProperties } from 'react'
 import rawContent from './data/content.json'
-import audioManifest from './data/audioManifest.json'
-import audioRevision from './data/audioRevision.json'
+import { useNarrator } from './useNarrator'
 import { PlayActivity } from './PlayActivities'
 import { AnimalIcon } from './AnimalIcon'
 import { WorldArt } from './WorldArt'
@@ -10,7 +9,6 @@ import type { ActivityKind, ActivityWorld } from './PlayActivities'
 import type { LearningContent, World, Question } from './data/types'
 
 const content = rawContent as unknown as LearningContent
-const audioKeys = new Set<string>(audioManifest.keys)
 type Feedback = 'correct' | 'retry' | null
 type Mode = ActivityKind | 'quiz' | null
 
@@ -53,36 +51,6 @@ function newPlayRound(world: World): Question[] {
   }))
 }
 
-function useNarration() {
-  const activeAudio = useRef<HTMLAudioElement | null>(null)
-  const stop = useCallback(() => {
-    activeAudio.current?.pause()
-    activeAudio.current = null
-    if ('speechSynthesis' in window) window.speechSynthesis.cancel()
-  }, [])
-  const fallback = useCallback((text: string) => {
-    if (!('speechSynthesis' in window)) return
-    const utterance = new SpeechSynthesisUtterance(text)
-    utterance.lang = 'id-ID'
-    utterance.rate = audioRevision.defaultPlaybackRate
-    utterance.pitch = 1
-    const idVoice = window.speechSynthesis.getVoices().find(v => v.lang.toLowerCase().startsWith('id'))
-    if (idVoice) utterance.voice = idVoice
-    window.speechSynthesis.speak(utterance)
-  }, [])
-  const speak = useCallback((key: string, text: string) => {
-    stop()
-    if (!audioKeys.has(key)) { fallback(text); return }
-    const audio = new Audio(import.meta.env.BASE_URL + audioRevision.basePath + key + '.mp3')
-    audio.playbackRate = audioRevision.defaultPlaybackRate
-    activeAudio.current = audio
-    audio.addEventListener('error', () => fallback(text), { once: true })
-    void audio.play().catch(() => fallback(text))
-  }, [fallback, stop])
-  useEffect(() => stop, [stop])
-  return { speak, stop }
-}
-
 export default function App() {
   const [world, setWorld] = useState<World | null>(null)
   const [mode, setMode] = useState<Mode>(null)
@@ -91,7 +59,7 @@ export default function App() {
   const [feedback, setFeedback] = useState<Feedback>(null)
   const [wrongChoice, setWrongChoice] = useState<string | null>(null)
   const [roundFinished, setRoundFinished] = useState(false)
-  const { speak, stop } = useNarration()
+  const { play, stop } = useNarrator()
 
   const openWorld = (next: World) => {
     setWorld(next)
@@ -101,7 +69,7 @@ export default function App() {
     setFeedback(null)
     setWrongChoice(null)
     setRoundFinished(false)
-    speak('worlds/' + next.id + '/intro', next.intro)
+    play('worlds/' + next.id + '/intro')
   }
   const goHome = () => {
     stop()
@@ -129,8 +97,11 @@ export default function App() {
       const questions = newPlayRound(world)
       setRound(questions)
       setStep(0)
-      speak('questions/' + questions[0].id, questions[0].prompt)
-    } else stop()
+      play('questions/' + questions[0].id)
+    } else {
+      const cue = next === 'trace' ? 'trace-' + world.id : next
+      play('activities/instructions/' + cue)
+    }
   }
   const currentQuestion = round[step] ?? null
   const chooseAnswer = (answer: string) => {
@@ -138,11 +109,11 @@ export default function App() {
     if (answer === currentQuestion.answer) {
       setFeedback('correct')
       setWrongChoice(null)
-      speak('global/correct', content.correct)
+      play('global/correct')
     } else {
       setWrongChoice(answer)
       setFeedback('retry')
-      speak('global/retry', content.retry)
+      play('global/retry')
     }
   }
   const nextQuestion = () => {
@@ -157,7 +128,7 @@ export default function App() {
     setStep(step + 1)
     setFeedback(null)
     setWrongChoice(null)
-    speak('questions/' + next.id, next.prompt)
+    play('questions/' + next.id)
   }
 
   return (
@@ -210,7 +181,7 @@ export default function App() {
             </div>
           </section>
         ) : mode !== 'quiz' ? (
-          <PlayActivity key={world.id + '-' + mode} world={world.id as ActivityWorld} kind={mode} onBack={backToWorld} />
+          <PlayActivity key={world.id + '-' + mode} world={world.id as ActivityWorld} kind={mode} onBack={backToWorld} narrate={play} />
         ) : (
           <section className="game-screen">
             <nav className="game-nav" aria-label="Navigasi permainan">
@@ -234,7 +205,7 @@ export default function App() {
                 <div className="question-center">
                   <h1>{currentQuestion.prompt}</h1>
                   <button className="listen-button" type="button"
-                    onClick={() => speak('questions/' + currentQuestion.id, currentQuestion.prompt)}>
+                    onClick={() => play('questions/' + currentQuestion.id)}>
                     <span aria-hidden="true">♪</span> Dengarkan lagi
                   </button>
                 </div>
