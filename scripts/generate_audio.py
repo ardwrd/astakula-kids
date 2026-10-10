@@ -56,9 +56,30 @@ def speak(key, message, voice_id, api_key):
             if error.code == 429 and attempt < 2:
                 time.sleep(3 * (attempt + 1))
                 continue
+            # ElevenLabs supplies a structured error code and message in JSON.
+            # Log a sanitized summary, never credentials or raw response bodies.
+            error_code = "unknown"
+            error_message = "No structured error details available."
+            try:
+                payload = json.loads(error.read(4096).decode("utf-8"))
+                detail = payload.get("detail", payload)
+                if isinstance(detail, dict):
+                    raw_code = detail.get("code") or detail.get("status") or detail.get("type")
+                    raw_message = detail.get("message")
+                    if isinstance(raw_code, str):
+                        error_code = re.sub(r"[^a-zA-Z0-9_-]", "", raw_code)[:80] or "unknown"
+                    if isinstance(raw_message, str):
+                        error_message = raw_message
+                elif isinstance(detail, str):
+                    error_message = detail
+            except (ValueError, UnicodeError, AttributeError):
+                pass
+            error_message = error_message.replace(api_key, "[REDACTED]")
+            error_message = re.sub(r"(?i)(xi-api-key|authorization|api.key)\\s*[:=]\\s*[^\\s,;]+", r"\\1=[REDACTED]", error_message)
+            error_message = re.sub(r"[\\r\\n\\t]+", " ", error_message)[:350]
             raise RuntimeError(
-                "ElevenLabs request failed (HTTP " + str(error.code)
-                + ") for " + key + ". Check plan, permissions, voice and credits."
+                "ElevenLabs rejected clip " + key + " (HTTP " + str(error.code)
+                + ", code=" + error_code + "): " + error_message
             ) from None
     raise RuntimeError("Audio generation retries exhausted")
 
