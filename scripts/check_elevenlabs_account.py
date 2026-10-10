@@ -6,6 +6,7 @@ No text-to-speech generation and therefore no TTS credits are consumed.
 """
 import json
 import os
+import re
 import urllib.error
 import urllib.request
 
@@ -19,7 +20,20 @@ def get_json(path: str, key: str):
             data = json.loads(response.read().decode("utf-8"))
             return response.status, data
     except urllib.error.HTTPError as error:
-        # HTTP status is sufficient: avoid echoing API body, account or key details.
+        # Only print a sanitized machine-readable error status, never the error
+        # message/body, API key, or identifying account details.
+        code = "unknown"
+        try:
+            payload = json.loads(error.read(4096).decode("utf-8"))
+            detail = payload.get("detail", payload)
+            if isinstance(detail, dict):
+                raw = detail.get("status") or detail.get("code") or "unknown"
+                if isinstance(raw, str):
+                    code = re.sub(r"[^a-zA-Z0-9_-]", "", raw)[:48] or "unknown"
+        except (ValueError, UnicodeError, AttributeError):
+            pass
+        print("ElevenLabs diagnostic: HTTP " + str(error.code) +
+              ", code=" + code)
         return error.code, None
     except (urllib.error.URLError, UnicodeError, json.JSONDecodeError):
         return 0, None
