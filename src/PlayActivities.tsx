@@ -176,7 +176,11 @@ function TraceLines({ world, narrate }: { world: 'bentuk' | 'hewan' | 'huruf'; n
   }
   const up = () => { drawingRef.current = false }
   const clear = () => { coveredRef.current = new Set(); setCoverage(0); setStrokes([]); setDotsReached(0) }
-  const next = () => { setIndex(old => (old + 1) % models.length) }
+  const next = () => {
+    const following = (index + 1) % models.length
+    setIndex(following)
+    narrate('activities/trace/' + models[following].name.toLowerCase())
+  }
   return (
     <div className="activity-inner tracing">
       <div className="trace-title"><h2>{track.name}</h2><span>{index + 1} dari {models.length}</span></div>
@@ -202,7 +206,10 @@ function TraceLines({ world, narrate }: { world: 'bentuk' | 'hewan' | 'huruf'; n
       <p className="activity-help" aria-live="polite">{complete ? 'Bagus! Garisnya sudah kamu ikuti.' : dotsMode ? 'Sentuh titik berikutnya.' : 'Tidak harus persis. Ikuti garis pelan-pelan.'}</p>
       <div className="activity-actions">
         <button type="button" className="quiet-button" onClick={clear}>Hapus garis</button>
-        <button type="button" className="quiet-button" onClick={() => setDotsMode(v => !v)}>{dotsMode ? 'Pakai jari' : 'Pakai titik pandu'}</button>
+        <button type="button" className="quiet-button" onClick={() => {
+          if (!dotsMode) narrate('activities/instructions/trace-dots')
+          setDotsMode(v => !v)
+        }}>{dotsMode ? 'Pakai jari' : 'Pakai titik pandu'}</button>
         {complete && <button type="button" className="primary-action" onClick={next}>Gambar berikutnya →</button>}
       </div>
     </div>
@@ -237,6 +244,7 @@ function AnimalMemory({ narrate }: { narrate: ActivityProps['narrate'] }) {
       narrate(matched.length + 1 === animals.length
         ? 'activities/results/memory-complete'
         : 'activities/results/memory-match')
+      narrate('activities/animals/' + card.id, true)
       setMatched(old => [...old, card.id])
       timer.current = window.setTimeout(() => setRevealed([]), 450)
     } else {
