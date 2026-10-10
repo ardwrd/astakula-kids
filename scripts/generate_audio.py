@@ -125,6 +125,12 @@ def main():
         destination.write_bytes(audio)
         generated.add(key)
         count += 1
+        # Persist progress after every clip. If credits run out mid-batch,
+        # the workflow can still commit the completed recordings.
+        MANIFEST.write_text(
+            json.dumps({"keys": sorted(generated)}, ensure_ascii=False, indent=2) + "\n",
+            encoding="utf-8",
+        )
         print("Generated:", key)
     MANIFEST.write_text(
         json.dumps({"keys": sorted(generated)}, ensure_ascii=False, indent=2) + "\n",
