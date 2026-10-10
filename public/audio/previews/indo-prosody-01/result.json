@@ -1,0 +1,11 @@
+{
+  "voice": "Z1zqlZPdl4KqSeH7Nm4L",
+  "samples": {
+    "welcome-v2.mp3": "ready",
+    "welcome-v4.mp3": "ready",
+    "instruction-v2.mp3": "ready",
+    "instruction-v4.mp3": "ready",
+    "question-v2.mp3": "ready",
+    "question-v4.mp3": "ready"
+  }
+}
