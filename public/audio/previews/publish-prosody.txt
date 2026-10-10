@@ -1,0 +1,3 @@
+Preview batch: indo-prosody-01
+Six samples generated with ElevenLabs Voice Design Z1zqlZPdl4KqSeH7Nm4L.
+The production MP3 files in audio/generated/ are unchanged.
