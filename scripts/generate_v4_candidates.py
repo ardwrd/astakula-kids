@@ -46,10 +46,10 @@ def validate_narration():
             raise ValueError("Missing or too short spoken text for " + key)
         if "<" in line or ">" in line:
             raise ValueError("SSML/HTML not allowed with Eleven v4: " + key)
-        tags = re.findall(r"\\[([^]]+)\\]", line)
+        tags = re.findall(r"\[([^]]+)\]", line)
         if any(tag not in SUPPORTED_TAGS for tag in tags):
             raise ValueError("Unapproved delivery tag in " + key)
-        if re.search(r"[\\U0001F300-\\U0001FAFF]", line):
+        if re.search(r"[\U0001F300-\U0001FAFF]", line):
             raise ValueError("Emoji should not be sent to Eleven v4: " + key)
         if item["kind"] == "pertanyaan" and "?" not in line:
             raise ValueError("Question missing question mark: " + key)
@@ -94,8 +94,8 @@ def convert(text, api_key):
                 pass
             # Redact API credentials before emitting diagnostics.
             message = message.replace(api_key, "[REDACTED]")
-            message = re.sub(r"(?i)(xi-api-key|authorization)\\s*[:=]\\s*\\S+",
-                             r"\\1=[REDACTED]", message)
+            message = re.sub(r"(?i)(xi-api-key|authorization)\s*[:=]\s*\S+",
+                             r"\1=[REDACTED]", message)
             raise RuntimeError("ElevenLabs HTTP " + str(error.code) +
                                " (" + code[:64] + "): " + message[:250]) from None
     raise RuntimeError("Audio request failed after retries")
