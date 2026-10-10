@@ -1,10 +1,10 @@
 # Astakula Kids — Standar Narasi Bahasa Indonesia (Eleven v4)
 
-Status: **DRAF KANDIDAT — BELUM DISETUJUI UNTUK PRODUKSI**.
+Status: **38/38 REKAMAN SELESAI — DISETUJUI DAN AKTIF DI APLIKASI**. Rekaman lama disimpan untuk rollback.
 
 ## Tujuan
 
-Menyampaikan instruksi dan pertanyaan kepada anak usia 3 dan 5 tahun dengan
+Menyampaikan instruksi dan pertanyaan kepada anak prasekolah (di bawah 6 tahun) dengan
 pelafalan bahasa Indonesia yang wajar, intonasi ramah, tempo nyaman, dan respons
 positif. Bahasa harus jelas, tidak terdengar seperti terjemahan bahasa Inggris,
 tidak terlalu dramatis, dan tidak membentak.
@@ -12,7 +12,7 @@ tidak terlalu dramatis, dan tidak membentak.
 ## Keputusan teknis
 
 - Model: `eleven_v4`; `language_code: id`.
-- Voice Design aktif untuk kandidat baru: `wtqqNhC5H27DEv1Ojo4B` (akun ElevenLabs kedua). Rekaman lama tetap menggunakan suara dari akun pertama.
+- Voice Design aktif: `wtqqNhC5H27DEv1Ojo4B` (akun ElevenLabs kedua). Rekaman lama tetap menggunakan suara dari akun pertama.
 - Stability 0,60; Similarity 0,75 sebagai titik awal, bukan jaminan hasil.
 - Eleven v4 tidak mendukung SSML `<break>` atau voice speed API. Gunakan tanda
   baca seperlunya, elipsis singkat, struktur kalimat, dan satu audio tag
@@ -23,7 +23,7 @@ tidak terlalu dramatis, dan tidak membentak.
   kanonis. Teks TTS tersimpan terpisah di `src/data/narrationV4.json`.
 - Semua 38 kunci audio, termasuk 30 soal dan 5 pengantar, harus dipertahankan.
 
-## Fase produksi
+## Riwayat dan prosedur produksi (selesai pada 10 Oktober 2026)
 
 1. **Naskah** — audit dan edit 38 kalimat, lalu jalankan
    `python scripts/generate_v4_candidates.py --validate`.
@@ -39,16 +39,16 @@ tidak terlalu dramatis, dan tidak membentak.
 4. **Batch tertutup** — setelah *persetujuan eksplisit* pengguna, jalankan
    workflow **Stage Eleven v4 Indonesian candidates** dengan limit sesuai
    sisa kredit. Default hanya 3 klip per run; `limit=38` boleh digunakan
-   setelah pengguna menyetujui seluruh naskah dan pembiayaan.
+   setelah pengguna menyetujui seluruh naskah dan pembiayaan. **Batch disetujui dan selesai, 38/38.**
    Berkas kandidat ditulis ke `public/audio/candidates/indo-v4-v1/`.
 5. **Verifikasi teknis** — jumlah tepat 38/38, durasi dan kualitas didengar,
    hash/ukuran berkas tercantum di `manifest.json`, tidak ada MP3 kosong,
-   suara konsisten antardunia dan antarusia.
+   suara konsisten antardunia dan antarjenis kegiatan.
 6. **Promosi tertutup** — hanya atas persetujuan eksplisit, ubah
    `src/data/audioRevision.json` dari `legacy-v2` ke `indo-v4-v1`,
    basePath menjadi `audio/candidates/indo-v4-v1/` dan
    defaultPlaybackRate menjadi `1.0`. Lakukan build, uji di HP,
-   lalu deploy. *Tidak perlu menimpa atau memindahkan MP3 lama.*
+   lalu deploy. **Sudah diterapkan dengan 38/38 MP3 V4**, tanpa menimpa atau memindahkan MP3 lama.
 7. **Rollback cepat** — kembalikan `audioRevision.json` ke
    `legacy-v2`, `audio/generated/`, defaultPlaybackRate `0.85`.
    Audio versi lama tetap berada di repository.
@@ -68,6 +68,6 @@ tidak terlalu dramatis, dan tidak membentak.
 
 Kunci ElevenLabs **hanya** berada di GitHub Actions Secret;
 jangan disimpan pada frontend maupun di repository.
-Audio kandidat terpisah dan tidak dimainkan aplikasi aktif.
+Audio Eleven v4 saat ini aktif melalui `src/data/audioRevision.json` dan disimpan terpisah dari rekaman V2 lama.
 Setiap permintaan TTS baru menghabiskan jatah/kredit sesuai ketentuan akun.
 Pada paket Free, ikuti syarat atribusi dan penggunaan nonkomersial ElevenLabs.
