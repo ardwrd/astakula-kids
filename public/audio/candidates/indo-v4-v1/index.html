@@ -33,7 +33,7 @@
    area.innerHTML=visible.map(x=>{
      const available=Boolean(manifest.entries?.[x.key]);
      const old='../../generated/'+x.key+'.mp3', fresh='./'+x.key+'.mp3';
-     const natural=x.spoken.replace(/\\[[^\\]]+\\]\\s*/g,'');
+     const natural=x.spoken.replace(/\[[^\]]+\]\s*/g,'');
      return '<article class="item"><div class="top"><strong>'+safe(x.display)+'</strong><span class="meta">'+safe(x.world)+' · '+safe(x.age==='Semua'?'Semua usia':'Usia '+x.age)+' · '+safe(x.kind)+'</span></div>'+
        '<div class="spoken"><small class="muted">Naskah yang akan diucapkan</small><div>'+safe(natural)+'</div></div>'+
        '<div class="paired"><div class="player"><b>Lama · Multilingual v2 (0,85x)</b><audio controls preload="none" data-old src="'+old+'"></audio><small>Rekaman produksi saat ini.</small></div>'+
