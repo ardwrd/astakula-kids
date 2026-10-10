@@ -287,7 +287,7 @@ export default function App() {
 
       <footer className="site-footer">
         <span>Made with care by Astakula · Family Alpha 0.1.0</span>
-        <span>Tanpa iklan · Tanpa akun · Berbahasa Indonesia</span>
+        <span>Tanpa iklan · Tanpa akun · Narasi: <a href="https://elevenlabs.io/" target="_blank" rel="noopener noreferrer">elevenlabs.io</a></span>
       </footer>
 
       {parentsOpen && (
