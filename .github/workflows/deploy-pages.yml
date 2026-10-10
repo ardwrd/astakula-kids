@@ -30,6 +30,10 @@ jobs:
           node-version: '22'
       - name: Install
         run: npm install --no-audit --no-fund
+      - name: Validate scripted narration and approved audio revision
+        run: |
+          python3 scripts/generate_v4_candidates.py --validate
+          python3 scripts/validate_active_audio.py
       - name: Build static site
         run: npm run build
         env:
