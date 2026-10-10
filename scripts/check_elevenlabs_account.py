@@ -11,7 +11,7 @@ import urllib.error
 import urllib.request
 
 BASE = "https://api.elevenlabs.io"
-OLD_VOICE = "Z1zqlZPdl4KqSeH7Nm4L"
+TARGET_VOICE = "wtqqNhC5H27DEv1Ojo4B"
 
 def get_json(path: str, key: str):
     request = urllib.request.Request(BASE + path, headers={"xi-api-key": key})
@@ -51,13 +51,13 @@ def main():
         print("ElevenLabs models endpoint: HTTP " + str(status) +
               "; key validity may require permitted API scopes")
 
-    voice_status, voice = get_json("/v1/voices/" + OLD_VOICE, key)
+    voice_status, voice = get_json("/v1/voices/" + TARGET_VOICE, key)
     if voice_status == 200 and isinstance(voice, dict):
-        print("Previous Voice Design ID: metadata accessible")
-        print("Previous Voice Design owned by connected account: " +
+        print("New Voice Design ID: metadata accessible")
+        print("New Voice Design owned by connected account: " +
               ("yes" if voice.get("is_owner") is True else "not confirmed"))
     else:
-        print("Previous Voice Design ID: inaccessible via this key (HTTP " +
+        print("New Voice Design ID: inaccessible via this key (HTTP " +
               str(voice_status) + ")")
 
     personal_status, voices = get_json(
