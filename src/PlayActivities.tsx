@@ -99,10 +99,12 @@ function TraceLines({ world, narrate }: { world: 'bentuk' | 'hewan' | 'huruf'; n
   const coveredRef = useRef<Set<number>>(new Set())
   const pathSamplesRef = useRef<Point[]>([])
   const drawingRef = useRef(false)
+  const resultAnnouncedRef = useRef(false)
   const track = models[index]
 
   useEffect(() => {
     coveredRef.current = new Set()
+    resultAnnouncedRef.current = false
     setCoverage(0)
     setStrokes([])
     setDotsReached(0)
@@ -146,7 +148,10 @@ function TraceLines({ world, narrate }: { world: 'bentuk' | 'hewan' | 'huruf'; n
       if (Math.hypot(sample.x - point.x, sample.y - point.y) < 22) coveredRef.current.add(i)
     }
     const nextCoverage = coveredRef.current.size / samples.length
-    if (nextCoverage >= .66 && coverage < .66) narrate('activities/results/trace-complete')
+    if (nextCoverage >= .66 && !resultAnnouncedRef.current) {
+      resultAnnouncedRef.current = true
+      narrate('activities/results/trace-complete')
+    }
     setCoverage(nextCoverage)
   }
   const down = (e: PointerEvent<SVGSVGElement>) => {
@@ -186,7 +191,10 @@ function TraceLines({ world, narrate }: { world: 'bentuk' | 'hewan' | 'huruf'; n
           className={i < dotsReached ? 'trace-dot-done' : i === dotsReached ? 'trace-dot-next' : 'trace-dot-wait'}
           onClick={() => {
             if (i !== dotsReached) return
-            if (i + 1 === checkpoints.length) narrate('activities/results/trace-complete')
+            if (i + 1 === checkpoints.length && !resultAnnouncedRef.current) {
+              resultAnnouncedRef.current = true
+              narrate('activities/results/trace-complete')
+            }
             setDotsReached(old => old + 1)
           }} role="button"
           aria-label={'Titik ' + (i + 1)} />)}
