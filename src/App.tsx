@@ -7,6 +7,7 @@ import type { AgeMode, LearningContent, World } from './data/types'
 const content = rawContent as unknown as LearningContent
 const audioKeys = new Set<string>(audioManifest.keys)
 const STORAGE_KEY = 'astakula-kids:progress:v1'
+const AUDIO_RATE_STORAGE_KEY = 'astakula-kids:audio-rate:v1'
 type Progress = Record<string, string[]>
 type Feedback = 'correct' | 'retry' | null
 
@@ -26,7 +27,16 @@ function readProgress(): Progress {
   }
 }
 
-function useNarration() {
+function readAudioRate(): number {
+  try {
+    const value = Number(localStorage.getItem(AUDIO_RATE_STORAGE_KEY))
+    return [0.75, 0.85, 1].includes(value) ? value : 0.85
+  } catch {
+    return 0.85
+  }
+}
+
+function useNarration(speed: number) {
   const activeAudio = useRef<HTMLAudioElement | null>(null)
 
   const stop = useCallback(() => {
@@ -39,13 +49,13 @@ function useNarration() {
     if (!('speechSynthesis' in window)) return
     const utterance = new SpeechSynthesisUtterance(text)
     utterance.lang = 'id-ID'
-    utterance.rate = 0.88
+    utterance.rate = speed
     utterance.pitch = 1.05
     const voices = window.speechSynthesis.getVoices()
     const indonesian = voices.find((voice) => voice.lang.toLowerCase().startsWith('id'))
     if (indonesian) utterance.voice = indonesian
     window.speechSynthesis.speak(utterance)
-  }, [])
+  }, [speed])
 
   const speak = useCallback((key: string, text: string) => {
     stop()
@@ -54,10 +64,13 @@ function useNarration() {
       return
     }
     const player = new Audio(import.meta.env.BASE_URL + 'audio/generated/' + key + '.mp3')
+    // Slow down pre-generated MP3 clips without consuming ElevenLabs credits.
+    // Modern browsers preserve speech pitch when changing playbackRate.
+    player.playbackRate = speed
     activeAudio.current = player
     player.addEventListener('error', () => fallback(text), { once: true })
     void player.play().catch(() => fallback(text))
-  }, [fallback, stop])
+  }, [fallback, stop, speed])
 
   useEffect(() => stop, [stop])
   return { speak, stop }
@@ -71,7 +84,12 @@ export default function App() {
   const [finished, setFinished] = useState(false)
   const [progress, setProgress] = useState<Progress>(readProgress)
   const [parentsOpen, setParentsOpen] = useState(false)
-  const { speak, stop } = useNarration()
+  const [audioRate, setAudioRate] = useState<number>(readAudioRate)
+  const { speak, stop } = useNarration(audioRate)
+
+  useEffect(() => {
+    try { localStorage.setItem(AUDIO_RATE_STORAGE_KEY, String(audioRate)) } catch { /* local storage may be disabled */ }
+  }, [audioRate])
 
   useEffect(() => {
     try { localStorage.setItem(STORAGE_KEY, JSON.stringify(progress)) } catch { /* storage may be disabled */ }
@@ -299,6 +317,27 @@ export default function App() {
             </div>
             <p>Astakula Kids adalah permainan edukasi awal, bukan alat untuk menilai perkembangan anak. Dampingi saat bermain, ajak berdiskusi, dan lanjutkan belajar menggunakan benda nyata.</p>
             <p>Progres disimpan hanya di browser ini. Narasi memakai file audio lokal jika tersedia; jika belum, browser akan mencoba suara bawaan perangkat. Tidak semua perangkat mendukung suara bahasa Indonesia secara offline.</p>
+            <div className="voice-rate-settings">
+              <p className="voice-rate-title">Kecepatan narasi</p>
+              <div className="voice-rate-options" role="group" aria-label="Kecepatan narasi">
+                {([
+                  { value: 0.75, label: 'Pelan' },
+                  { value: 0.85, label: 'Santai' },
+                  { value: 1, label: 'Normal' },
+                ] as const).map(({ value, label }) => (
+                  <button
+                    type="button"
+                    key={value}
+                    className={audioRate === value ? 'rate-selected' : ''}
+                    aria-pressed={audioRate === value}
+                    onClick={() => setAudioRate(value)}
+                  >
+                    {label} <span>{value.toFixed(2).replace(/0$/, '')}x</span>
+                  </button>
+                ))}
+              </div>
+              <p className="rate-hint">Standar: Santai (0,85x). Pengaturan disimpan di perangkat ini.</p>
+            </div>
             <button className="reset-button" type="button" onClick={resetProgress}>Hapus progres lokal</button>
           </section>
         </div>
