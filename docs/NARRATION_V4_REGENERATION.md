@@ -12,7 +12,7 @@ tidak terlalu dramatis, dan tidak membentak.
 ## Keputusan teknis
 
 - Model: `eleven_v4`; `language_code: id`.
-- Voice Design: `Z1zqlZPdl4KqSeH7Nm4L`.
+- Voice Design aktif untuk kandidat baru: `wtqqNhC5H27DEv1Ojo4B` (akun ElevenLabs kedua). Rekaman lama tetap menggunakan suara dari akun pertama.
 - Stability 0,60; Similarity 0,75 sebagai titik awal, bukan jaminan hasil.
 - Eleven v4 tidak mendukung SSML `<break>` atau voice speed API. Gunakan tanda
   baca seperlunya, elipsis singkat, struktur kalimat, dan satu audio tag
