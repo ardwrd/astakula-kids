@@ -33,14 +33,20 @@ def clips_from_content():
     return clips
 
 
-def speak(key, message, voice_id, api_key):
+def speak(key, message, voice_id, api_key, model_id="eleven_multilingual_v2", speed=1.0):
     url = ("https://api.elevenlabs.io/v1/text-to-speech/"
            + voice_id + "?output_format=mp3_44100_128")
-    data = json.dumps({
+    voice_settings = {"stability": 0.6, "similarity_boost": 0.75}
+    if model_id != "eleven_v4":
+        voice_settings["speed"] = speed
+    request_data = {
         "text": message,
-        "model_id": "eleven_multilingual_v2",
-        "voice_settings": {"stability": 0.6, "similarity_boost": 0.75},
-    }, ensure_ascii=False).encode("utf-8")
+        "model_id": model_id,
+        "voice_settings": voice_settings,
+    }
+    if model_id == "eleven_v4":
+        request_data["language_code"] = "id"
+    data = json.dumps(request_data, ensure_ascii=False).encode("utf-8")
     request = urllib.request.Request(
         url, data=data, method="POST",
         headers={"xi-api-key": api_key, "Content-Type": "application/json",
