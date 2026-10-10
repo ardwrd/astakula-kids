@@ -1,9 +1,11 @@
+import type { ReactNode } from 'react'
+
 interface AnimalIconProps { id: string; size?: number }
 const ink = '#354947'
 const line = { stroke: ink, strokeWidth: 3.5, strokeLinecap: 'round' as const, strokeLinejoin: 'round' as const }
 
 export function AnimalIcon({ id, size = 90 }: AnimalIconProps) {
-  const shapes: Record<string, React.ReactNode> = {
+  const shapes: Record<string, ReactNode> = {
     kucing: <>
       <path d="M19 41 L17 17 L36 27 Q50 20 64 27 L83 17 L81 41 Q89 53 83 68 Q75 85 50 85 Q25 85 17 68 Q11 53 19 41 Z" fill="#efc993" {...line}/>
       <path d="M23 26 L31 31 L22 36 Z M77 26 L69 31 L78 36 Z" fill="#e4a4a2"/>
