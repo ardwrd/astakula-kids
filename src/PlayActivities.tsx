@@ -89,10 +89,25 @@ function TraceLines({ world }: { world: 'bentuk' | 'hewan' | 'huruf' }) {
   const trackRef = useRef<SVGPathElement | null>(null)
   const svgRef = useRef<SVGSVGElement | null>(null)
   const coveredRef = useRef<Set<number>>(new Set())
+  const pathSamplesRef = useRef<Point[]>([])
   const drawingRef = useRef(false)
   const track = models[index]
 
-  useEffect(() => { coveredRef.current = new Set(); setCoverage(0); setStrokes([]); setDotsReached(0) }, [index, dotsMode])
+  useEffect(() => {
+    coveredRef.current = new Set()
+    setCoverage(0)
+    setStrokes([])
+    setDotsReached(0)
+    // SVG geometry is cached once per outline to keep touch drawing smooth.
+    const path = trackRef.current
+    if (path) {
+      const length = path.getTotalLength()
+      pathSamplesRef.current = Array.from({ length: 110 }, (_, i) => {
+        const p = path.getPointAtLength(length * i / 109)
+        return { x: p.x, y: p.y }
+      })
+    }
+  }, [index, dotsMode])
 
   const pointAt = (ratio: number): Point => {
     const p = trackRef.current
@@ -115,15 +130,14 @@ function TraceLines({ world }: { world: 'bentuk' | 'hewan' | 'huruf' }) {
     return { x: local.x, y: local.y }
   }
   const record = (point: Point) => {
-    const path = trackRef.current
-    if (!path) return
-    const length = path.getTotalLength()
-    for (let i = 0; i < 110; i++) {
+    const samples = pathSamplesRef.current
+    if (!samples.length) return
+    for (let i = 0; i < samples.length; i++) {
       if (coveredRef.current.has(i)) continue
-      const sample = path.getPointAtLength(length * i / 109)
+      const sample = samples[i]
       if (Math.hypot(sample.x - point.x, sample.y - point.y) < 22) coveredRef.current.add(i)
     }
-    setCoverage(coveredRef.current.size / 110)
+    setCoverage(coveredRef.current.size / samples.length)
   }
   const down = (e: PointerEvent<SVGSVGElement>) => {
     if (dotsMode || complete) return
