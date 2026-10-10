@@ -7,10 +7,10 @@
 </style></head>
 <body><main class="wrap">
 <a href="../../../">← Astakula Kids</a>
-<p class="pill">Family Alpha · review saja · belum rilis</p>
-<h1>Review narasi baru Eleven v4</h1>
-<p class="muted">Bandingkan audio lama dan kandidat baru. Dengarkan aksen bahasa Indonesia, jeda, intonasi pertanyaan, serta nada perintah yang ramah anak. Teks pembelajaran yang tampil di permainan tidak berubah.</p>
-<p class="note">Kandidat tersimpan di folder terpisah. Tombol putar audio lama memakai 0,85x (sesuai setelan aplikasi), sedangkan kandidat Eleven v4 diputar pada tempo aslinya (1x). Belum ada kandidat yang dipakai oleh permainan.</p>
+<p class="pill">Family Alpha · narator v4 aktif</p>
+<h1>Perbandingan narator Eleven v4</h1>
+<p class="muted">Bandingkan rekaman lama dengan narator Eleven v4 yang sudah disetujui dan digunakan di permainan. Semua 38 rekaman versi baru tersedia untuk didengarkan. Teks pembelajaran yang tampil di permainan tidak berubah.</p>
+<p class="note">Narator aktif Eleven v4 diputar pada tempo asli (1x). Rekaman lama tetap disimpan sebagai cadangan dan dimainkan pada tempo 0,85x hanya untuk perbandingan.</p>
 <div id="status" aria-live="polite">Memuat status sampel…</div>
 <div class="filters" id="filters"></div><section id="list"></section>
 <p class="muted">Kredit audio: <a href="https://elevenlabs.io/" rel="noopener noreferrer" target="_blank">ElevenLabs</a>. Sampel dari akun Free hanya untuk penggunaan nonkomersial sesuai ketentuan penyedia.</p>
@@ -26,7 +26,7 @@
   ]);
   const groups=['Semua','Umum',...Array.from(new Set(catalog.items.map(x=>x.world))).filter(x=>x!=='Umum')];
   let current='Semua';
-  stat.innerHTML='<strong>'+safe(manifest.generated_count||0)+' / 38 audio kandidat tersedia.</strong> <span class="muted">Audio utama tetap aman.</span>';
+  stat.innerHTML='<strong>'+safe(manifest.generated_count||0)+' / 38 audio Eleven v4 tersedia.</strong> <span class="muted">Narator baru aktif; rekaman lama tetap tersedia untuk rollback.</span>';
   const draw=()=>{
    bar.innerHTML=groups.map(g=>'<button type="button" data-filter="'+safe(g)+'" class="'+(current===g?'active':'')+'">'+safe(g)+'</button>').join('');
    const visible=catalog.items.filter(x=>current==='Semua'||x.world===current);
@@ -36,8 +36,8 @@
      const natural=x.spoken.replace(/\[[^\]]+\]\s*/g,'');
      return '<article class="item"><div class="top"><strong>'+safe(x.display)+'</strong><span class="meta">'+safe(x.world)+' · '+safe(x.age==='Semua'?'Semua usia':'Usia '+x.age)+' · '+safe(x.kind)+'</span></div>'+
        '<div class="spoken"><small class="muted">Naskah yang akan diucapkan</small><div>'+safe(natural)+'</div></div>'+
-       '<div class="paired"><div class="player"><b>Lama · Multilingual v2 (0,85x)</b><audio controls preload="none" data-old src="'+old+'"></audio><small>Rekaman produksi saat ini.</small></div>'+
-       '<div class="player"><b>Baru · Eleven v4 (1x)</b>'+(available?'<audio controls preload="none" src="'+fresh+'"></audio>':'<div class="unready">Belum digenerasi — menunggu validasi bertahap.</div>')+'<small>Versi kandidat terpisah, belum diterapkan.</small></div></div></article>';
+       '<div class="paired"><div class="player"><b>Cadangan · Multilingual v2 (0,85x)</b><audio controls preload="none" data-old src="'+old+'"></audio><small>Rekaman produksi saat ini.</small></div>'+
+       '<div class="player"><b>Aktif · Eleven v4 (1x)</b>'+(available?'<audio controls preload="none" src="'+fresh+'"></audio>':'<div class="unready">Belum digenerasi — menunggu validasi bertahap.</div>')+'<small>Narasi Eleven v4 yang digunakan aplikasi saat ini.</small></div></div></article>';
    }).join('');
    area.querySelectorAll('audio[data-old]').forEach(x=>x.playbackRate=.85);
    area.querySelectorAll('audio').forEach(a=>a.addEventListener('play',()=>area.querySelectorAll('audio').forEach(b=>{if(b!==a)b.pause()})));
