@@ -26,10 +26,14 @@ The site is static, with no analytics or backend. Progress is stored in this bro
 Text is always available. Initially, the app can use browser speech synthesis as a fallback (availability and offline support vary). Pre-rendered ElevenLabs MP3 assets take precedence once generated.
 
 1. Create a repository Actions secret named `ELEVENLABS_API_KEY` (never place keys in frontend code).
-2. Select a suitable Indonesian-language **voice ID** in ElevenLabs.
-3. Under **Actions → Generate Indonesian narration → Run workflow**, enter that voice ID and a clip limit (try 3 first).
-4. The workflow writes generated files into `public/audio/generated/` and updates `src/data/audioManifest.json`.
-5. Validate pronunciation before generating the full set. Generated audio is checked into the public repository, so verify ElevenLabs usage rights first.
+2. For Free-tier API usage, use a **Voice Design** voice saved in ElevenLabs **My Voices**. Voices copied from the community **Voice Library** are not usable through the API on Free. Default voices are only available on older accounts and expire on 31 December 2026.
+3. Under **Actions → Generate Indonesian narration → Run workflow**, keep `voice_id=auto` and `limit=3`. The generator searches for a saved Voice Design voice, falling back to an eligible Default voice if available. Voice discovery requires **Voices: Read** permission on the ElevenLabs API key (plus **Text to Speech** permission).
+4. You can also manually enter a compatible Voice ID instead of `auto`. Selecting an unavailable community voice will fail with an ElevenLabs permission error.
+5. The workflow writes generated MP3 files to `public/audio/generated/` and updates `src/data/audioManifest.json`. Validate pronunciation before generating the full set. Generated audio is checked into the public repository, so verify ElevenLabs usage rights first.
+
+Suggested Voice Design prompt: `Warm adult Indonesian female educator with a clear standard Indonesian accent. Patient, cheerful and reassuring, natural articulation, unhurried child-friendly storytelling delivery, no background noise or exaggerated cartoon affect.`
+
+The Free tier is for **non-commercial use with ElevenLabs attribution**, even if the repository is public and open-source. Confirm current terms before publishing or redistributing generated audio.
 
 No key is needed at runtime. ElevenLabs consumes credits **only during audio generation**.
 
