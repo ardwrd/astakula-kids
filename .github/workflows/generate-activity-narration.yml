@@ -29,7 +29,7 @@ jobs:
       - name: Generate missing MP3s only
         env:
           ELEVENLABS_API_KEY: ${{ secrets.ELEVENLABS_API_KEY }}
-        run: python scripts/generate_activity_narration.py --limit 22
+        run: python scripts/generate_activity_narration.py --limit 38
       - name: Save partial or complete generated audio
         if: ${{ success() || failure() }}
         run: |
