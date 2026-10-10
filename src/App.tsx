@@ -3,18 +3,40 @@ import type { CSSProperties } from 'react'
 import rawContent from './data/content.json'
 import audioManifest from './data/audioManifest.json'
 import audioRevision from './data/audioRevision.json'
+import { PlayActivity } from './PlayActivities'
+import type { ActivityKind, ActivityWorld } from './PlayActivities'
 import type { LearningContent, World, Question } from './data/types'
 
 const content = rawContent as unknown as LearningContent
 const audioKeys = new Set<string>(audioManifest.keys)
-const LEGACY_PROGRESS_KEY = 'astakula-kids:progress:v1'
-const AUDIO_RATE_STORAGE_KEY = audioRevision.id === 'legacy-v2'
-  ? 'astakula-kids:audio-rate:v1'
-  : 'astakula-kids:audio-rate:' + audioRevision.id
 type Feedback = 'correct' | 'retry' | null
+type Mode = ActivityKind | 'quiz' | null
 
-// Content is grouped by introductory/advanced difficulty internally.
-// Neither age groups nor completion percentages are shown to children.
+const activityChoices: Record<string, { kind: Exclude<Mode, null>; title: string; detail: string }[]> = {
+  warna: [
+    { kind: 'mix', title: 'Campur warna', detail: 'Pilih dua warna, lalu lihat hasilnya.' },
+    { kind: 'quiz', title: 'Tebak warna', detail: 'Cari warna yang disebutkan.' },
+  ],
+  bentuk: [
+    { kind: 'trace', title: 'Tebalkan bentuk', detail: 'Ikuti garis dengan jari.' },
+    { kind: 'quiz', title: 'Tebak bentuk', detail: 'Pilih bentuk yang tepat.' },
+  ],
+  hewan: [
+    { kind: 'memory', title: 'Cari pasangan', detail: 'Balik kartu dan temukan gambar yang sama.' },
+    { kind: 'trace', title: 'Tebalkan hewan', detail: 'Ikuti garis gambar hewan.' },
+    { kind: 'quiz', title: 'Tebak hewan', detail: 'Kenali gambar hewan.' },
+  ],
+  angka: [
+    { kind: 'count', title: 'Hitung benda', detail: 'Sentuh bendanya satu per satu.' },
+    { kind: 'quiz', title: 'Tebak angka', detail: 'Pilih angka yang cocok.' },
+  ],
+  huruf: [
+    { kind: 'trace', title: 'Tebalkan huruf', detail: 'Tulis huruf mengikuti garis.' },
+    { kind: 'letters', title: 'Susun kata', detail: 'Gabungkan dua suku kata.' },
+    { kind: 'quiz', title: 'Tebak huruf', detail: 'Kenali huruf dan kata.' },
+  ],
+}
+
 function shuffle<T>(items: readonly T[]): T[] {
   const result = [...items]
   for (let index = result.length - 1; index > 0; index--) {
@@ -23,227 +45,211 @@ function shuffle<T>(items: readonly T[]): T[] {
   }
   return result
 }
-
 function newPlayRound(world: World): Question[] {
-  const questions = [
-    ...shuffle(world.levels['3']),
-    ...shuffle(world.levels['5']),
-  ]
-  return questions.map((question) => ({
-    ...question,
-    options: shuffle(question.options),
+  return [...shuffle(world.levels['3']), ...shuffle(world.levels['5'])].map(q => ({
+    ...q, options: shuffle(q.options),
   }))
 }
 
-function readAudioRate(): number {
-  try {
-    const value = Number(localStorage.getItem(AUDIO_RATE_STORAGE_KEY))
-    return [0.75, 0.85, 1].includes(value) ? value : audioRevision.defaultPlaybackRate
-  } catch {
-    return audioRevision.defaultPlaybackRate
-  }
-}
-
-function useNarration(speed: number) {
+function useNarration() {
   const activeAudio = useRef<HTMLAudioElement | null>(null)
-
   const stop = useCallback(() => {
     activeAudio.current?.pause()
     activeAudio.current = null
     if ('speechSynthesis' in window) window.speechSynthesis.cancel()
   }, [])
-
   const fallback = useCallback((text: string) => {
     if (!('speechSynthesis' in window)) return
     const utterance = new SpeechSynthesisUtterance(text)
     utterance.lang = 'id-ID'
-    utterance.rate = speed
-    utterance.pitch = 1.05
-    const voices = window.speechSynthesis.getVoices()
-    const indonesian = voices.find((voice) => voice.lang.toLowerCase().startsWith('id'))
-    if (indonesian) utterance.voice = indonesian
+    utterance.rate = audioRevision.defaultPlaybackRate
+    utterance.pitch = 1
+    const idVoice = window.speechSynthesis.getVoices().find(v => v.lang.toLowerCase().startsWith('id'))
+    if (idVoice) utterance.voice = idVoice
     window.speechSynthesis.speak(utterance)
-  }, [speed])
-
+  }, [])
   const speak = useCallback((key: string, text: string) => {
     stop()
-    if (!audioKeys.has(key)) {
-      fallback(text)
-      return
-    }
-    const player = new Audio(import.meta.env.BASE_URL + audioRevision.basePath + key + '.mp3')
-    // Slow down pre-generated MP3 clips without consuming ElevenLabs credits.
-    // Modern browsers preserve speech pitch when changing playbackRate.
-    player.playbackRate = speed
-    activeAudio.current = player
-    player.addEventListener('error', () => fallback(text), { once: true })
-    void player.play().catch(() => fallback(text))
-  }, [fallback, stop, speed])
-
+    if (!audioKeys.has(key)) { fallback(text); return }
+    const audio = new Audio(import.meta.env.BASE_URL + audioRevision.basePath + key + '.mp3')
+    audio.playbackRate = audioRevision.defaultPlaybackRate
+    activeAudio.current = audio
+    audio.addEventListener('error', () => fallback(text), { once: true })
+    void audio.play().catch(() => fallback(text))
+  }, [fallback, stop])
   useEffect(() => stop, [stop])
   return { speak, stop }
 }
 
 export default function App() {
   const [world, setWorld] = useState<World | null>(null)
+  const [mode, setMode] = useState<Mode>(null)
   const [step, setStep] = useState(0)
   const [round, setRound] = useState<Question[]>([])
   const [feedback, setFeedback] = useState<Feedback>(null)
+  const [wrongChoice, setWrongChoice] = useState<string | null>(null)
   const [roundFinished, setRoundFinished] = useState(false)
-  const [parentsOpen, setParentsOpen] = useState(false)
-  const [legacyCleared, setLegacyCleared] = useState(false)
-  const [audioRate, setAudioRate] = useState<number>(readAudioRate)
-  const { speak, stop } = useNarration(audioRate)
+  const { speak, stop } = useNarration()
 
-  useEffect(() => {
-    try { localStorage.setItem(AUDIO_RATE_STORAGE_KEY, String(audioRate)) } catch { /* local storage may be disabled */ }
-  }, [audioRate])
-
-  const openWorld = (nextWorld: World) => {
-    setWorld(nextWorld)
-    setRound(newPlayRound(nextWorld))
-    setStep(0)
-    setFeedback(null)
-    setRoundFinished(false)
-    speak('worlds/' + nextWorld.id + '/intro', nextWorld.intro)
-  }
-
-  const goHome = () => {
-    stop()
-    setWorld(null)
+  const openWorld = (next: World) => {
+    setWorld(next)
+    setMode(null)
     setRound([])
     setStep(0)
     setFeedback(null)
+    setWrongChoice(null)
+    setRoundFinished(false)
+    speak('worlds/' + next.id + '/intro', next.intro)
+  }
+  const goHome = () => {
+    stop()
+    setWorld(null)
+    setMode(null)
+    setRound([])
+    setFeedback(null)
+    setRoundFinished(false)
+    setWrongChoice(null)
+  }
+  const backToWorld = () => {
+    stop()
+    setMode(null)
+    setFeedback(null)
+    setWrongChoice(null)
     setRoundFinished(false)
   }
-
+  const startMode = (next: Exclude<Mode, null>) => {
+    if (!world) return
+    setMode(next)
+    setFeedback(null)
+    setWrongChoice(null)
+    setRoundFinished(false)
+    if (next === 'quiz') {
+      const questions = newPlayRound(world)
+      setRound(questions)
+      setStep(0)
+      speak('questions/' + questions[0].id, questions[0].prompt)
+    } else stop()
+  }
   const currentQuestion = round[step] ?? null
-
   const chooseAnswer = (answer: string) => {
     if (!currentQuestion || !world || roundFinished || feedback === 'correct') return
     if (answer === currentQuestion.answer) {
       setFeedback('correct')
+      setWrongChoice(null)
       speak('global/correct', content.correct)
     } else {
+      setWrongChoice(answer)
       setFeedback('retry')
       speak('global/retry', content.retry)
     }
   }
-
   const nextQuestion = () => {
     if (!world || roundFinished || feedback !== 'correct') return
     if (step + 1 >= round.length) {
-      // Finish this play session only. A new session starts when the child chooses "Main lagi".
       stop()
-      setFeedback(null)
       setRoundFinished(true)
+      setFeedback(null)
       return
     }
     const next = round[step + 1]
     setStep(step + 1)
     setFeedback(null)
+    setWrongChoice(null)
     speak('questions/' + next.id, next.prompt)
-  }
-
-  const clearLegacyHistory = () => {
-    if (!window.confirm('Hapus riwayat jawaban yang tersimpan dari versi Astakula Kids sebelumnya?')) return
-    try {
-      localStorage.removeItem(LEGACY_PROGRESS_KEY)
-      setLegacyCleared(true)
-    } catch {
-      window.alert('Penyimpanan browser tidak dapat diakses saat ini.')
-    }
   }
 
   return (
     <div className="app-shell">
       <header className="app-header">
-        <button className="brand" type="button" onClick={goHome} aria-label="Astakula Kids — semua dunia">
+        <button className="brand" type="button" onClick={goHome} aria-label="Astakula Kids — halaman utama">
           <span className="brand-name">Astakula Kids</span>
         </button>
-        <div className="header-actions">
-          <button className="parent-button" type="button" onClick={() => setParentsOpen(true)} aria-label="Informasi untuk orang tua">Untuk orang tua</button>
-        </div>
       </header>
-
       <main className="container">
         {!world ? (
           <section className="worlds-screen">
             <div className="section-heading">
               <div>
-                <p className="eyebrow">HALO, PETUALANG KECIL!</p>
-                <h1>Hari ini kita <em>belajar apa?</em></h1>
-                <p className="lead">Pilih dunia yang kamu suka, lalu bermain dan belajar bersama. Yuk, mulai petualangannya!</p>
+                <p className="eyebrow">ASTAKULA KIDS</p>
+                <h1>Mau main apa hari ini?</h1>
+                <p className="lead">Pilih satu dunia. Ada beberapa cara untuk bermain dan belajar.</p>
               </div>
-              <div className="heading-doodle" aria-hidden="true">✦</div>
             </div>
             <div className="world-grid">
               {content.worlds.map((item, index) => (
                 <button key={item.id} type="button" className={'world-card world-' + item.tint} onClick={() => openWorld(item)}>
                   <div className="world-card-top">
-                    <span className="world-number">0{index + 1}</span>
-                    <span className="world-icon" aria-hidden="true">{item.icon}</span>
+                    <span className="world-number">{String(index + 1).padStart(2, '0')}</span>
+                    <span className="world-card-direction" aria-hidden="true">↗</span>
                   </div>
                   <h2>{item.title}</h2>
-                  <p>{item.short}</p>
-                  <div className="world-card-bottom">
-                    <span className="world-status">Bisa dimainkan kapan saja</span>
-                    <span className="arrow-circle" aria-hidden="true">↗</span>
-                  </div>
+                  <p>{item.id === 'warna' ? 'Kenali dan campur warna.' : item.id === 'bentuk' ? 'Kenali dan tebalkan bentuk.' :
+                    item.id === 'hewan' ? 'Lihat, pasangkan, dan gambar hewan.' : item.id === 'angka' ?
+                      'Hitung benda di layar.' : 'Tebalkan huruf dan susun kata.'}</p>
+                  <span className="world-card-cta">Pilih permainan →</span>
                 </button>
               ))}
             </div>
-            <p className="small-note">Bermain sesukamu, tanpa batas waktu, nilai, atau status tamat.</p>
           </section>
+        ) : mode === null ? (
+          <section className="mode-screen">
+            <nav className="game-nav"><button className="back-button" type="button" onClick={goHome}>← Semua dunia</button></nav>
+            <h1>{world.title}</h1>
+            <p className="mode-intro">Pilih cara bermain.</p>
+            <div className="mode-grid">
+              {(activityChoices[world.id] || []).map((activity, index) => (
+                <button type="button" className="mode-card" key={activity.kind} onClick={() => startMode(activity.kind)}>
+                  <span className="mode-index">{String(index + 1).padStart(2, '0')}</span>
+                  <strong>{activity.title}</strong>
+                  <span>{activity.detail}</span>
+                  <span className="mode-arrow" aria-hidden="true">Mulai →</span>
+                </button>
+              ))}
+            </div>
+          </section>
+        ) : mode !== 'quiz' ? (
+          <PlayActivity key={world.id + '-' + mode} world={world.id as ActivityWorld} kind={mode} onBack={backToWorld} />
         ) : (
           <section className="game-screen">
             <nav className="game-nav" aria-label="Navigasi permainan">
-              <button className="back-button" type="button" onClick={goHome}>← Semua dunia</button>
-              <span className="game-world-name">{world.icon} {world.title}</span>
+              <button className="back-button" type="button" onClick={backToWorld}>← Pilih permainan</button>
+              <span className="game-world-name">{world.title}</span>
             </nav>
             {roundFinished ? (
               <div className="session-finish-panel">
-                <span className="session-finish-icon" aria-hidden="true">🌈</span>
-                <p className="eyebrow">HEBAT, PETUALANG KECIL!</p>
-                <h1>Asyik, sudah mencoba <em>semuanya!</em></h1>
-                <p>Kamu sudah bermain di {world.title} hari ini. Mau coba lagi dengan susunan yang berbeda atau pilih dunia lainnya?</p>
+                <h1>Sudah selesai satu sesi.</h1>
+                <p>Mau main lagi atau mencoba permainan lain?</p>
                 <div className="session-actions">
-                  <button className="continue-button" type="button" onClick={() => openWorld(world)}>Main lagi ↻</button>
-                  <button className="secondary-button" type="button" onClick={goHome}>Pilih dunia lain →</button>
+                  <button className="continue-button" type="button" onClick={() => startMode('quiz')}>Main lagi</button>
+                  <button className="secondary-button" type="button" onClick={backToWorld}>Pilih permainan lain</button>
                 </div>
-                <p className="session-note">Dunia ini tetap bisa dimainkan kapan saja.</p>
               </div>
             ) : currentQuestion ? (
               <div className={'question-panel game-' + world.tint}>
                 <div className="question-header">
-                  <span className="question-count">AYO COBA!</span>
-                  <span className="question-badge">✦ Bermain sesukamu</span>
+                  <span className="question-count">Pilih jawaban</span>
+                  <span className="question-badge">{step + 1} dari {round.length}</span>
                 </div>
                 <div className="question-center">
-                  <span className="question-mascot" aria-hidden="true">{world.icon}</span>
                   <h1>{currentQuestion.prompt}</h1>
-                  <button className="listen-button" type="button" onClick={() => speak('questions/' + currentQuestion.id, currentQuestion.prompt)}>
-                    <span aria-hidden="true">♪</span> Dengarkan pertanyaan
+                  <button className="listen-button" type="button"
+                    onClick={() => speak('questions/' + currentQuestion.id, currentQuestion.prompt)}>
+                    <span aria-hidden="true">♪</span> Dengarkan lagi
                   </button>
-                  <p className="tap-helper">Sentuh satu jawaban di bawah ini</p>
                 </div>
                 <div className="answer-grid" aria-label="Pilihan jawaban">
-                  {currentQuestion.options.map((answer) => (
-                    <button
-                      key={answer.id}
-                      className={'answer-card' + (world.id === 'warna' ? ' color-answer-card' : '') + (feedback === 'correct' && answer.id === currentQuestion.answer ? ' chosen' : '')}
+                  {currentQuestion.options.map(answer => (
+                    <button key={answer.id} type="button" disabled={feedback === 'correct'}
+                      className={'answer-card' + (world.id === 'warna' ? ' color-answer-card' : '') +
+                        (feedback === 'correct' && answer.id === currentQuestion.answer ? ' chosen' : '') +
+                        (feedback === 'retry' && answer.id === wrongChoice ? ' is-wrong' : '')}
                       style={{ '--option-color': answer.color || '#f4eee5' } as CSSProperties}
-                      type="button"
-                      disabled={feedback === 'correct'}
-                      onClick={() => chooseAnswer(answer.id)}
-                    >
-                      {world.id !== 'warna' && (
-                        <span className="answer-visual" aria-hidden="true">
-                          {answer.image
-                            ? <img className="answer-image" src={import.meta.env.BASE_URL + answer.image} alt="" />
-                            : answer.visual}
-                        </span>
-                      )}
+                      onClick={() => chooseAnswer(answer.id)}>
+                      {world.id !== 'warna' && <span className="answer-visual" aria-hidden="true">
+                        {answer.image
+                          ? <img className="answer-image" src={import.meta.env.BASE_URL + answer.image} alt="" />
+                          : answer.visual}
+                      </span>}
                       <span className="answer-label">{answer.label}</span>
                     </button>
                   ))}
@@ -251,61 +257,22 @@ export default function App() {
                 <div className={'feedback-row' + (feedback ? ' visible' : '')} aria-live="polite">
                   {feedback === 'correct' ? (
                     <>
-                      <span>🌟 Hebat! Jawabanmu tepat!</span>
+                      <span>Benar!</span>
                       <button type="button" className="continue-button" onClick={nextQuestion}>
-                        {step + 1 >= round.length ? 'Lihat hasil bermain →' : 'Lanjut →'}
+                        {step + 1 === round.length ? 'Selesai →' : 'Lanjut →'}
                       </button>
                     </>
-                  ) : feedback === 'retry' ? (
-                    <span>💛 Belum tepat. Coba pilihan lainnya, yuk!</span>
-                  ) : <span>Pelan-pelan saja, tidak perlu buru-buru.</span>}
+                  ) : feedback === 'retry' ? <span>Coba lagi. Pilih yang lain.</span> : <span>Sentuh salah satu jawaban.</span>}
                 </div>
               </div>
             ) : null}
           </section>
         )}
       </main>
-
       <footer className="site-footer">
-        <span>Made with care by Astakula · Family Alpha 0.1.0</span>
-        <span>Tanpa iklan · Tanpa akun · Narasi: <a href="https://elevenlabs.io/" target="_blank" rel="noopener noreferrer">elevenlabs.io</a></span>
+        <span>Astakula Kids</span>
+        <span>Tanpa iklan · Tanpa akun · Narasi: <a href="https://elevenlabs.io/" target="_blank" rel="noopener noreferrer">ElevenLabs</a></span>
       </footer>
-
-      {parentsOpen && (
-        <div className="modal-backdrop" role="presentation" onClick={() => setParentsOpen(false)}>
-          <section role="dialog" aria-modal="true" aria-labelledby="parents-title" className="parent-modal" onClick={(event) => event.stopPropagation()}>
-            <div className="modal-header">
-              <h2 id="parents-title">Catatan untuk orang tua</h2>
-              <button type="button" className="modal-close" onClick={() => setParentsOpen(false)} aria-label="Tutup">✕</button>
-            </div>
-            <p>Astakula Kids adalah permainan edukasi prasekolah, bukan alat untuk menilai perkembangan anak. Setiap sesi berisi enam pertanyaan yang dimulai dari pengenalan mudah lalu tantangan berikutnya. Setelah sesi berakhir, anak bebas memilih untuk bermain lagi dengan urutan dan posisi jawaban berbeda, atau berpindah dunia. Tidak ada status tamat permanen.</p>
-            <p>Aplikasi tidak menyimpan skor atau riwayat jawaban baru. Hanya pengaturan kecepatan narasi yang disimpan di perangkat. Narasi memakai MP3 lokal; suara bawaan browser digunakan jika file tidak tersedia. Dampingi anak ketika bermain dan lanjutkan belajar menggunakan benda nyata.</p>
-            <div className="voice-rate-settings">
-              <p className="voice-rate-title">Kecepatan narasi</p>
-              <div className="voice-rate-options" role="group" aria-label="Kecepatan narasi">
-                {([
-                  { value: 0.75, label: 'Pelan' },
-                  { value: 0.85, label: 'Santai' },
-                  { value: 1, label: 'Normal' },
-                ] as const).map(({ value, label }) => (
-                  <button
-                    type="button"
-                    key={value}
-                    className={audioRate === value ? 'rate-selected' : ''}
-                    aria-pressed={audioRate === value}
-                    onClick={() => setAudioRate(value)}
-                  >
-                    {label} <span>{value.toFixed(2).replace(/0$/, '')}x</span>
-                  </button>
-                ))}
-              </div>
-              <p className="rate-hint">Standar narator baru: Normal (1x). Pengaturan disimpan di perangkat ini.</p>
-            </div>
-            <button className="reset-button" type="button" onClick={clearLegacyHistory}>Hapus riwayat versi lama</button>
-            {legacyCleared && <p className="legacy-note" role="status">Riwayat dari versi sebelumnya sudah dihapus dari perangkat ini.</p>}
-          </section>
-        </div>
-      )}
     </div>
   )
 }
