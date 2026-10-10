@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import type { PointerEvent } from 'react'
+import { AnimalIcon } from './AnimalIcon'
 
 export type ActivityKind = 'mix' | 'trace' | 'memory' | 'count' | 'letters'
 export type ActivityWorld = 'warna' | 'bentuk' | 'hewan' | 'angka' | 'huruf'
@@ -56,7 +57,7 @@ function randomize<T>(items: T[]) {
 
 function MixColors() {
   const [selection, setSelection] = useState<string[]>([])
-  const pick = (id: string) => setSelection(old => old.length === 2 ? [id] : [...old, id].slice(0, 2))
+  const pick = (id: string) => setSelection(old => old.length === 2 ? [id] : old.includes(id) ? old : [...old, id].slice(0, 2))
   const result = selection.length === 2 ? mixes[mixKey(selection[0], selection[1])] : null
   return (
     <div className="activity-inner">
@@ -72,7 +73,7 @@ function MixColors() {
         {mixOptions.map(c => <button key={c.id} type="button" className="paint-choice" onClick={() => pick(c.id)}
           style={{ background: c.color }} aria-label={'Pilih ' + c.label}><span>{c.label}</span></button>)}
       </div>
-      <p className="activity-help" aria-live="polite">{result ? 'Merah, kuning, dan biru bisa jadi warna baru. Pilih lagi, yuk.' : selection.length === 1 ? 'Sekarang pilih satu warna lagi.' : 'Sentuh warna yang kamu suka.'}</p>
+      <p className="activity-help" aria-live="polite">{result ? 'Jadi warna ' + result.name.toLowerCase() + '. Mau campur lagi?' : selection.length === 1 ? 'Pilih warna berbeda.' : 'Sentuh warna yang kamu suka.'}</p>
       <button type="button" className="quiet-button" onClick={() => setSelection([])}>Ulangi campuran</button>
     </div>
   )
@@ -212,7 +213,7 @@ function AnimalMemory() {
           const visible = revealed.includes(card.key) || matched.includes(card.id)
           return <button key={card.key} type="button" className={'memory-card' + (visible ? ' is-open' : '') + (matched.includes(card.id) ? ' is-matched' : '')}
             onClick={() => turn(card)} aria-label={visible ? 'Gambar ' + card.id : 'Buka kartu hewan'}
-            aria-pressed={visible}>{visible ? <span aria-hidden="true">{card.visual}</span> : <span aria-hidden="true">?</span>}</button>
+            aria-pressed={visible}>{visible ? <AnimalIcon id={card.id} size={80} /> : <span aria-hidden="true">?</span>}</button>
         })}
       </div>
       <p className="activity-help" aria-live="polite">{matched.length === animals.length ? 'Semua pasangan ketemu!' : 'Balik dua kartu, lalu lihat gambarnya.'}</p>
