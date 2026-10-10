@@ -15,11 +15,8 @@ button:disabled { cursor: default; }
 #root { min-height: 100vh; }
 .app-shell { min-height: 100vh; display: flex; flex-direction: column; overflow: hidden; }
 .app-header { height: 88px; width: min(1160px, 100% - 44px); margin: auto; display: flex; align-items: center; justify-content: space-between; gap: 14px; }
-.brand { display: inline-flex; align-items: center; gap: 10px; border: 0; background: transparent; padding: 5px 0; }
-.brand-mark { position: relative; display: grid; place-items: center; background: #e69b7b; color: #fff; font-weight: 900; font-size: 32px; width: 44px; height: 44px; border-radius: 14px; line-height: 1; }
-.brand-mark span { font-size: 14px; position: absolute; right: -4px; top: -6px; color: #eab452; }
-.brand-name { font-size: 21px; font-weight: 900; letter-spacing: -1.1px; }
-.brand-name span { color: #d57d6d; }
+.brand { display: inline-flex; align-items: center; min-height: 44px; border: 0; background: transparent; padding: 6px 0; color: inherit; }
+.brand-name { font-size: 21px; font-weight: 900; letter-spacing: -.04em; line-height: 1; color: #2b3543; white-space: nowrap; }
 .header-actions { display: flex; align-items: center; gap: 12px; }
 .parent-button { border: 1px solid #e5ded4; border-radius: 999px; padding: 11px 16px; background: #fffdf9; color: #454b50; font-size: 13px; font-weight: 800; white-space: nowrap; }
 .container { width: min(1100px, 100% - 40px); margin: 0 auto; flex: 1; }
@@ -106,7 +103,6 @@ h1 em { font-style: normal; color: #cc7966; }
 @media (max-width: 720px) {
   .app-header { width: calc(100% - 30px); height: 75px; }
   .brand-name { font-size: 19px; }
-  .brand-mark { width: 38px; height: 38px; font-size: 26px; }
   .parent-button { font-size: 11px; padding: 10px; }
   .container { width: calc(100% - 28px); }
   h1 { letter-spacing: -1.5px; }
