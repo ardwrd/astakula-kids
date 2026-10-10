@@ -16,7 +16,7 @@ on:
   push:
     branches: [main]
     paths:
-      - 'scripts/v4-sample.request'
+      - 'scripts/v4-full-approved.request'
 
 permissions:
   contents: write
@@ -40,8 +40,8 @@ jobs:
       - name: Synthesize isolated candidate audio
         env:
           ELEVENLABS_API_KEY: ${{ secrets.ELEVENLABS_API_KEY }}
-          CLIP_LIMIT: ${{ github.event_name == 'push' && '4' || inputs.limit }}
-          CLIP_KEYS: ${{ github.event_name == 'push' && 'global/welcome,questions/warna-3-1,questions/warna-3-2,global/correct' || inputs.keys }}
+          CLIP_LIMIT: ${{ github.event_name == 'push' && '38' || inputs.limit }}
+          CLIP_KEYS: ${{ inputs.keys || '' }}
         run: python scripts/generate_v4_candidates.py --limit "$CLIP_LIMIT" --keys "$CLIP_KEYS"
       - name: Commit only staged candidates, even if credit limit interrupts batch
         if: ${{ success() || failure() }}
