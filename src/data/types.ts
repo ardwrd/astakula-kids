@@ -4,6 +4,7 @@ export interface Choice {
   id: string
   label: string
   visual: string
+  image?: string // Exact local illustration asset, used when an emoji is misleading.
   color?: string
 }
 
