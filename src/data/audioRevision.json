@@ -1,7 +1,7 @@
 {
-  "id": "legacy-v2",
-  "basePath": "audio/generated/",
-  "defaultPlaybackRate": 0.85,
+  "id": "indo-v4-v1",
+  "basePath": "audio/candidates/indo-v4-v1/",
+  "defaultPlaybackRate": 1,
   "approved": true,
-  "note": "Versi produksi yang aktif. Kandidat Eleven v4 belum disetujui dan tidak boleh dipakai aplikasi."
+  "note": "Disetujui pengguna setelah pengujian Voice Design wtqqNhC5H27DEv1Ojo4B. Seluruh 38 MP3 telah digenerasi; legacy-v2 tetap disimpan di audio/generated untuk rollback."
 }
