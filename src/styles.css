@@ -260,3 +260,6 @@ h1 em { font-style: normal; color: #cc7966; }
 @media (prefers-reduced-motion: reduce) {
   .world-card, .mode-card, .paint-choice, .answer-card { transition: none; }
 }
+
+.activity-listen { display: block; margin: 0 auto 24px; min-height: 44px; }
+.memory-card svg, .answer-card .answer-visual svg { display: block; width: min(100%, 84px); height: auto; }
