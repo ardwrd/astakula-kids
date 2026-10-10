@@ -766,7 +766,8 @@
               {
                 "id": "paku",
                 "label": "Paku",
-                "visual": "🔩"
+                "visual": "",
+                "image": "icons/paku.svg"
               }
             ],
             "answer": "pagi"
