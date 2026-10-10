@@ -2,12 +2,15 @@ import { useCallback, useEffect, useRef, useState } from 'react'
 import type { CSSProperties } from 'react'
 import rawContent from './data/content.json'
 import audioManifest from './data/audioManifest.json'
+import audioRevision from './data/audioRevision.json'
 import type { AgeMode, LearningContent, World } from './data/types'
 
 const content = rawContent as unknown as LearningContent
 const audioKeys = new Set<string>(audioManifest.keys)
 const STORAGE_KEY = 'astakula-kids:progress:v1'
-const AUDIO_RATE_STORAGE_KEY = 'astakula-kids:audio-rate:v1'
+const AUDIO_RATE_STORAGE_KEY = audioRevision.id === 'legacy-v2'
+  ? 'astakula-kids:audio-rate:v1'
+  : 'astakula-kids:audio-rate:' + audioRevision.id
 type Progress = Record<string, string[]>
 type Feedback = 'correct' | 'retry' | null
 
@@ -30,9 +33,9 @@ function readProgress(): Progress {
 function readAudioRate(): number {
   try {
     const value = Number(localStorage.getItem(AUDIO_RATE_STORAGE_KEY))
-    return [0.75, 0.85, 1].includes(value) ? value : 0.85
+    return [0.75, 0.85, 1].includes(value) ? value : audioRevision.defaultPlaybackRate
   } catch {
-    return 0.85
+    return audioRevision.defaultPlaybackRate
   }
 }
 
@@ -63,7 +66,7 @@ function useNarration(speed: number) {
       fallback(text)
       return
     }
-    const player = new Audio(import.meta.env.BASE_URL + 'audio/generated/' + key + '.mp3')
+    const player = new Audio(import.meta.env.BASE_URL + audioRevision.basePath + key + '.mp3')
     // Slow down pre-generated MP3 clips without consuming ElevenLabs credits.
     // Modern browsers preserve speech pitch when changing playbackRate.
     player.playbackRate = speed
