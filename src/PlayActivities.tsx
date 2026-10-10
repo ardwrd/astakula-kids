@@ -285,6 +285,26 @@ function WordBuilder() {
 }
 
 export function PlayActivity({ world, kind, onBack }: ActivityProps) {
+  useEffect(() => () => {
+    if ('speechSynthesis' in window) window.speechSynthesis.cancel()
+  }, [])
+  const instructions: Record<ActivityKind, string> = {
+    mix: 'Pilih dua warna. Lihat warna yang muncul setelah dicampur.',
+    trace: 'Ikuti garis putus-putus dengan jarimu. Kalau sulit, pilih titik pandu.',
+    memory: 'Balik dua kartu, lalu cari gambar hewan yang sama.',
+    count: 'Sentuh satu per satu lingkaran sambil menghitung.',
+    letters: 'Sentuh dua suku kata yang benar untuk membentuk sebuah kata.',
+  }
+  const listen = () => {
+    if (!('speechSynthesis' in window)) return
+    window.speechSynthesis.cancel()
+    const speech = new SpeechSynthesisUtterance(instructions[kind])
+    speech.lang = 'id-ID'
+    speech.rate = 0.9
+    const voice = window.speechSynthesis.getVoices().find(v => v.lang.toLowerCase().startsWith('id'))
+    if (voice) speech.voice = voice
+    window.speechSynthesis.speak(speech)
+  }
   const title: Record<ActivityKind, string> = {
     mix: 'Campur warna', trace: 'Tebalkan garis', memory: 'Cari pasangan',
     count: 'Hitung benda', letters: 'Susun kata',
@@ -296,6 +316,7 @@ export function PlayActivity({ world, kind, onBack }: ActivityProps) {
         <span>{title[kind]}</span>
       </div>
       <div className="activity-panel">
+        <button className="listen-button activity-listen" type="button" onClick={listen}>Dengarkan cara bermain</button>
         {kind === 'mix' ? <MixColors /> : null}
         {kind === 'trace' && (world === 'bentuk' || world === 'hewan' || world === 'huruf')
           ? <TraceLines world={world} /> : null}
