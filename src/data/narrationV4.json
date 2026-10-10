@@ -1,0 +1,161 @@
+{
+  "version": "indonesian-v4-v1",
+  "language_code": "id",
+  "voice_id": "Z1zqlZPdl4KqSeH7Nm4L",
+  "model_id": "eleven_v4",
+  "notes": "Kandidat narasi non-destruktif. Teks ini hanya untuk TTS, tidak mengubah teks soal di UI. Eleven v4: gunakan tanda baca, elipsis dan audio tags; jangan gunakan SSML break.",
+  "clips": {
+    "global/welcome": {
+      "kind": "sambutan",
+      "text": "[warmly] Halo, petualang kecil! ... Hari ini kita belajar sambil bermain, yuk."
+    },
+    "global/correct": {
+      "kind": "pujian",
+      "text": "[happily] Iya, benar! Wah, hebat sekali!"
+    },
+    "global/retry": {
+      "kind": "dukungan",
+      "text": "[gently] Belum tepat, nih. Tidak apa-apa ... ayo coba sekali lagi."
+    },
+    "worlds/warna/intro": {
+      "kind": "pengantar",
+      "text": "[warmly] Selamat datang di Dunia Warna! ... Yuk, kita cari warna-warna di sekitar kita."
+    },
+    "questions/warna-3-1": {
+      "kind": "perintah",
+      "text": "[gently] Coba sentuh warna merah, ya."
+    },
+    "questions/warna-3-2": {
+      "kind": "pertanyaan",
+      "text": "[curious] Coba lihat baik-baik. ... Warna biru yang mana, ya?"
+    },
+    "questions/warna-3-3": {
+      "kind": "perintah",
+      "text": "[gently] Sekarang, cari warna kuning, yuk."
+    },
+    "questions/warna-5-1": {
+      "kind": "pertanyaan",
+      "text": "[curious] Kalau warna merah dicampur dengan warna kuning ... hasilnya jadi warna apa, ya?"
+    },
+    "questions/warna-5-2": {
+      "kind": "pertanyaan",
+      "text": "[curious] Kalau warna biru dicampur dengan warna kuning ... hasilnya jadi warna apa, ya?"
+    },
+    "questions/warna-5-3": {
+      "kind": "pertanyaan",
+      "text": "[curious] Kalau warna merah dicampur dengan warna biru ... hasilnya jadi warna apa, ya?"
+    },
+    "worlds/bentuk/intro": {
+      "kind": "pengantar",
+      "text": "[warmly] Selamat datang di Dunia Bentuk! ... Ada lingkaran, segitiga, dan banyak bentuk lainnya. Yuk, kita bermain!"
+    },
+    "questions/bentuk-3-1": {
+      "kind": "perintah",
+      "text": "[gently] Coba pilih bentuk lingkaran, ya."
+    },
+    "questions/bentuk-3-2": {
+      "kind": "pertanyaan",
+      "text": "[curious] Dari gambar-gambar ini ... yang mana bentuk segitiga?"
+    },
+    "questions/bentuk-3-3": {
+      "kind": "perintah",
+      "text": "[gently] Sekarang, sentuh bentuk persegi, yuk."
+    },
+    "questions/bentuk-5-1": {
+      "kind": "pertanyaan",
+      "text": "[curious] Ada bentuk yang punya tiga sisi. ... Bentuk apa, ya?"
+    },
+    "questions/bentuk-5-2": {
+      "kind": "pertanyaan",
+      "text": "[curious] Coba pikirkan. ... Bentuk mana yang tidak punya sudut?"
+    },
+    "questions/bentuk-5-3": {
+      "kind": "pertanyaan",
+      "text": "[curious] Bentuk mana yang punya empat sisi sama panjang, ya?"
+    },
+    "worlds/hewan/intro": {
+      "kind": "pengantar",
+      "text": "[warmly] Selamat datang di Dunia Hewan! ... Yuk, kita bertemu hewan-hewan lucu dan mengenal mereka."
+    },
+    "questions/hewan-3-1": {
+      "kind": "pertanyaan",
+      "text": "[curious] Lihat hewan-hewan ini. ... Yang mana kucing, ya?"
+    },
+    "questions/hewan-3-2": {
+      "kind": "pertanyaan",
+      "text": "[curious] Coba cari gambar ayam. ... Ayamnya yang mana, ya?"
+    },
+    "questions/hewan-3-3": {
+      "kind": "perintah",
+      "text": "[gently] Sekarang, sentuh gambar sapi, ya."
+    },
+    "questions/hewan-5-1": {
+      "kind": "pertanyaan",
+      "text": "[curious] Dari hewan-hewan ini ... mana yang hidup di dalam air, ya?"
+    },
+    "questions/hewan-5-2": {
+      "kind": "pertanyaan",
+      "text": "[curious] Hewan mana yang punya sayap dan bisa terbang?"
+    },
+    "questions/hewan-5-3": {
+      "kind": "pertanyaan",
+      "text": "[curious] Hewan mana yang punya telinga panjang, ya?"
+    },
+    "worlds/angka/intro": {
+      "kind": "pengantar",
+      "text": "[warmly] Selamat datang di Dunia Angka! ... Kita hitung bersama, pelan-pelan, ya."
+    },
+    "questions/angka-3-1": {
+      "kind": "perintah",
+      "text": "[gently] Lihat, ada satu apel. ... Sekarang, coba pilih angka satu, ya."
+    },
+    "questions/angka-3-2": {
+      "kind": "perintah",
+      "text": "[gently] Lihat, ada dua bintang. ... Coba pilih angka dua, ya."
+    },
+    "questions/angka-3-3": {
+      "kind": "perintah",
+      "text": "[gently] Lihat, ada tiga bola. ... Sekarang, pilih angka tiga, yuk."
+    },
+    "questions/angka-5-1": {
+      "kind": "pertanyaan",
+      "text": "[curious] Dua ditambah tiga ... hasilnya berapa, ya?"
+    },
+    "questions/angka-5-2": {
+      "kind": "pertanyaan",
+      "text": "[curious] Empat ditambah dua ... hasilnya berapa, ya?"
+    },
+    "questions/angka-5-3": {
+      "kind": "pertanyaan",
+      "text": "[curious] Delapan dikurangi tiga ... hasilnya berapa, ya?"
+    },
+    "worlds/huruf/intro": {
+      "kind": "pengantar",
+      "text": "[warmly] Selamat datang di Dunia Huruf! ... Yuk, dengarkan bunyi huruf dan temukan jawabannya."
+    },
+    "questions/huruf-3-1": {
+      "kind": "perintah",
+      "text": "[gently] Kata apel dimulai dengan huruf A. ... Coba pilih huruf A, ya."
+    },
+    "questions/huruf-3-2": {
+      "kind": "perintah",
+      "text": "[gently] Kata bola dimulai dengan huruf B. ... Sekarang, cari huruf B, yuk."
+    },
+    "questions/huruf-3-3": {
+      "kind": "perintah",
+      "text": "[gently] Kata cicak dimulai dengan huruf C. ... Coba sentuh huruf C, ya."
+    },
+    "questions/huruf-5-1": {
+      "kind": "pertanyaan",
+      "text": "[curious] Dengarkan kata ini ... bola. ... Kata bola diawali huruf apa, ya?"
+    },
+    "questions/huruf-5-2": {
+      "kind": "pertanyaan",
+      "text": "[curious] Dengarkan kata ini ... mata. ... Huruf pertama pada kata mata itu apa, ya?"
+    },
+    "questions/huruf-5-3": {
+      "kind": "pertanyaan",
+      "text": "[curious] Ada dua suku kata: pa ... dan gi. ... Kalau digabung, jadi kata apa, ya?"
+    }
+  }
+}
