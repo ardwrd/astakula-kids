@@ -1,0 +1,61 @@
+name: Stage Eleven v4 Indonesian candidates
+
+on:
+  workflow_dispatch:
+    inputs:
+      limit:
+        description: 'Max new candidate MP3s (1-38); default 3'
+        required: true
+        type: string
+        default: '3'
+      keys:
+        description: 'Optional comma-separated exact clip keys; blank means next missing'
+        required: false
+        type: string
+        default: ''
+  push:
+    branches: [main]
+    paths:
+      - 'scripts/v4-sample.request'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: astakula-kids-v4-candidates
+  cancel-in-progress: false
+
+jobs:
+  stage:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Verify all 38 scripts, key mappings and punctuation
+        run: python scripts/generate_v4_candidates.py --validate
+      - name: Synthesize isolated candidate audio
+        env:
+          ELEVENLABS_API_KEY: ${{ secrets.ELEVENLABS_API_KEY }}
+          CLIP_LIMIT: ${{ github.event_name == 'push' && '4' || inputs.limit }}
+          CLIP_KEYS: ${{ github.event_name == 'push' && 'global/welcome,questions/warna-3-1,questions/warna-3-2,global/correct' || inputs.keys }}
+        run: python scripts/generate_v4_candidates.py --limit "$CLIP_LIMIT" --keys "$CLIP_KEYS"
+      - name: Commit only staged candidates, even if credit limit interrupts batch
+        if: ${{ success() || failure() }}
+        run: |
+          if [ ! -d public/audio/candidates/indo-v4-v1 ]; then
+            echo "No candidate files created."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add public/audio/candidates/indo-v4-v1
+          if ! git diff --cached --quiet; then
+            git commit -m "assets(audio): stage Eleven v4 Indonesian narration candidates"
+            git push
+          else
+            echo "No new candidate audio to save."
+          fi
