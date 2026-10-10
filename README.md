@@ -9,7 +9,7 @@
 - Dunia Angka
 - Dunia Huruf
 
-Each world currently includes **six different questions per play session**, with **30 unique questions across five worlds**. Questions progress from simple to more challenging. After six questions, the session stops and the child chooses **Main lagi** or **Pilih dunia lain**. Questions and answer positions are reshuffled only when starting a new session. The original age-grouped question sets remain internal for difficulty sequencing; no ages are shown. This is an initial content bank that should expand over time—not an infinite supply of unique questions. Activities are not developmental tests or mandatory milestones. Adults should accompany children and support offline play.
+Each world has **a choice of different ways to play**, instead of starting the same quiz automatically. Dunia Warna offers tactile color mixing; Dunia Bentuk offers finger-tracing shapes; Dunia Hewan offers a matching-card game and tracing animal outlines; Dunia Angka offers tap-to-count objects; Dunia Huruf offers letter tracing and syllable building. Every world also retains its original six-question multiple-choice game (30 unique questions across five worlds). Each quiz session ends after six questions, with explicit replay or return to the activity chooser. The pre-existing internal question groups still determine easy-to-harder ordering; no ages are displayed. New tactile games are prototypes with limited content pools, not a claim of unlimited learning material.
 
 ## Getting started
 Requires Node.js 22+.
@@ -20,7 +20,7 @@ npm run dev
 npm run build
 ```
 
-The site is static, with no analytics or backend. There are **no scores, completion percentages, automatic loops, or stored answer histories** for new play. Each session ends with an optional replay/other-world choice; the learning worlds themselves never lock or become permanently completed. Only the preferred audio playback speed is stored in the browser. Historical answer records from earlier alpha versions are not used or changed; parents can choose to delete them in the parent settings. No child names, photos, ages, or accounts are required.
+The site is static, with no analytics or backend. There are **no scores, permanent completion milestones, automatic quiz loops, or newly stored answer histories**. All activities can be replayed by choice. The child-facing **'Untuk orang tua'** button and its settings panel have been removed. The current interface does not store audio preferences or quiz progress. Old alpha versions may have left local browser data, which this version does not access or silently delete; browser site-data controls can clear it. No child names, photos, ages, or accounts are required.
 
 ## Indonesian audio
 Text is always available. **The approved Indonesian Eleven v4 narrator is active**, using Voice Design `wtqqNhC5H27DEv1Ojo4B` and 38/38 pre-rendered MP3 files in `public/audio/candidates/indo-v4-v1/`. The original Multilingual v2 recordings remain intact in `public/audio/generated/` for rollback. `src/data/audioRevision.json` controls the active narrator; the build and deploy workflows verify its files. Browser speech synthesis is only a fallback (availability and offline support vary).
@@ -35,13 +35,13 @@ Suggested Voice Design prompt: `Warm adult Indonesian female educator with a cle
 
 **Audio attribution:** Narration generated using [ElevenLabs](https://elevenlabs.io/) (elevenlabs.io), on its Free plan. These recordings are restricted to **non-commercial use with attribution**; do not assume they are covered by any future MIT license for the application code. Confirm current terms before republishing, remixing, or commercial use.
 
-No key is needed at runtime. ElevenLabs consumes credits **only during audio generation**.
+No key is needed at runtime. ElevenLabs consumes credits **only during audio generation**. The existing 38/38 Eleven v4 recordings are still used for the original quiz prompts and introductions. New tracing, matching, counting, color-mixing and letter-tile games include optional **Dengarkan cara bermain** instructions via the device's Indonesian speech synthesis where available; they do not yet have new Eleven v4 recordings. This allows trying the mechanics without using additional synthesis credits.
 
 One voice-comparison page remains at `/audio/candidates/indo-v4-v1/index.html`. The earlier experimental sample page was removed to avoid duplicates.
 
 ## Privacy and safety
 - No cookies for tracking, analytics, ads, signup or user profiling.
-- New play sessions do not persist results or scores. Audio speed preference is stored in `localStorage`; old progress records can be cleared explicitly by a parent.
+- New play sessions do not persist results, audio settings, or scores. Prior alpha storage remains untouched, and can be removed with the browser's clear-site-data controls.
 - Never commit personal data of children or API credentials.
 - Audio or illustration assets may have their own licenses. Do not assume they are covered by a future MIT license for the code.
 
