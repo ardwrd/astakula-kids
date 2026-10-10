@@ -21,6 +21,7 @@ jobs:
       - run: python3 -m py_compile scripts/generate_audio.py scripts/discover_elevenlabs_voice.py scripts/generate_prosody_previews.py scripts/generate_v4_candidates.py
       - run: python3 scripts/generate_v4_candidates.py --validate
       - run: python3 scripts/validate_active_audio.py
+      - run: python3 scripts/validate_activity_audio.py
       - run: python3 scripts/validate_kids_content.py
       - run: npm run build
         env:
