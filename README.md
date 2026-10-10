@@ -33,7 +33,7 @@ Text is always available. Initially, the app can use browser speech synthesis as
 
 Suggested Voice Design prompt: `Warm adult Indonesian female educator with a clear standard Indonesian accent. Patient, cheerful and reassuring, natural articulation, unhurried child-friendly storytelling delivery, no background noise or exaggerated cartoon affect.`
 
-The Free tier is for **non-commercial use with ElevenLabs attribution**, even if the repository is public and open-source. Confirm current terms before publishing or redistributing generated audio.
+**Audio attribution:** Narration generated using [ElevenLabs](https://elevenlabs.io/) (elevenlabs.io), on its Free plan. These recordings are restricted to **non-commercial use with attribution**; do not assume they are covered by any future MIT license for the application code. Confirm current terms before republishing, remixing, or commercial use.
 
 No key is needed at runtime. ElevenLabs consumes credits **only during audio generation**.
 
