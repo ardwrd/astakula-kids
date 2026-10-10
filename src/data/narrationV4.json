@@ -1,7 +1,7 @@
 {
   "version": "indonesian-v4-v1",
   "language_code": "id",
-  "voice_id": "Z1zqlZPdl4KqSeH7Nm4L",
+  "voice_id": "wtqqNhC5H27DEv1Ojo4B",
   "model_id": "eleven_v4",
   "notes": "Kandidat narasi non-destruktif. Teks ini hanya untuk TTS, tidak mengubah teks soal di UI. Eleven v4: gunakan tanda baca, elipsis dan audio tags; jangan gunakan SSML break.",
   "clips": {
