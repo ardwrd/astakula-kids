@@ -9,6 +9,7 @@ interface ActivityProps {
   world: ActivityWorld
   kind: ActivityKind
   onBack: () => void
+  narrate: (key: string, queued?: boolean) => void
 }
 
 type TraceModel = { name: string; path: string }
@@ -55,9 +56,16 @@ function randomize<T>(items: T[]) {
   return arr
 }
 
-function MixColors() {
+function MixColors({ narrate }: { narrate: ActivityProps['narrate'] }) {
   const [selection, setSelection] = useState<string[]>([])
-  const pick = (id: string) => setSelection(old => old.length === 2 ? [id] : old.includes(id) ? old : [...old, id].slice(0, 2))
+  const pick = (id: string) => {
+    const next = selection.length === 2 ? [id] : selection.includes(id) ? selection : [...selection, id]
+    setSelection(next)
+    if (next.length === 2) {
+      const result = mixes[mixKey(next[0], next[1])]
+      if (result) narrate('activities/results/mix-' + result.name.toLowerCase())
+    }
+  }
   const result = selection.length === 2 ? mixes[mixKey(selection[0], selection[1])] : null
   return (
     <div className="activity-inner">
@@ -79,7 +87,7 @@ function MixColors() {
   )
 }
 
-function TraceLines({ world }: { world: 'bentuk' | 'hewan' | 'huruf' }) {
+function TraceLines({ world, narrate }: { world: 'bentuk' | 'hewan' | 'huruf'; narrate: ActivityProps['narrate'] }) {
   const models = traceModels[world]
   const [index, setIndex] = useState(0)
   const [dotsMode, setDotsMode] = useState(false)
@@ -137,7 +145,9 @@ function TraceLines({ world }: { world: 'bentuk' | 'hewan' | 'huruf' }) {
       const sample = samples[i]
       if (Math.hypot(sample.x - point.x, sample.y - point.y) < 22) coveredRef.current.add(i)
     }
-    setCoverage(coveredRef.current.size / samples.length)
+    const nextCoverage = coveredRef.current.size / samples.length
+    if (nextCoverage >= .66 && coverage < .66) narrate('activities/results/trace-complete')
+    setCoverage(nextCoverage)
   }
   const down = (e: PointerEvent<SVGSVGElement>) => {
     if (dotsMode || complete) return
@@ -174,7 +184,11 @@ function TraceLines({ world }: { world: 'bentuk' | 'hewan' | 'huruf' }) {
           stroke="#24786e" strokeWidth="11" fill="none" strokeLinecap="round" strokeLinejoin="round" />)}
         {dotsMode && checkpoints.map((point, i) => <circle key={i} cx={point.x} cy={point.y} r={i === dotsReached ? 17 : 12}
           className={i < dotsReached ? 'trace-dot-done' : i === dotsReached ? 'trace-dot-next' : 'trace-dot-wait'}
-          onClick={() => { if (i === dotsReached) setDotsReached(old => old + 1) }} role="button"
+          onClick={() => {
+            if (i !== dotsReached) return
+            if (i + 1 === checkpoints.length) narrate('activities/results/trace-complete')
+            setDotsReached(old => old + 1)
+          }} role="button"
           aria-label={'Titik ' + (i + 1)} />)}
       </svg>
       <p className="activity-help" aria-live="polite">{complete ? 'Bagus! Garisnya sudah kamu ikuti.' : dotsMode ? 'Sentuh titik berikutnya.' : 'Tidak harus persis. Ikuti garis pelan-pelan.'}</p>
@@ -199,7 +213,7 @@ function newDeck(): MemoryCard[] {
     { key: animal.id + '-b', id: animal.id, visual: animal.visual },
   ]))
 }
-function AnimalMemory() {
+function AnimalMemory({ narrate }: { narrate: ActivityProps['narrate'] }) {
   const [deck, setDeck] = useState<MemoryCard[]>(newDeck)
   const [revealed, setRevealed] = useState<string[]>([])
   const [matched, setMatched] = useState<string[]>([])
@@ -212,6 +226,9 @@ function AnimalMemory() {
     if (next.length !== 2) return
     const first = deck.find(c => c.key === next[0])
     if (first?.id === card.id) {
+      narrate(matched.length + 1 === animals.length
+        ? 'activities/results/memory-complete'
+        : 'activities/results/memory-match')
       setMatched(old => [...old, card.id])
       timer.current = window.setTimeout(() => setRevealed([]), 450)
     } else {
@@ -237,7 +254,7 @@ function AnimalMemory() {
 }
 
 const countingItems = [3, 4, 5, 6]
-function Counting() {
+function Counting({ narrate }: { narrate: ActivityProps['narrate'] }) {
   const [round, setRound] = useState(0)
   const [tapped, setTapped] = useState<number[]>([])
   const count = countingItems[round]
@@ -249,7 +266,12 @@ function Counting() {
       <div className="count-stage">
         {Array.from({ length: count }, (_, i) => (
           <button key={i} type="button" className={'count-object' + (tapped.includes(i) ? ' counted' : '')}
-            onClick={() => { if (!tapped.includes(i)) setTapped(t => [...t, i]) }}
+            onClick={() => {
+              if (tapped.includes(i)) return
+              const number = tapped.length + 1
+              setTapped(previous => [...previous, i])
+              narrate('activities/count/' + number, true)
+            }}
             aria-label={'Lingkaran ' + (i + 1)} aria-pressed={tapped.includes(i)}>
             {tapped.includes(i) ? tapped.indexOf(i) + 1 : ''}
           </button>
@@ -269,14 +291,19 @@ const words = [
   { word: 'BOLA', parts: ['BO', 'LA'] },
   { word: 'MATA', parts: ['MA', 'TA'] },
 ]
-function WordBuilder() {
+function WordBuilder({ narrate }: { narrate: ActivityProps['narrate'] }) {
   const [index, setIndex] = useState(0)
   const [chosen, setChosen] = useState<string[]>([])
   const word = words[index]
   const done = chosen.length === word.parts.length
   const add = (part: string) => {
     if (done || chosen.includes(part)) return
-    if (part === word.parts[chosen.length]) setChosen(old => [...old, part])
+    if (part === word.parts[chosen.length]) {
+      if (chosen.length + 1 === word.parts.length) {
+        narrate('activities/results/word-' + word.word.toLowerCase())
+      }
+      setChosen(old => [...old, part])
+    }
   }
   const next = () => { setIndex(old => (old + 1) % words.length); setChosen([]) }
   return (
@@ -298,27 +325,9 @@ function WordBuilder() {
   )
 }
 
-export function PlayActivity({ world, kind, onBack }: ActivityProps) {
-  useEffect(() => () => {
-    if ('speechSynthesis' in window) window.speechSynthesis.cancel()
-  }, [])
-  const instructions: Record<ActivityKind, string> = {
-    mix: 'Pilih dua warna. Lihat warna yang muncul setelah dicampur.',
-    trace: 'Ikuti garis putus-putus dengan jarimu. Kalau sulit, pilih titik pandu.',
-    memory: 'Balik dua kartu, lalu cari gambar hewan yang sama.',
-    count: 'Sentuh satu per satu lingkaran sambil menghitung.',
-    letters: 'Sentuh dua suku kata yang benar untuk membentuk sebuah kata.',
-  }
-  const listen = () => {
-    if (!('speechSynthesis' in window)) return
-    window.speechSynthesis.cancel()
-    const speech = new SpeechSynthesisUtterance(instructions[kind])
-    speech.lang = 'id-ID'
-    speech.rate = 0.9
-    const voice = window.speechSynthesis.getVoices().find(v => v.lang.toLowerCase().startsWith('id'))
-    if (voice) speech.voice = voice
-    window.speechSynthesis.speak(speech)
-  }
+export function PlayActivity({ world, kind, onBack, narrate }: ActivityProps) {
+  const cue = kind === 'trace' ? 'trace-' + world : kind
+  const listen = () => narrate('activities/instructions/' + cue)
   const title: Record<ActivityKind, string> = {
     mix: 'Campur warna', trace: 'Tebalkan garis', memory: 'Cari pasangan',
     count: 'Hitung benda', letters: 'Susun kata',
@@ -331,12 +340,12 @@ export function PlayActivity({ world, kind, onBack }: ActivityProps) {
       </div>
       <div className="activity-panel">
         <button className="listen-button activity-listen" type="button" onClick={listen}>Dengarkan cara bermain</button>
-        {kind === 'mix' ? <MixColors /> : null}
+        {kind === 'mix' ? <MixColors narrate={narrate} /> : null}
         {kind === 'trace' && (world === 'bentuk' || world === 'hewan' || world === 'huruf')
-          ? <TraceLines world={world} /> : null}
-        {kind === 'memory' ? <AnimalMemory /> : null}
-        {kind === 'count' ? <Counting /> : null}
-        {kind === 'letters' ? <WordBuilder /> : null}
+          ? <TraceLines world={world} narrate={narrate} /> : null}
+        {kind === 'memory' ? <AnimalMemory narrate={narrate} /> : null}
+        {kind === 'count' ? <Counting narrate={narrate} /> : null}
+        {kind === 'letters' ? <WordBuilder narrate={narrate} /> : null}
       </div>
     </section>
   )
