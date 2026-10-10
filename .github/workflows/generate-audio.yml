@@ -7,7 +7,7 @@ on:
         description: 'auto discovers an eligible Voice Design or Default voice; alternatively enter a Voice ID'
         type: string
         required: true
-        default: 'auto'
+        default: 'Z1zqlZPdl4KqSeH7Nm4L'
       limit:
         description: 'Maximum clips this run (1-100; default 3)'
         type: string
