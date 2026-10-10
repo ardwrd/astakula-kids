@@ -29,7 +29,7 @@ jobs:
       - name: Generate missing MP3s only
         env:
           ELEVENLABS_API_KEY: ${{ secrets.ELEVENLABS_API_KEY }}
-        run: python scripts/generate_activity_narration.py --limit 38
+        run: python scripts/generate_activity_narration.py --limit 22
       - name: Save partial or complete generated audio
         if: ${{ success() || failure() }}
         run: |
@@ -42,5 +42,17 @@ jobs:
           git add public/audio/activities/indo-v4-v1
           if ! git diff --cached --quiet; then
             git commit -m "assets(audio): add Eleven v4 interaction narration"
-            git push
+            # The repository can receive UI commits while TTS runs.
+            # Rebase the generated binary-assets commit instead of discarding it.
+            for attempt in 1 2 3 4 5; do
+              git fetch origin main
+              git rebase origin/main
+              if git push origin HEAD:main; then
+                echo "Narration assets saved."
+                exit 0
+              fi
+              sleep 2
+            done
+            echo "Unable to save narration after five safe retries."
+            exit 1
           fi
