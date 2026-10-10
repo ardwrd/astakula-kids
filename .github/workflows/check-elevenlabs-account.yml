@@ -1,0 +1,24 @@
+name: Check ElevenLabs account access
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'scripts/elevenlabs-key-check.request'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Check ElevenLabs API connectivity without generating audio
+        env:
+          ELEVENLABS_API_KEY: ${{ secrets.ELEVENLABS_API_KEY }}
+        run: python scripts/check_elevenlabs_account.py
