@@ -4,6 +4,7 @@ import rawContent from './data/content.json'
 import audioManifest from './data/audioManifest.json'
 import audioRevision from './data/audioRevision.json'
 import { PlayActivity } from './PlayActivities'
+import { AnimalIcon } from './AnimalIcon'
 import type { ActivityKind, ActivityWorld } from './PlayActivities'
 import type { LearningContent, World, Question } from './data/types'
 
@@ -228,7 +229,6 @@ export default function App() {
               <div className={'question-panel game-' + world.tint}>
                 <div className="question-header">
                   <span className="question-count">Pilih jawaban</span>
-                  <span className="question-badge">{step + 1} dari {round.length}</span>
                 </div>
                 <div className="question-center">
                   <h1>{currentQuestion.prompt}</h1>
@@ -246,9 +246,11 @@ export default function App() {
                       style={{ '--option-color': answer.color || '#f4eee5' } as CSSProperties}
                       onClick={() => chooseAnswer(answer.id)}>
                       {world.id !== 'warna' && <span className="answer-visual" aria-hidden="true">
-                        {answer.image
-                          ? <img className="answer-image" src={import.meta.env.BASE_URL + answer.image} alt="" />
-                          : answer.visual}
+                        {world.id === 'hewan'
+                          ? <AnimalIcon id={answer.id} size={84} />
+                          : answer.image
+                            ? <img className="answer-image" src={import.meta.env.BASE_URL + answer.image} alt="" />
+                            : answer.visual}
                       </span>}
                       <span className="answer-label">{answer.label}</span>
                     </button>
