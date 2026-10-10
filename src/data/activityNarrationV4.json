@@ -25,6 +25,22 @@
     "count/3": "Tiga.",
     "count/4": "Empat.",
     "count/5": "Lima.",
-    "count/6": "Enam."
+    "count/6": "Enam.",
+    "instructions/trace-dots": "[gently] Sekarang sentuh titik yang menyala, satu per satu.",
+    "trace/lingkaran": "Lingkaran.",
+    "trace/segitiga": "Segitiga.",
+    "trace/bintang": "Bintang.",
+    "trace/rumah": "Rumah.",
+    "trace/ikan": "Ikan.",
+    "trace/kucing": "Kucing.",
+    "trace/kelinci": "Kelinci.",
+    "trace/a": "Huruf A.",
+    "trace/b": "Huruf B.",
+    "trace/c": "Huruf C.",
+    "trace/m": "Huruf M.",
+    "trace/p": "Huruf P.",
+    "animals/kucing": "Ini kucing.",
+    "animals/sapi": "Ini sapi.",
+    "animals/ayam": "Ini ayam."
   }
 }
