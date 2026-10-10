@@ -1,0 +1,30 @@
+{
+  "version": "activities-indo-v4-v1",
+  "model_id": "eleven_v4",
+  "voice_id": "wtqqNhC5H27DEv1Ojo4B",
+  "language_code": "id",
+  "clips": {
+    "instructions/mix": "[gently] Pilih dua warna berbeda. Lihat warna apa yang muncul.",
+    "instructions/trace-bentuk": "[gently] Ikuti garis putus-putus dengan jarimu. Pelan-pelan saja.",
+    "instructions/trace-hewan": "[gently] Ayo tebalkan gambar hewan. Ikuti garisnya dengan jarimu.",
+    "instructions/trace-huruf": "[gently] Yuk, tebalkan huruf ini. Mulai dari ujung garisnya.",
+    "instructions/memory": "[warmly] Buka dua kartu. Cari dua hewan dengan gambar yang sama.",
+    "instructions/count": "[gently] Sentuh lingkarannya satu per satu. Kita hitung bersama.",
+    "instructions/letters": "[warmly] Susun dua suku kata. Mulai dari bagian yang pertama.",
+    "results/mix-jingga": "[happily] Merah dan kuning menjadi jingga!",
+    "results/mix-hijau": "[happily] Biru dan kuning menjadi hijau!",
+    "results/mix-ungu": "[happily] Merah dan biru menjadi ungu!",
+    "results/word-pagi": "[happily] Pa, gi. Jadi kata pagi!",
+    "results/word-bola": "[happily] Bo, la. Jadi kata bola!",
+    "results/word-mata": "[happily] Ma, ta. Jadi kata mata!",
+    "results/trace-complete": "[happily] Bagus! Kamu sudah mengikuti garisnya.",
+    "results/memory-match": "[happily] Cocok! Kamu menemukan pasangannya.",
+    "results/memory-complete": "[happily] Semua pasangan sudah ketemu!",
+    "count/1": "Satu.",
+    "count/2": "Dua.",
+    "count/3": "Tiga.",
+    "count/4": "Empat.",
+    "count/5": "Lima.",
+    "count/6": "Enam."
+  }
+}
