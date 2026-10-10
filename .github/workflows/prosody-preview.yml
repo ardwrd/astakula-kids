@@ -1,0 +1,40 @@
+name: Audition Indonesian prosody
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'scripts/prosody-preview.request'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: astakula-kids-prosody-preview
+  cancel-in-progress: false
+
+jobs:
+  preview:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Generate non-destructive audio previews
+        env:
+          ELEVENLABS_API_KEY: ${{ secrets.ELEVENLABS_API_KEY }}
+        run: python scripts/generate_prosody_previews.py
+      - name: Save completed previews even when a model is unavailable
+        if: ${{ success() || failure() }}
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          if [ -d public/audio/previews/indo-prosody-01 ]; then
+            git add public/audio/previews/indo-prosody-01
+            if ! git diff --cached --quiet; then
+              git commit -m "assets(audio): add Indonesian prosody audition clips"
+              git push
+            fi
+          fi
