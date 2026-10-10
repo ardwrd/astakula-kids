@@ -9,7 +9,7 @@
 - Dunia Angka
 - Dunia Huruf
 
-Each world currently includes **six different questions per repeatable round**, with **30 unique questions across five worlds**. Questions progress from simple to more challenging, but every round cycles into another shuffled round rather than ending. Answer positions are also reshuffled. The original age-grouped question sets remain internal for difficulty sequencing; no ages are shown. This is an initial content bank that should expand over time—not an infinite supply of unique questions. Activities are not developmental tests or mandatory milestones. Adults should accompany children and support offline play.
+Each world currently includes **six different questions per play session**, with **30 unique questions across five worlds**. Questions progress from simple to more challenging. After six questions, the session stops and the child chooses **Main lagi** or **Pilih dunia lain**. Questions and answer positions are reshuffled only when starting a new session. The original age-grouped question sets remain internal for difficulty sequencing; no ages are shown. This is an initial content bank that should expand over time—not an infinite supply of unique questions. Activities are not developmental tests or mandatory milestones. Adults should accompany children and support offline play.
 
 ## Getting started
 Requires Node.js 22+.
@@ -20,7 +20,7 @@ npm run dev
 npm run build
 ```
 
-The site is static, with no analytics or backend. There are **no scores, completion percentages, end screens, or stored answer histories** for new play. Children can re-enter any world and play again indefinitely. Only the preferred audio playback speed is stored in the browser. Historical answer records from earlier alpha versions are not used or changed; parents can choose to delete them in the parent settings. No child names, photos, ages, or accounts are required.
+The site is static, with no analytics or backend. There are **no scores, completion percentages, automatic loops, or stored answer histories** for new play. Each session ends with an optional replay/other-world choice; the learning worlds themselves never lock or become permanently completed. Only the preferred audio playback speed is stored in the browser. Historical answer records from earlier alpha versions are not used or changed; parents can choose to delete them in the parent settings. No child names, photos, ages, or accounts are required.
 
 ## Indonesian audio
 Text is always available. **The approved Indonesian Eleven v4 narrator is active**, using Voice Design `wtqqNhC5H27DEv1Ojo4B` and 38/38 pre-rendered MP3 files in `public/audio/candidates/indo-v4-v1/`. The original Multilingual v2 recordings remain intact in `public/audio/generated/` for rollback. `src/data/audioRevision.json` controls the active narrator; the build and deploy workflows verify its files. Browser speech synthesis is only a fallback (availability and offline support vary).
