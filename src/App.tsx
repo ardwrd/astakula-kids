@@ -159,8 +159,7 @@ export default function App() {
     <div className="app-shell">
       <header className="app-header">
         <button className="brand" type="button" onClick={goHome} aria-label="Astakula Kids — semua dunia">
-          <span className="brand-mark">a<span>✳</span></span>
-          <span className="brand-name">astakula<span>kids</span></span>
+          <span className="brand-name">Astakula Kids</span>
         </button>
         <div className="header-actions">
           <button className="parent-button" type="button" onClick={() => setParentsOpen(true)} aria-label="Informasi untuk orang tua">Untuk orang tua</button>
