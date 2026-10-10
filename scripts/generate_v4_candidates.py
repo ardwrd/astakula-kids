@@ -20,7 +20,7 @@ NARRATION = ROOT / "src/data/narrationV4.json"
 CONTENT = ROOT / "src/data/content.json"
 DESTINATION = ROOT / "public/audio/candidates/indo-v4-v1"
 MANIFEST = DESTINATION / "manifest.json"
-VOICE_ID = "Z1zqlZPdl4KqSeH7Nm4L"
+VOICE_ID = "wtqqNhC5H27DEv1Ojo4B"
 SUPPORTED_TAGS = {"warmly", "happily", "gently", "curious"}
 
 
