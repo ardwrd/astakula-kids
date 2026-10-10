@@ -101,6 +101,11 @@ export default function App() {
     } else {
       const cue = next === 'trace' ? 'trace-' + world.id : next
       play('activities/instructions/' + cue)
+      if (next === 'trace') {
+        const firstOutline: Record<string, string> = { bentuk: 'lingkaran', hewan: 'ikan', huruf: 'a' }
+        const outline = firstOutline[world.id]
+        if (outline) play('activities/trace/' + outline, true)
+      }
     }
   }
   const currentQuestion = round[step] ?? null
