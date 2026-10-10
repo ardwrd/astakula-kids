@@ -1,7 +1,11 @@
 name: Deploy to GitHub Pages
 
-# Manual until the owner enables Pages -> Source: GitHub Actions.
+# Deploy every change to main once Pages -> Source is GitHub Actions.
 on:
+  push:
+    branches: [main]
+    paths-ignore:
+      - '**/*.md'
   workflow_dispatch:
 
 permissions:
