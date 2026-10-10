@@ -67,6 +67,8 @@ h1 em { font-style: normal; color: #cc7966; }
 .answer-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
 .answer-card { min-height: 170px; border: 3px solid #fff; border-radius: 20px; background: rgba(255,255,255,.88); display: flex; flex-direction: column; gap: 10px; justify-content: center; align-items: center; padding: 10px; box-shadow: 0 5px 0 rgba(43,57,66,.08); color: #2f3944; transition: transform .2s, border-color .2s; }
 .answer-visual { color: var(--option-color); font-family: system-ui, sans-serif; font-size: clamp(44px, 8vw, 69px); font-weight: 900; line-height: 1.2; }
+.answer-image { display: block; width: clamp(68px, 10vw, 98px); height: clamp(68px, 10vw, 98px); max-width: 100%; object-fit: contain; }
+
 .answer-label { font-size: 16px; font-weight: 900; }
 .answer-card.chosen { border-color: #57ac86; background: #f0fff7; }
 /* In Dunia Warna the complete touch target displays the actual color.
