@@ -263,3 +263,8 @@ h1 em { font-style: normal; color: #cc7966; }
 
 .activity-listen { display: block; margin: 0 auto 24px; min-height: 44px; }
 .memory-card svg, .answer-card .answer-visual svg { display: block; width: min(100%, 84px); height: auto; }
+
+.world-art { display: flex; width: 87px; height: 66px; flex: 0 0 87px; align-items: center; justify-content: center; }
+.world-art svg { display: block; max-width: 100%; height: 66px; }
+.world-card h2 { margin-top: 9px; }
+@media (max-width: 720px) { .world-art { width: 65px; flex-basis: 65px; height: 54px; } .world-art svg { height: 54px; } }
