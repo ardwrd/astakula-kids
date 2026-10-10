@@ -69,6 +69,18 @@ h1 em { font-style: normal; color: #cc7966; }
 .answer-visual { color: var(--option-color); font-family: system-ui, sans-serif; font-size: clamp(44px, 8vw, 69px); font-weight: 900; line-height: 1.2; }
 .answer-label { font-size: 16px; font-weight: 900; }
 .answer-card.chosen { border-color: #57ac86; background: #f0fff7; }
+/* In Dunia Warna the complete touch target displays the actual color.
+   No small dot/emoji proxy: the surface itself is the color choice. */
+.answer-card.color-answer-card { background: var(--option-color); border-color: rgba(255,255,255,.85); color: #26343a; }
+.answer-card.color-answer-card .answer-label { background: rgba(255,255,255,.96); border-radius: 999px; padding: 10px 18px; box-shadow: 0 2px 7px rgba(0,0,0,.10); font-size: 17px; }
+.answer-card.color-answer-card.chosen { border-color: #236e51; outline: 3px solid rgba(35,110,81,.24); }
+.session-finish-panel { background: #e2f3e8; border-radius: 28px; text-align: center; padding: 40px 28px; }
+.session-finish-icon { display: block; font-size: 80px; margin-bottom: 14px; }
+.session-finish-panel h1 { font-size: clamp(32px,5vw,47px); max-width: 650px; margin: 0 auto 20px; }
+.session-finish-panel p:not(.eyebrow) { max-width: 550px; margin: 0 auto 25px; color: #60736b; line-height: 1.65; }
+.session-actions { display: flex; flex-wrap: wrap; gap: 12px; justify-content: center; }
+.secondary-button { min-height: 51px; border: 2px solid #37785d; background: #fff; border-radius: 15px; color: #326f58; padding: 12px 19px; font-weight: 900; }
+.session-finish-panel .session-note { margin-top: 20px !important; margin-bottom: 0 !important; font-size: 13px; }
 .feedback-row { min-height: 82px; display: flex; justify-content: space-between; align-items: center; gap: 14px; padding-top: 16px; font-weight: 900; font-size: 14px; }
 .feedback-row:not(.visible) { font-weight: 500; font-size: 12px; color: #7b7d7f; justify-content: center; }
 .continue-button { border: 0; color: #fff; background: #3d8268; border-radius: 15px; padding: 14px 21px; font-weight: 900; min-height: 51px; }
@@ -109,6 +121,10 @@ h1 em { font-style: normal; color: #cc7966; }
   .question-mascot { font-size: 40px; }
   .answer-grid { gap: 8px; }
   .answer-card { min-height: 130px; padding: 8px 2px; border-radius: 13px; }
+  .answer-card.color-answer-card .answer-label { font-size: 14px; padding: 9px 12px; }
+  .session-finish-panel { padding: 32px 18px; }
+  .session-actions { flex-direction: column; }
+  .session-actions button { width: 100%; }
   .answer-visual { font-size: clamp(37px, 9vw, 60px); }
   .answer-label { font-size: 13px; }
   .feedback-row { flex-wrap: wrap; }
