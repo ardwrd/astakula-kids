@@ -2,7 +2,7 @@
   "voice_id": "wtqqNhC5H27DEv1Ojo4B",
   "model_id": "eleven_v4",
   "required_count": 38,
-  "generated_count": 22,
+  "generated_count": 38,
   "entries": {
     "instructions/mix": {
       "sha256": "48301ea40966e49c64fe849aa20786027ddd3fd7466feb8c2c2f7ab62268c5b8",
@@ -91,6 +91,70 @@
     "count/6": {
       "sha256": "0fd697ebcc8f7c7987ee307ca28494eb13f97394983b9e4d546ff7995163fa71",
       "bytes": 13836
+    },
+    "instructions/trace-dots": {
+      "sha256": "e1da036837886a2aa4d05bbf1eba6a2e724cd9846555be496f7ae9861f66e651",
+      "bytes": 70261
+    },
+    "trace/lingkaran": {
+      "sha256": "54ee971cd48fda2d5ccb2ae5936b3cf8830d4b8cd4d1bafe4b623577f1bbf9e8",
+      "bytes": 18852
+    },
+    "trace/segitiga": {
+      "sha256": "d84613e662585417ae788250dd769102eaf59a6455021b905e96d8800eeaaf83",
+      "bytes": 18852
+    },
+    "trace/bintang": {
+      "sha256": "3da2d3478c330fffb5516e0085c163fb738c9819c15b85f32b019b039a1b9b79",
+      "bytes": 16344
+    },
+    "trace/rumah": {
+      "sha256": "b3564d99bd4f2868ca1369f80a84f92cc0938c409f56eac32c65cab637d3a1a3",
+      "bytes": 15090
+    },
+    "trace/ikan": {
+      "sha256": "3e77a94368c6a48e49d38b3b59095aa4b9273b4910afb5cea1945c08dd0677f7",
+      "bytes": 15090
+    },
+    "trace/kucing": {
+      "sha256": "a71481dd8f79805ee71926ca69dc5086e15eb83f52997f06463fb9965dec5a1f",
+      "bytes": 15090
+    },
+    "trace/kelinci": {
+      "sha256": "23a38894efa8d491e2ecf0204be001151cd14de55d80e0c6ac3bf5fa4158e92e",
+      "bytes": 16344
+    },
+    "trace/a": {
+      "sha256": "f67dca64810bb3849154d0d1f388cfe4e796ec4c9dd242207e91b42e35f79214",
+      "bytes": 21359
+    },
+    "trace/b": {
+      "sha256": "11c6bc8a477bea5d703aa94560c643f780e368080da594ab9b2c9e0314cac293",
+      "bytes": 20106
+    },
+    "trace/c": {
+      "sha256": "57a4b88bc54d9735f054ff9def1f9242efc4a796703eb383ac394cc0f107c33b",
+      "bytes": 21359
+    },
+    "trace/m": {
+      "sha256": "d62f9edcb6f8de7c16313fd08ce4b4a942802fe0c619fd672a5236e2b8b52ab8",
+      "bytes": 23031
+    },
+    "trace/p": {
+      "sha256": "56c5eefacc94dacff7b40f3bf12a2afd0b32dacc3a3ba07e9f977305902052f2",
+      "bytes": 21359
+    },
+    "animals/kucing": {
+      "sha256": "697fc050755b1229d656e9c1398b785cacb43d91a53eaddc8df687014eb16411",
+      "bytes": 24285
+    },
+    "animals/sapi": {
+      "sha256": "c09694ba6e2ad8ac80c8fff252e31d590b0f7242859439ae5e0a6c56ef392d49",
+      "bytes": 24285
+    },
+    "animals/ayam": {
+      "sha256": "07a8cb2599023c503749f7aa1899d7f8bc8021659f60d00102c5c43ca0cbb3cc",
+      "bytes": 25539
     }
   }
 }
