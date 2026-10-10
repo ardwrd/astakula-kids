@@ -238,7 +238,13 @@ export default function App() {
                       disabled={feedback === 'correct'}
                       onClick={() => chooseAnswer(answer.id)}
                     >
-                      {world.id !== 'warna' && <span className="answer-visual" aria-hidden="true">{answer.visual}</span>}
+                      {world.id !== 'warna' && (
+                        <span className="answer-visual" aria-hidden="true">
+                          {answer.image
+                            ? <img className="answer-image" src={import.meta.env.BASE_URL + answer.image} alt="" />
+                            : answer.visual}
+                        </span>
+                      )}
                       <span className="answer-label">{answer.label}</span>
                     </button>
                   ))}
