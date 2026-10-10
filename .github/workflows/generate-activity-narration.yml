@@ -1,0 +1,46 @@
+name: Generate Eleven v4 activity narration
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - 'scripts/activity-narration.request'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: astakula-kids-activity-voice
+  cancel-in-progress: false
+
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Validate activity narration catalog
+        run: python scripts/generate_activity_narration.py --validate
+      - name: Generate missing MP3s only
+        env:
+          ELEVENLABS_API_KEY: ${{ secrets.ELEVENLABS_API_KEY }}
+        run: python scripts/generate_activity_narration.py --limit 22
+      - name: Save partial or complete generated audio
+        if: ${{ success() || failure() }}
+        run: |
+          if [ ! -d public/audio/activities/indo-v4-v1 ]; then
+            echo "No MP3s generated"
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add public/audio/activities/indo-v4-v1
+          if ! git diff --cached --quiet; then
+            git commit -m "assets(audio): add Eleven v4 interaction narration"
+            git push
+          fi
