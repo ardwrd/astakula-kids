@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="id">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Review Narasi Eleven v4 — Astakula Kids</title>
+<style>
+:root{font-family:system-ui,-apple-system,Segoe UI,sans-serif;color:#243e42;background:#f4f6f0}*{box-sizing:border-box}body{margin:0}.wrap{max-width:1000px;margin:0 auto;padding:20px 16px 52px}h1{font-size:clamp(25px,5vw,38px);line-height:1.15;margin:12px 0}p{line-height:1.6}.muted{color:#5c7072}.pill{display:inline-block;background:#dfefe1;color:#286746;border-radius:999px;padding:6px 13px;font-size:12px;font-weight:700}.filters{display:flex;flex-wrap:wrap;gap:8px;margin:24px 0 16px}button{border:1px solid #cbd5ce;background:white;color:#31585a;padding:9px 13px;border-radius:11px;font:inherit;font-size:13px;cursor:pointer}button.active{background:#275d50;color:#fff;border-color:#275d50}.item{background:white;border:1px solid #e0e8df;border-radius:16px;padding:17px;margin-bottom:14px}.top{display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap}.top strong{font-size:16px}.meta{color:#687c7b;font-size:12px}.spoken{background:#f5f8f4;border-radius:10px;padding:10px 12px;margin:10px 0 14px;font-size:14px}.paired{display:grid;grid-template-columns:1fr 1fr;gap:12px}.player{background:#f8f9f8;border-radius:11px;padding:12px;min-width:0}.player b{display:block;font-size:13px;margin-bottom:7px}.player small{display:block;font-size:11px;color:#637573;margin-top:6px}.player audio{display:block;width:100%;height:42px}.unready{color:#916833;font-size:12px;min-height:42px;padding-top:8px}.note{background:#fff7dd;padding:13px;border-radius:12px;font-size:13px}a{color:#236d5e}@media(max-width:620px){.paired{grid-template-columns:1fr}.wrap{padding:16px 12px 36px}}
+</style></head>
+<body><main class="wrap">
+<a href="../../../">← Astakula Kids</a>
+<p class="pill">Family Alpha · review saja · belum rilis</p>
+<h1>Review narasi baru Eleven v4</h1>
+<p class="muted">Bandingkan audio lama dan kandidat baru. Dengarkan aksen bahasa Indonesia, jeda, intonasi pertanyaan, serta nada perintah yang ramah anak. Teks pembelajaran yang tampil di permainan tidak berubah.</p>
+<p class="note">Kandidat tersimpan di folder terpisah. Tombol putar audio lama memakai 0,85x (sesuai setelan aplikasi), sedangkan kandidat Eleven v4 diputar pada tempo aslinya (1x). Belum ada kandidat yang dipakai oleh permainan.</p>
+<div id="status" aria-live="polite">Memuat status sampel…</div>
+<div class="filters" id="filters"></div><section id="list"></section>
+<p class="muted">Kredit audio: <a href="https://elevenlabs.io/" rel="noopener noreferrer" target="_blank">ElevenLabs</a>. Sampel dari akun Free hanya untuk penggunaan nonkomersial sesuai ketentuan penyedia.</p>
+</main>
+<script>
+(async()=>{
+ const area=document.getElementById('list'),bar=document.getElementById('filters'),stat=document.getElementById('status');
+ const safe=text=>String(text).replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;').replaceAll('"','&quot;');
+ try{
+  const [catalog,manifest]=await Promise.all([
+   fetch('./catalog.json').then(r=>{if(!r.ok)throw Error('Katalog belum tersedia');return r.json()}),
+   fetch('./manifest.json').then(r=>r.ok?r.json():{entries:{},generated_count:0})
+  ]);
+  const groups=['Semua','Umum',...Array.from(new Set(catalog.items.map(x=>x.world))).filter(x=>x!=='Umum')];
+  let current='Semua';
+  stat.innerHTML='<strong>'+safe(manifest.generated_count||0)+' / 38 audio kandidat tersedia.</strong> <span class="muted">Audio utama tetap aman.</span>';
+  const draw=()=>{
+   bar.innerHTML=groups.map(g=>'<button type="button" data-filter="'+safe(g)+'" class="'+(current===g?'active':'')+'">'+safe(g)+'</button>').join('');
+   const visible=catalog.items.filter(x=>current==='Semua'||x.world===current);
+   area.innerHTML=visible.map(x=>{
+     const available=Boolean(manifest.entries?.[x.key]);
+     const old='../../generated/'+x.key+'.mp3', fresh='./'+x.key+'.mp3';
+     const natural=x.spoken.replace(/\\[[^\\]]+\\]\\s*/g,'');
+     return '<article class="item"><div class="top"><strong>'+safe(x.display)+'</strong><span class="meta">'+safe(x.world)+' · '+safe(x.age==='Semua'?'Semua usia':'Usia '+x.age)+' · '+safe(x.kind)+'</span></div>'+
+       '<div class="spoken"><small class="muted">Naskah yang akan diucapkan</small><div>'+safe(natural)+'</div></div>'+
+       '<div class="paired"><div class="player"><b>Lama · Multilingual v2 (0,85x)</b><audio controls preload="none" data-old src="'+old+'"></audio><small>Rekaman produksi saat ini.</small></div>'+
+       '<div class="player"><b>Baru · Eleven v4 (1x)</b>'+(available?'<audio controls preload="none" src="'+fresh+'"></audio>':'<div class="unready">Belum digenerasi — menunggu validasi bertahap.</div>')+'<small>Versi kandidat terpisah, belum diterapkan.</small></div></div></article>';
+   }).join('');
+   area.querySelectorAll('audio[data-old]').forEach(x=>x.playbackRate=.85);
+   area.querySelectorAll('audio').forEach(a=>a.addEventListener('play',()=>area.querySelectorAll('audio').forEach(b=>{if(b!==a)b.pause()})));
+  };
+  bar.addEventListener('click',e=>{const btn=e.target.closest('button[data-filter]');if(btn){current=btn.dataset.filter;draw()}});
+  draw();
+ }catch(error){stat.textContent='Gagal memuat katalog: '+error.message}
+})();
+</script></body></html>
