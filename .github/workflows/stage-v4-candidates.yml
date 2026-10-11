@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
     inputs:
       limit:
-        description: 'Max new candidate MP3s (1-38); default 3'
+        description: 'Max new candidate MP3s (1-49); default 3'
         required: true
         type: string
         default: '3'
@@ -55,7 +55,17 @@ jobs:
           git add public/audio/candidates/indo-v4-v1
           if ! git diff --cached --quiet; then
             git commit -m "assets(audio): stage Eleven v4 Indonesian narration candidates"
-            git push
+            for attempt in 1 2 3 4 5; do
+              git fetch origin main
+              git rebase origin/main
+              if git push origin HEAD:main; then
+                echo "Narration assets saved."
+                exit 0
+              fi
+              sleep 2
+            done
+            echo "Failed to save narration after retries."
+            exit 1
           else
             echo "No new candidate audio to save."
           fi
