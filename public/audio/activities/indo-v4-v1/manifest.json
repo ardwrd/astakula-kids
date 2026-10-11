@@ -1,8 +1,8 @@
 {
   "voice_id": "wtqqNhC5H27DEv1Ojo4B",
   "model_id": "eleven_v4",
-  "required_count": 38,
-  "generated_count": 38,
+  "required_count": 48,
+  "generated_count": 48,
   "entries": {
     "instructions/mix": {
       "sha256": "48301ea40966e49c64fe849aa20786027ddd3fd7466feb8c2c2f7ab62268c5b8",
@@ -155,6 +155,46 @@
     "animals/ayam": {
       "sha256": "07a8cb2599023c503749f7aa1899d7f8bc8021659f60d00102c5c43ca0cbb3cc",
       "bytes": 25539
+    },
+    "instructions/color": {
+      "sha256": "f945187ad9d293c51667f03a94f5b94182766063d1bd92fbedb0bd4e44df54b9",
+      "bytes": 75276
+    },
+    "trace/persegi": {
+      "sha256": "bde10e6af8216b47d4a972595b55e9ec5709b866565185d80cecfe91b33f3f0e",
+      "bytes": 17598
+    },
+    "trace/hati": {
+      "sha256": "df3f089ac447de2855f6dc60d77631bd52657047f3ff64e89f403ccd7a58f02e",
+      "bytes": 15090
+    },
+    "trace/burung": {
+      "sha256": "606aa8aa47e1ffd33e65c2be042dab5cb9cdc9c53370dba0e015de9fbc742fbd",
+      "bytes": 15090
+    },
+    "trace/d": {
+      "sha256": "132a2b7a615c831d45355cf7272ebf46d2c18d17d6b9f71a665f6814191f91d7",
+      "bytes": 21359
+    },
+    "trace/o": {
+      "sha256": "d2f9fb0da3bb3a5731a6e29bc29f0cb884a5a7e402df9edf8b9fb8ef91f7ed18",
+      "bytes": 21359
+    },
+    "results/word-dasi": {
+      "sha256": "470ff705f936e0cfb528f4c15a5f4f4947d671d349a05e0fd8b5864ef8fd4939",
+      "bytes": 53542
+    },
+    "results/word-kota": {
+      "sha256": "c925d15e5565d741b29e0953256a7f9b6ea80d4b0deb029486113b263fe6cbca",
+      "bytes": 47273
+    },
+    "results/word-tali": {
+      "sha256": "64a4c558ff75dd907e37456cd32128cff7ef9fcfd5eb3acc164cd3bdbe05ee01",
+      "bytes": 53542
+    },
+    "results/word-topi": {
+      "sha256": "ea331cf8bc25226978061824a2a8da91ec0feb87bcd85412f1a954a6508ec65b",
+      "bytes": 52288
     }
   }
 }
