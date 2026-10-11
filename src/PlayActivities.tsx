@@ -290,16 +290,29 @@ function AnimalMemory({ narrate }: { narrate: ActivityProps['narrate'] }) {
   )
 }
 
-const countingItems = [3, 4, 5, 6]
 function Counting({ narrate }: { narrate: ActivityProps['narrate'] }) {
-  const [round, setRound] = useState(0)
+  const [counts, setCounts] = useState(() => randomize([1, 2, 3, 4, 5, 6]))
+  const [index, setIndex] = useState(0)
   const [tapped, setTapped] = useState<number[]>([])
-  const count = countingItems[round]
+  const [finished, setFinished] = useState(false)
+  const count = counts[index]
   const done = tapped.length === count
-  const next = () => { setRound(i => (i + 1) % countingItems.length); setTapped([]) }
+  const next = () => {
+    if (index === counts.length - 1) { setFinished(true); return }
+    setIndex(index + 1); setTapped([])
+  }
+  const reset = () => { setCounts(randomize([1, 2, 3, 4, 5, 6])); setIndex(0); setTapped([]); setFinished(false) }
+  if (finished) return (
+    <div className="activity-inner">
+      <h2>Semua hitungan sudah dicoba.</h2>
+      <p className="activity-help">Mau menghitung lagi?</p>
+      <button className="primary-action" type="button" onClick={reset}>Hitung lagi</button>
+    </div>
+  )
   return (
     <div className="activity-inner">
-      <p className="activity-instruction">Sentuh setiap lingkaran. Kita hitung bersama.</p>
+      <p className="activity-instruction">Sentuh setiap lingkaran, satu per satu.</p>
+      <p className="activity-step">Hitungan {index + 1} dari {counts.length}</p>
       <div className="count-stage">
         {Array.from({ length: count }, (_, i) => (
           <button key={i} type="button" className={'count-object' + (tapped.includes(i) ? ' counted' : '')}
@@ -315,48 +328,66 @@ function Counting({ narrate }: { narrate: ActivityProps['narrate'] }) {
         ))}
       </div>
       <div className="count-display" aria-live="polite">{tapped.length} <span>lingkaran dihitung</span></div>
-      <p className="activity-help">{done ? 'Semuanya sudah dihitung.' : 'Ada yang belum disentuh?'}</p>
+      <p className="activity-help">{done ? 'Sudah dihitung semuanya.' : 'Masih ada lingkaran yang belum disentuh.'}</p>
       <div className="activity-actions">
         <button className="quiet-button" type="button" onClick={() => setTapped([])}>Ulangi</button>
-        {done && <button className="primary-action" type="button" onClick={next}>Hitung lagi →</button>}
+        {done && <button className="primary-action" type="button" onClick={next}>{index === counts.length - 1 ? 'Selesai' : 'Hitungan berikutnya →'}</button>}
       </div>
     </div>
   )
 }
-const words = [
+
+const allWords = [
   { word: 'PAGI', parts: ['PA', 'GI'] },
   { word: 'BOLA', parts: ['BO', 'LA'] },
   { word: 'MATA', parts: ['MA', 'TA'] },
+  { word: 'DASI', parts: ['DA', 'SI'] },
+  { word: 'KOTA', parts: ['KO', 'TA'] },
+  { word: 'TALI', parts: ['TA', 'LI'] },
+  { word: 'TOPI', parts: ['TO', 'PI'] },
 ]
 function WordBuilder({ narrate }: { narrate: ActivityProps['narrate'] }) {
+  const [words, setWords] = useState(() => randomize(allWords))
   const [index, setIndex] = useState(0)
   const [chosen, setChosen] = useState<string[]>([])
+  const [finished, setFinished] = useState(false)
   const word = words[index]
   const done = chosen.length === word.parts.length
   const add = (part: string) => {
     if (done || chosen.includes(part)) return
     if (part === word.parts[chosen.length]) {
-      if (chosen.length + 1 === word.parts.length) {
+      if (chosen.length + 1 === word.parts.length)
         narrate('activities/results/word-' + word.word.toLowerCase())
-      }
       setChosen(old => [...old, part])
-    }
+    } else narrate('global/retry')
   }
-  const next = () => { setIndex(old => (old + 1) % words.length); setChosen([]) }
+  const next = () => {
+    if (index === words.length - 1) { setFinished(true); return }
+    setIndex(index + 1); setChosen([])
+  }
+  const reset = () => { setWords(randomize(allWords)); setIndex(0); setChosen([]); setFinished(false) }
+  if (finished) return (
+    <div className="activity-inner">
+      <h2>Kata sudah dicoba semua.</h2>
+      <p className="activity-help">Mau menyusun kata lagi?</p>
+      <button type="button" className="primary-action" onClick={reset}>Susun lagi</button>
+    </div>
+  )
   return (
     <div className="activity-inner">
-      <p className="activity-instruction">Susun suku kata supaya menjadi kata.</p>
+      <p className="activity-instruction">Pilih suku kata pertama, lalu yang kedua.</p>
+      <p className="activity-step">Kata {index + 1} dari {words.length}</p>
       <div className="word-slots" aria-label="Susunan suku kata">
         {word.parts.map((part, i) => <div className={'word-slot' + (chosen[i] ? ' filled' : '')} key={part}>{chosen[i] || '· ·'}</div>)}
       </div>
       <div className="word-tiles">
-        {[...word.parts].reverse().map(part => <button key={part} type="button" onClick={() => add(part)}
+        {randomize([...word.parts]).sort((a,b)=>word.parts.indexOf(b)-word.parts.indexOf(a)).map(part => <button key={part} type="button" onClick={() => add(part)}
           className="word-tile" disabled={chosen.includes(part)}>{part}</button>)}
       </div>
-      <p className="activity-help" aria-live="polite">{done ? 'Jadi kata ' + word.word + '!' : 'Mulai dari suku kata pertama.'}</p>
+      <p className="activity-help" aria-live="polite">{done ? 'Jadi kata ' + word.word.toLowerCase() + '!' : 'Coba mulai dari suku kata pertama.'}</p>
       <div className="activity-actions">
         <button type="button" className="quiet-button" onClick={() => setChosen([])}>Ulangi</button>
-        {done && <button type="button" className="primary-action" onClick={next}>Kata berikutnya →</button>}
+        {done && <button type="button" className="primary-action" onClick={next}>{index === words.length - 1 ? 'Selesai' : 'Kata berikutnya →'}</button>}
       </div>
     </div>
   )
