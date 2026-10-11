@@ -5,6 +5,7 @@ import { useNarrator } from './useNarrator'
 import { PlayActivity } from './PlayActivities'
 import { AnimalIcon } from './AnimalIcon'
 import { WorldArt } from './WorldArt'
+import { ActivityArt } from './ActivityArt'
 import type { ActivityKind, ActivityWorld } from './PlayActivities'
 import type { LearningContent, World, Question } from './data/types'
 
@@ -14,7 +15,7 @@ type Mode = ActivityKind | 'quiz' | null
 
 const activityChoices: Record<string, { kind: Exclude<Mode, null>; title: string; detail: string }[]> = {
   warna: [
-    { kind: 'color', title: 'Warnai gambar', detail: 'Pilih warna dan warnai bagian gambar.' },
+    { kind: 'color', title: 'Warnai gambar', detail: 'Warnai gambar dengan jarimu.' },
     { kind: 'quiz', title: 'Tebak warna', detail: 'Cari warna yang disebutkan.' },
   ],
   bentuk: [
@@ -150,9 +151,9 @@ export default function App() {
           <section className="worlds-screen">
             <div className="section-heading">
               <div>
-                <p className="eyebrow">ASTAKULA KIDS</p>
+                <p className="eyebrow">BELAJAR SAMBIL BERMAIN</p>
                 <h1>Mau main apa hari ini?</h1>
-                <p className="lead">Pilih satu dunia. Ada beberapa cara untuk bermain dan belajar.</p>
+                <p className="lead">Ketuk gambar yang kamu suka. Ayo bermain!</p>
               </div>
             </div>
             <div className="world-grid">
@@ -166,7 +167,7 @@ export default function App() {
                   <p>{item.id === 'warna' ? 'Kenali warna dan warnai gambar.' : item.id === 'bentuk' ? 'Kenali dan tebalkan bentuk.' :
                     item.id === 'hewan' ? 'Lihat, pasangkan, dan gambar hewan.' : item.id === 'angka' ?
                       'Hitung benda di layar.' : 'Tebalkan huruf dan susun kata.'}</p>
-                  <span className="world-card-cta">Pilih permainan →</span>
+                  <span className="world-card-cta">Ayo main <span aria-hidden="true">→</span></span>
                 </button>
               ))}
             </div>
@@ -175,14 +176,17 @@ export default function App() {
           <section className="mode-screen">
             <nav className="game-nav"><button className="back-button" type="button" onClick={goHome}>← Semua dunia</button></nav>
             <h1>{world.title}</h1>
-            <p className="mode-intro">Pilih cara bermain.</p>
+            <p className="mode-intro">Mau coba permainan yang mana?</p>
             <div className="mode-grid">
               {(activityChoices[world.id] || []).map((activity, index) => (
                 <button type="button" className="mode-card" key={activity.kind} onClick={() => startMode(activity.kind)}>
-                  <span className="mode-index">{String(index + 1).padStart(2, '0')}</span>
+                  <span className="mode-card-head">
+                    <span className="mode-index">{String(index + 1).padStart(2, '0')}</span>
+                    <ActivityArt kind={activity.kind === 'quiz' ? 'quiz' : activity.kind} />
+                  </span>
                   <strong>{activity.title}</strong>
                   <span>{activity.detail}</span>
-                  <span className="mode-arrow" aria-hidden="true">Mulai →</span>
+                  <span className="mode-arrow" aria-hidden="true">Main sekarang <span>→</span></span>
                 </button>
               ))}
             </div>
