@@ -1,25 +1,26 @@
-# Astakula Kids — Sumber Gambar Mewarnai
+# Sumber gambar mewarnai — Astakula Kids
 
-Enam gambar halaman mewarnai merupakan **line art CC0 (Creative Commons Zero / public domain)** dari Openclipart dan berkas aslinya yang tersimpan dalam koleksi publik [pflajsman/coloring-book](https://github.com/pflajsman/coloring-book/tree/main/public/templates).
+## Gambar yang dipakai sekarang
 
-Semua gambar disimpan **lokal** di `public/coloring/` agar tidak memerlukan hotlink atau pemanggilan API pada perangkat anak. Berkas SVG mempertahankan informasi kreator dan CC0 di bagian `metadata`. XML header/DOCTYPE tidak dimasukkan saat disalin. Hanya sumber dengan metadata dedikasi domain publik yang dipakai.
+Permainan **Warnai gambar** memakai enam gambar SVG hitam-putih yang disimpan lokal di `public/coloring/`. Berkas aslinya berasal dari koleksi publik [pflajsman/coloring-book](https://github.com/pflajsman/coloring-book), yang menyimpan clipart dari Openclipart. Metadata pada keenam sumber mengacu ke Openclipart atau dedikasi domain publik **CC0**.
 
-| Aset Astakula Kids | Pembuat yang tercantum di metadata | Sumber |
-| --- | --- | --- |
-| `cc0-cat.svg` | gammillian | [Openclipart: Cat Line Art](https://openclipart.org/detail/75877/cat-line-art-by-gammillian), [arsip SVG](https://github.com/pflajsman/coloring-book/blob/main/public/templates/cat.svg) |
-| `cc0-rabbit.svg` | Frank Tremmel | [arsip SVG + metadata CC0](https://github.com/pflajsman/coloring-book/blob/main/public/templates/rabbit.svg) |
-| `cc0-dog.svg` | Frank Tremmel | [arsip SVG + metadata CC0](https://github.com/pflajsman/coloring-book/blob/main/public/templates/dog.svg) |
-| `cc0-owl.svg` | gammillian | [Openclipart: Owl Line Art](https://openclipart.org/detail/75271/owl-line-art-by-gammillian), [arsip SVG](https://github.com/pflajsman/coloring-book/blob/main/public/templates/owl.svg) |
-| `cc0-tree.svg` | Frank Tremmel | [arsip SVG + metadata CC0](https://github.com/pflajsman/coloring-book/blob/main/public/templates/tree.svg) |
-| `cc0-sun.svg` | gammillian | [Openclipart: Sun Line Art](https://openclipart.org/detail/75523/sun-line-art-by-gammillian), [arsip SVG](https://github.com/pflajsman/coloring-book/blob/main/public/templates/sun.svg) |
+| Gambar | Aset lokal | Sumber SVG |
+|---|---|---|
+| Kucing | `cat.svg` | [cat.svg](https://github.com/pflajsman/coloring-book/blob/main/public/templates/cat.svg) |
+| Bebek | `duck.svg` | [duck.svg](https://github.com/pflajsman/coloring-book/blob/main/public/templates/duck.svg) |
+| Burung hantu | `owl.svg` | [owl.svg](https://github.com/pflajsman/coloring-book/blob/main/public/templates/owl.svg) |
+| Ikan | `fish.svg` | [fish.svg](https://github.com/pflajsman/coloring-book/blob/main/public/templates/fish.svg) |
+| Domba | `sheep.svg` | [sheep.svg](https://github.com/pflajsman/coloring-book/blob/main/public/templates/sheep.svg) |
+| Kelinci | `rabbit.svg` | [rabbit.svg](https://github.com/pflajsman/coloring-book/blob/main/public/templates/rabbit.svg) |
 
-Openclipart menjelaskan bahwa aset yang dibagikan melalui perpustakaannya dirilis dengan dedikasi CC0: [FAQ lisensi](https://openclipart.org/share).
+Enam file tambahan bernama `cc0-cat.svg`, `cc0-dog.svg`, `cc0-owl.svg`, `cc0-rabbit.svg`, `cc0-tree.svg`, dan `cc0-sun.svg` juga tersimpan di direktori yang sama sebagai alternatif gambar, tetapi belum ditampilkan dalam pilihan mewarnai aktif.
 
-## Integrasi teknis
+**Lisensi:** sumber-sumber yang dipilih adalah clipart Openclipart yang dipublikasikan di bawah [CC0/Public Domain](https://creativecommons.org/publicdomain/zero/1.0/). Jangan menganggap semua file dari repository asal memiliki lisensi yang sama; periksa setiap karya baru sebelum dipakai.
 
-- `src/ColoringActivity.tsx` menampilkan SVG sumber sebagai lapisan garis **di atas** canvas krayon berwarna. Anak mewarnai dengan gestur jari, bukan klik-to-fill.
-- `src/styles.css` mencegah seleksi teks dan callout Android pada area mewarnai.
-- Sumber tidak dimuat dari Google atau domain lain saat dimainkan.
-- Jenis permainan ini tetap mempunyai tombol urungkan, hapus, penghapus, pilihan warna, ukuran kuas, dan gambar berikutnya.
+## Integrasi
 
-Keterangan: Google digunakan untuk **menemukan** karya. Google Images bukan sumber hak cipta; tautan asal dan lisensi sumber yang menentukan kelayakan penggunaan.
+- SVG disajikan sebagai gambar lokal dan hanya berfungsi sebagai garis pandu di atas canvas.
+- Anak memilih krayon lalu **menggores dengan jari**. Warna tidak lagi langsung memenuhi bidang saat diketuk.
+- Pemilihan warna, ukuran krayon, penghapus, urungkan, dan hapus semua tersedia tanpa backend.
+- Berkas SVG aktif tidak memuat script atau external runtime. Deklarasi DOCTYPE dan metadata lama dihilangkan saat penyalinan.
+- UI tetap tanpa iklan, akun, maupun unggahan gambar anak.
