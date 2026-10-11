@@ -322,3 +322,72 @@ h1 em { font-style: normal; color: #cc7966; }
 @media (prefers-reduced-motion: reduce) {
   .coloring-picture path, .coloring-swatch { transition: none; }
 }
+
+
+/* Actual finger/pen coloring: stationery-like sheet with a canvas underneath
+   CC0 monochrome line art. Artwork is never a click-to-fill button. */
+.coloring-sheet {
+  position: relative;
+  width: min(100%, 520px);
+  aspect-ratio: 320 / 270;
+  margin: 6px auto 22px;
+  background: #fff;
+  border: 2px solid #d6dde0;
+  border-radius: 16px;
+  box-shadow: 0 5px 0 #e8e3d7;
+  overflow: hidden;
+  isolation: isolate;
+  touch-action: none;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+}
+.coloring-page-base,
+.coloring-canvas,
+.coloring-lineart {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  user-select: none;
+  -webkit-user-select: none;
+}
+.coloring-page-base { background: #fff; pointer-events: none; }
+.coloring-canvas {
+  z-index: 1;
+  touch-action: none;
+  -webkit-touch-callout: none;
+  cursor: crosshair;
+  -webkit-tap-highlight-color: transparent;
+}
+.coloring-lineart {
+  z-index: 2;
+  pointer-events: none;
+  object-fit: contain;
+  padding: 10px;
+  mix-blend-mode: multiply;
+  -webkit-user-drag: none;
+}
+.coloring-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 18px;
+}
+.brush-sizes { display: flex; gap: 6px; padding: 4px; border: 1px solid #d2dad9; border-radius: 12px; }
+.brush-size { width: 47px; min-height: 46px; border: 2px solid transparent; background: #f5f9f7; display: grid; place-items: center; border-radius: 9px; }
+.brush-size.selected { border-color: #217b74; background: #e0f4ec; }
+.brush-size span { display: block; background: #345c58; border-radius: 50%; }
+.eraser-toggle.selected { background: #fff0d0; border-color: #efb24c; color: #704a20; }
+.coloring-toolbar .quiet-button:disabled,
+.coloring-activity .quiet-button:disabled { opacity: .45; cursor: default; }
+.coloring-done { text-align: center; padding: 30px 10px; }
+.coloring-done h2 { font-size: 28px; }
+@media (max-width: 480px) {
+  .coloring-sheet { width: 100%; border-radius: 12px; }
+  .coloring-toolbar .quiet-button { min-height: 46px; }
+  .coloring-lineart { padding: 5px; }
+}
