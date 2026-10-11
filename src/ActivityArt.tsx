@@ -1,9 +1,9 @@
 export type IconKind = 'color' | 'trace' | 'memory' | 'count' | 'letters' | 'quiz'
 
 export function ActivityArt({ kind }: { kind: IconKind }) {
-  const base = { fill: 'none', stroke: 'currentColor', strokeWidth: 3.5, strokeLinecap: 'round' as const, strokeLinejoin: 'round' as const }
+  const base = { stroke: 'currentColor', strokeWidth: 3.5, strokeLinecap: 'round' as const, strokeLinejoin: 'round' as const }
   return <span className={'activity-art art-' + kind} aria-hidden="true">
-    <svg viewBox="0 0 80 80" width="76" height="76" focusable="false">
+    <svg viewBox="0 0 80 80" width="76" height="76" fill="none" focusable="false">
       {kind === 'color' && <>
         <path d="M21 20 L48 20 L53 38 L31 60 L16 45 Z" {...base}/>
         <path d="M27 29 L43 29 M24 37 L39 37" {...base}/>
