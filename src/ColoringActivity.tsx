@@ -8,40 +8,17 @@ const palette: Color[] = [
   { name: 'Ungu', hex: '#a48ac4' }, { name: 'Jingga', hex: '#eda063' },
 ]
 
-type Region = { id: string; path: string; label: string }
-type Picture = { title: string; regions: Region[] }
+type Picture = { title: string; asset: string }
 
+// CC0 coloring line art curated from Openclipart. Source/license details:
+// docs/COLORING_ASSET_SOURCES.md. One consistent large drawing per sheet.
 const pictures: Picture[] = [
-  { title: 'Rumah', regions: [
-    { id: 'atap', label: 'Atap', path: 'M50 112 L160 26 L270 112 Z' },
-    { id: 'dinding', label: 'Dinding', path: 'M73 116 H247 V224 H73 Z' },
-    { id: 'pintu', label: 'Pintu', path: 'M140 154 H181 V224 H140 Z' },
-  ] },
-  { title: 'Bunga', regions: [
-    { id: 'kelopak', label: 'Kelopak bunga', path: 'M160 53 C125 12 104 65 132 94 C80 61 67 128 120 133 C72 153 111 204 149 165 C173 215 223 178 194 142 C248 131 235 78 193 91 C217 46 177 30 160 53 Z' },
-    { id: 'tengah', label: 'Tengah bunga', path: 'M160 100 A27 27 0 1 1 159.9 100 Z' },
-    { id: 'batang', label: 'Batang bunga', path: 'M153 157 H167 V238 H153 Z' },
-  ] },
-  { title: 'Ikan', regions: [
-    { id: 'ekor', label: 'Ekor ikan', path: 'M215 125 L275 75 L275 175 Z' },
-    { id: 'badan', label: 'Badan ikan', path: 'M49 125 C95 52 181 52 233 125 C181 198 95 198 49 125 Z' },
-    { id: 'sirip', label: 'Sirip ikan', path: 'M132 99 L171 39 L196 109 Z' },
-  ] },
-  { title: 'Balon', regions: [
-    { id: 'balon-kiri', label: 'Balon kiri', path: 'M68 84 A44 50 0 1 1 156 84 Q151 125 115 143 Q79 125 68 84 Z' },
-    { id: 'balon-kanan', label: 'Balon kanan', path: 'M169 80 A42 48 0 1 1 253 80 Q247 123 211 142 Q176 123 169 80 Z' },
-    { id: 'pita', label: 'Pita balon', path: 'M111 142 L121 142 L160 224 L203 140 L213 143 L161 247 Z' },
-  ] },
-  { title: 'Mobil', regions: [
-    { id: 'bodi', label: 'Badan mobil', path: 'M38 129 L73 124 L104 75 H214 L246 124 H281 V194 H38 Z' },
-    { id: 'jendela', label: 'Jendela', path: 'M111 87 H155 V124 H84 Z M168 87 H206 L232 124 H168 Z' },
-    { id: 'roda', label: 'Roda', path: 'M81 186 A29 29 0 1 1 80.9 186 Z M235 186 A29 29 0 1 1 234.9 186 Z' },
-  ] },
-  { title: 'Pohon', regions: [
-    { id: 'daun', label: 'Daun pohon', path: 'M160 25 C111 17 97 63 96 87 C40 97 51 163 105 175 H218 C277 161 265 100 220 86 C222 45 193 25 160 25 Z' },
-    { id: 'batang', label: 'Batang pohon', path: 'M144 174 H180 V234 H144 Z' },
-    { id: 'buah', label: 'Buah', path: 'M105 116 A13 13 0 1 1 104.9 116 Z M214 122 A13 13 0 1 1 213.9 122 Z' },
-  ] },
+  { title: 'Kucing', asset: 'cat' },
+  { title: 'Kelinci', asset: 'rabbit' },
+  { title: 'Anjing', asset: 'dog' },
+  { title: 'Burung hantu', asset: 'owl' },
+  { title: 'Pohon', asset: 'tree' },
+  { title: 'Matahari', asset: 'sun' },
 ]
 
 function shuffled<T>(values: readonly T[]) {
@@ -86,11 +63,8 @@ export function ColoringActivity({ narrate }: { narrate: (key: string, queued?: 
     const context = getContext()
     if (!context || !stroke.points.length) return
     context.save()
-    // The brush is clipped to the drawing: moving outside the picture
-    // never spills color onto the surrounding sheet.
-    const silhouette = new Path2D()
-    for (const region of picture.regions) silhouette.addPath(new Path2D(region.path))
-    context.clip(silhouette)
+    // Children paint freely like on a coloring sheet. The clear line-art
+    // image sits above the strokes to keep each illustration recognizable.
     context.globalCompositeOperation = stroke.eraser ? 'destination-out' : 'source-over'
     context.lineWidth = stroke.size
     context.lineCap = 'round'
@@ -110,7 +84,7 @@ export function ColoringActivity({ narrate }: { narrate: (key: string, queued?: 
       context.stroke()
     }
     context.restore()
-  }, [getContext, picture])
+  }, [getContext])
 
   const repaint = useCallback(() => {
     const context = getContext()
@@ -119,7 +93,7 @@ export function ColoringActivity({ narrate }: { narrate: (key: string, queued?: 
     for (const stroke of strokesRef.current) draw(stroke)
   }, [draw, getContext])
 
-  useEffect(() => { repaint() }, [repaint])
+  useEffect(() => { repaint() }, [repaint, index])
 
   const pointFrom = (event: PointerEvent<HTMLCanvasElement>): DrawPoint | null => {
     const canvas = canvasRef.current
@@ -157,9 +131,6 @@ export function ColoringActivity({ narrate }: { narrate: (key: string, queued?: 
     const context = getContext()
     if (!context) return
     context.save()
-    const silhouette = new Path2D()
-    for (const region of picture.regions) silhouette.addPath(new Path2D(region.path))
-    context.clip(silhouette)
     context.globalCompositeOperation = stroke.eraser ? 'destination-out' : 'source-over'
     context.lineWidth = stroke.size
     context.lineCap = 'round'
@@ -239,27 +210,18 @@ export function ColoringActivity({ narrate }: { narrate: (key: string, queued?: 
             <h2>{picture.title}</h2>
             <span>{index + 1} dari {session.length}</span>
           </div>
-          <p className="activity-instruction">Pilih krayon, lalu geser jari di gambar.</p>
+          <p className="activity-instruction">Pilih krayon, lalu warnai gambar dengan jari.</p>
           <div className="coloring-sheet">
-            <svg className="coloring-picture coloring-outline" viewBox="0 0 320 270" role="img"
-              aria-label={'Gambar garis ' + picture.title} aria-hidden="true">
-              {picture.regions.map(region => (
-                <path key={region.id} d={region.path} fill="#fff"
-                  stroke="#354d49" strokeWidth="3.5" strokeLinejoin="round"/>
-              ))}
-            </svg>
+            <div className="coloring-page-base" aria-hidden="true" />
             <canvas ref={canvasRef} width={640} height={540} className="coloring-canvas"
               aria-label={'Mewarnai ' + picture.title + ' dengan jari'}
               onPointerDown={pointerDown} onPointerMove={pointerMove}
               onPointerUp={pointerEnd} onPointerCancel={pointerEnd}
               onContextMenu={event => event.preventDefault()}
               onDragStart={event => event.preventDefault()}/>
-            <svg className="coloring-picture coloring-lines" viewBox="0 0 320 270" aria-hidden="true">
-              {picture.regions.map(region => (
-                <path key={region.id} d={region.path} fill="none"
-                  stroke="#354d49" strokeWidth="3.5" strokeLinejoin="round"/>
-              ))}
-            </svg>
+            <img className="coloring-lineart" src={import.meta.env.BASE_URL + 'coloring/cc0-' + picture.asset + '.svg'}
+              alt="" draggable={false} aria-hidden="true" />
+
           </div>
           <div className="coloring-palette" role="group" aria-label="Pilih warna krayon">
             {palette.map(option => (
