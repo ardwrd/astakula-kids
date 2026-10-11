@@ -173,6 +173,7 @@ export function ColoringActivity({ narrate }: { narrate: (key: string, queued?: 
   }
 
   const next = () => {
+    if (strokeCount > 0) narrate('global/correct')
     if (index === session.length - 1) {
       setFinished(true)
       return
