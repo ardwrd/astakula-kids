@@ -42,6 +42,15 @@
     "animals/kucing": "Ini kucing.",
     "animals/sapi": "Ini sapi.",
     "animals/ayam": "Ini ayam.",
-    "instructions/color": "[gently] Pilih warna, lalu sentuh bagian gambar yang ingin kamu warnai."
+    "instructions/color": "[gently] Pilih warna, lalu sentuh bagian gambar yang ingin kamu warnai.",
+    "trace/persegi": "Persegi.",
+    "trace/hati": "Hati.",
+    "trace/burung": "Burung.",
+    "trace/d": "Huruf D.",
+    "trace/o": "Huruf O.",
+    "results/word-dasi": "[happily] Da, si. Jadi kata dasi!",
+    "results/word-kota": "[happily] Ko, ta. Jadi kata kota!",
+    "results/word-tali": "[happily] Ta, li. Jadi kata tali!",
+    "results/word-topi": "[happily] To, pi. Jadi kata topi!"
   }
 }
