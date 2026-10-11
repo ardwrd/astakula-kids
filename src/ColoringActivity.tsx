@@ -81,7 +81,7 @@ export function ColoringActivity({ narrate }: { narrate: (key: string, queued?: 
         <div className="trace-title"><h2>{picture.title}</h2><span>{index + 1} dari {session.length} gambar</span></div>
         <p className="activity-instruction">Pilih warna, lalu sentuh bagian gambar.</p>
         <svg className="coloring-picture" viewBox="0 0 320 270"
-          role="img" aria-label={'Gambar ' + picture.title + ' yang bisa diwarnai'}>
+          role="img" aria-label={'Gambar ' + picture.title + ' yang bisa diwarnai'} onContextMenu={event => event.preventDefault()}>
           {picture.regions.map(region => (
             <path key={region.id} d={region.path} fill={filled[region.id] || '#ffffff'}
               stroke="#394d4a" strokeWidth="4" strokeLinejoin="round"
@@ -91,7 +91,7 @@ export function ColoringActivity({ narrate }: { narrate: (key: string, queued?: 
           ))}
         </svg>
         <div className="coloring-palette" role="group" aria-label="Pilih warna">
-          {shuffled(palette).sort((a,b)=>palette.indexOf(a)-palette.indexOf(b)).map(option => (
+          {palette.map(option => (
             <button key={option.name} type="button" className={'coloring-swatch' + (option.name === color.name ? ' selected' : '')}
               style={{ backgroundColor: option.hex }}
               onClick={() => setColor(option)} aria-pressed={option.name === color.name}
@@ -104,7 +104,7 @@ export function ColoringActivity({ narrate }: { narrate: (key: string, queued?: 
         <div className="activity-actions">
           <button type="button" className="quiet-button" onClick={() => setFilled({})}>Hapus warna</button>
           <button type="button" className="primary-action" onClick={() => { if (done) narrate('global/correct'); next() }}>
-            {index === session.length - 1 ? 'Selesai' : 'Gambar berikutnya →'}
+            {index === session.length - 1 ? 'Selesai' : done ? 'Gambar berikutnya →' : 'Lewati gambar →'}
           </button>
         </div>
       </>}
