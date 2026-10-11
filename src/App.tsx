@@ -14,7 +14,7 @@ type Mode = ActivityKind | 'quiz' | null
 
 const activityChoices: Record<string, { kind: Exclude<Mode, null>; title: string; detail: string }[]> = {
   warna: [
-    { kind: 'mix', title: 'Campur warna', detail: 'Pilih dua warna, lalu lihat hasilnya.' },
+    { kind: 'color', title: 'Warnai gambar', detail: 'Pilih warna dan warnai bagian gambar.' },
     { kind: 'quiz', title: 'Tebak warna', detail: 'Cari warna yang disebutkan.' },
   ],
   bentuk: [
@@ -103,10 +103,6 @@ export default function App() {
       play('activities/instructions/' + cue)
       if (next === 'trace') {
         const firstOutline: Record<string, string> = { bentuk: 'lingkaran', hewan: 'ikan', huruf: 'a' }
-        play('activities/trace/' + firstOutline[world.id], true)
-      }
-      if (next === 'trace') {
-        const firstOutline: Record<string, string> = { bentuk: 'lingkaran', hewan: 'ikan', huruf: 'a' }
         const outline = firstOutline[world.id]
         if (outline) play('activities/trace/' + outline, true)
       }
@@ -165,7 +161,7 @@ export default function App() {
                     <WorldArt id={item.id} />
                   </div>
                   <h2>{item.title}</h2>
-                  <p>{item.id === 'warna' ? 'Kenali dan campur warna.' : item.id === 'bentuk' ? 'Kenali dan tebalkan bentuk.' :
+                  <p>{item.id === 'warna' ? 'Kenali warna dan warnai gambar.' : item.id === 'bentuk' ? 'Kenali dan tebalkan bentuk.' :
                     item.id === 'hewan' ? 'Lihat, pasangkan, dan gambar hewan.' : item.id === 'angka' ?
                       'Hitung benda di layar.' : 'Tebalkan huruf dan susun kata.'}</p>
                   <span className="world-card-cta">Pilih permainan →</span>
