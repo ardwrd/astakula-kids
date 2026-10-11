@@ -41,6 +41,7 @@
     "trace/p": "Huruf P.",
     "animals/kucing": "Ini kucing.",
     "animals/sapi": "Ini sapi.",
-    "animals/ayam": "Ini ayam."
+    "animals/ayam": "Ini ayam.",
+    "instructions/color": "[gently] Pilih warna, lalu sentuh bagian gambar yang ingin kamu warnai."
   }
 }
