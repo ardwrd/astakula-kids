@@ -99,7 +99,7 @@ function TraceLines({ world, narrate }: { world: 'bentuk' | 'hewan' | 'huruf'; n
     const pt = p.getPointAtLength(p.getTotalLength() * ratio)
     return { x: pt.x, y: pt.y }
   }
-  const checkpoints = Array.from({ length: 16 }, (_, i) => pointAt(i / 15))
+  const checkpoints = Array.from({ length: 16 }, (_, i) => pointAt(i / 16))
   // A line only counts as finished after nearly all of its parts were traced.
   // This includes disconnected strokes, such as the crossbar in letter A.
   const complete = dotsMode ? dotsReached >= checkpoints.length : coverage >= .94
