@@ -48,19 +48,28 @@ function randomize<T>(items: T[]) {
 
 
 function TraceLines({ world, narrate }: { world: 'bentuk' | 'hewan' | 'huruf'; narrate: ActivityProps['narrate'] }) {
-  const models = traceModels[world]
+  const [models, setModels] = useState(() => randomize(traceModels[world]))
   const [index, setIndex] = useState(0)
   const [dotsMode, setDotsMode] = useState(false)
   const [dotsReached, setDotsReached] = useState(0)
   const [strokes, setStrokes] = useState<Point[][]>([])
   const [coverage, setCoverage] = useState(0)
+  const [sessionFinished, setSessionFinished] = useState(false)
   const trackRef = useRef<SVGPathElement | null>(null)
   const svgRef = useRef<SVGSVGElement | null>(null)
   const coveredRef = useRef<Set<number>>(new Set())
   const pathSamplesRef = useRef<Point[]>([])
   const drawingRef = useRef(false)
+  const lastPointRef = useRef<Point | null>(null)
+  const announcedStartRef = useRef(false)
   const resultAnnouncedRef = useRef(false)
   const track = models[index]
+  useEffect(() => {
+    if (!announcedStartRef.current) {
+      announcedStartRef.current = true
+      narrate('activities/trace/' + track.name.toLowerCase(), true)
+    }
+  }, [narrate, track.name])
 
   useEffect(() => {
     coveredRef.current = new Set()
@@ -72,8 +81,8 @@ function TraceLines({ world, narrate }: { world: 'bentuk' | 'hewan' | 'huruf'; n
     const path = trackRef.current
     if (path) {
       const length = path.getTotalLength()
-      pathSamplesRef.current = Array.from({ length: 110 }, (_, i) => {
-        const p = path.getPointAtLength(length * i / 109)
+      pathSamplesRef.current = Array.from({ length: 240 }, (_, i) => {
+        const p = path.getPointAtLength(length * i / 239)
         return { x: p.x, y: p.y }
       })
     }
@@ -85,8 +94,10 @@ function TraceLines({ world, narrate }: { world: 'bentuk' | 'hewan' | 'huruf'; n
     const pt = p.getPointAtLength(p.getTotalLength() * ratio)
     return { x: pt.x, y: pt.y }
   }
-  const checkpoints = Array.from({ length: 9 }, (_, i) => pointAt(i / 9))
-  const complete = dotsMode ? dotsReached >= checkpoints.length : coverage >= .66
+  const checkpoints = Array.from({ length: 16 }, (_, i) => pointAt(i / 15))
+  // A line only counts as finished after nearly all of its parts were traced.
+  // This includes disconnected strokes, such as the crossbar in letter A.
+  const complete = dotsMode ? dotsReached >= checkpoints.length : coverage >= .94
 
   const pointFromEvent = (e: PointerEvent<SVGSVGElement>): Point | null => {
     const svg = svgRef.current
@@ -102,29 +113,52 @@ function TraceLines({ world, narrate }: { world: 'bentuk' | 'hewan' | 'huruf'; n
   const record = (point: Point) => {
     const samples = pathSamplesRef.current
     if (!samples.length) return
-    for (let i = 0; i < samples.length; i++) {
-      if (coveredRef.current.has(i)) continue
-      const sample = samples[i]
-      if (Math.hypot(sample.x - point.x, sample.y - point.y) < 22) coveredRef.current.add(i)
+    const last = lastPointRef.current || point
+    const travel = Math.hypot(point.x - last.x, point.y - last.y)
+    // Fill gaps caused by fast finger movement rather than losing traced segments.
+    const steps = Math.max(1, Math.min(120, Math.ceil(travel / 3)))
+    for (let segment = 0; segment <= steps; segment++) {
+      const t = segment / steps
+      const px = last.x + (point.x - last.x) * t
+      const py = last.y + (point.y - last.y) * t
+      for (let i = 0; i < samples.length; i++) {
+        if (coveredRef.current.has(i)) continue
+        if (Math.hypot(samples[i].x - px, samples[i].y - py) <= 12) coveredRef.current.add(i)
+      }
     }
+    lastPointRef.current = point
     const nextCoverage = coveredRef.current.size / samples.length
-    if (nextCoverage >= .66 && !resultAnnouncedRef.current) {
+    // Guard against a big shape looking finished when only one portion was drawn.
+    const sectionCount = 8
+    let allSections = true
+    for (let section = 0; section < sectionCount; section++) {
+      const start = Math.floor(section * samples.length / sectionCount)
+      const end = Math.floor((section + 1) * samples.length / sectionCount)
+      let marked = 0
+      for (let i = start; i < end; i++) if (coveredRef.current.has(i)) marked++
+      if (marked / (end - start) < .86) allSections = false
+    }
+    if (nextCoverage >= .94 && allSections && !resultAnnouncedRef.current) {
       resultAnnouncedRef.current = true
       narrate('activities/results/trace-complete')
     }
-    setCoverage(nextCoverage)
+    setCoverage(nextCoverage >= .94 && allSections ? nextCoverage : Math.min(nextCoverage, .939))
   }
   const down = (e: PointerEvent<SVGSVGElement>) => {
-    if (dotsMode || complete) return
+    if (dotsMode) return
+    e.preventDefault()
+    if (drawingRef.current) return
     const point = pointFromEvent(e)
     if (!point) return
     e.currentTarget.setPointerCapture(e.pointerId)
     drawingRef.current = true
+    lastPointRef.current = point
     setStrokes(previous => [...previous, [point]])
     record(point)
   }
   const move = (e: PointerEvent<SVGSVGElement>) => {
     if (!drawingRef.current || dotsMode) return
+    e.preventDefault()
     const point = pointFromEvent(e)
     if (!point) return
     setStrokes(previous => {
@@ -134,20 +168,41 @@ function TraceLines({ world, narrate }: { world: 'bentuk' | 'hewan' | 'huruf'; n
     })
     record(point)
   }
-  const up = () => { drawingRef.current = false }
-  const clear = () => { coveredRef.current = new Set(); setCoverage(0); setStrokes([]); setDotsReached(0) }
+  const up = () => { drawingRef.current = false; lastPointRef.current = null }
+  const clear = () => {
+    coveredRef.current = new Set()
+    resultAnnouncedRef.current = false
+    lastPointRef.current = null
+    drawingRef.current = false
+    setCoverage(0); setStrokes([]); setDotsReached(0)
+  }
   const next = () => {
-    const following = (index + 1) % models.length
+    if (index === models.length - 1) { setSessionFinished(true); return }
+    const following = index + 1
     setIndex(following)
     narrate('activities/trace/' + models[following].name.toLowerCase())
   }
+  const replay = () => {
+    const fresh = randomize(traceModels[world])
+    setModels(fresh); setIndex(0); setSessionFinished(false); clear()
+    narrate('activities/trace/' + fresh[0].name.toLowerCase())
+  }
   return (
     <div className="activity-inner tracing">
+      {sessionFinished ? (
+        <div className="trace-session-end">
+          <h2>Gambar sudah dicoba semua.</h2>
+          <p>Mau menebalkan gambar lagi dengan urutan berbeda?</p>
+          <button type="button" className="primary-action" onClick={replay}>Main lagi</button>
+        </div>
+      ) : <>
       <div className="trace-title"><h2>{track.name}</h2><span>{index + 1} dari {models.length}</span></div>
       <p className="activity-instruction">{dotsMode ? 'Sentuh titik yang menyala, satu per satu.' : 'Ikuti garis putus-putus dengan jarimu.'}</p>
       <svg ref={svgRef} viewBox="0 0 320 250" className="trace-paper" role="img"
         aria-label={'Area menebalkan garis ' + track.name}
-        onPointerDown={down} onPointerMove={move} onPointerUp={up} onPointerCancel={up}>
+        onPointerDown={down} onPointerMove={move} onPointerUp={up} onPointerCancel={up}
+        onContextMenu={event => event.preventDefault()}
+        onDragStart={event => event.preventDefault()}>
         <path ref={trackRef} d={track.path} className="trace-guide" />
         {!dotsMode && strokes.map((stroke, i) => <polyline key={i} points={stroke.map(p => p.x + ',' + p.y).join(' ')}
           stroke="#24786e" strokeWidth="11" fill="none" strokeLinecap="round" strokeLinejoin="round" />)}
@@ -170,8 +225,9 @@ function TraceLines({ world, narrate }: { world: 'bentuk' | 'hewan' | 'huruf'; n
           if (!dotsMode) narrate('activities/instructions/trace-dots')
           setDotsMode(v => !v)
         }}>{dotsMode ? 'Pakai jari' : 'Pakai titik pandu'}</button>
-        {complete && <button type="button" className="primary-action" onClick={next}>Gambar berikutnya →</button>}
+        <button type="button" className="primary-action" onClick={next}>{index === models.length - 1 ? 'Akhiri sesi' : complete ? 'Gambar berikutnya →' : 'Lewati gambar →'}</button>
       </div>
+      </>}
     </div>
   )
 }
