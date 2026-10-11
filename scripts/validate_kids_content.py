@@ -41,4 +41,14 @@ for world in DATA["worlds"]:
                         "Paku must show a smooth-shaft nail illustration, not a bolt emoji"
                     )
 assert total == 38
-print("Content QA PASSED: five worlds, 38 active questions, valid choices, colors and local illustrations")
+# Audio/text must remain aligned as the question bank expands.
+narration = json.loads((ROOT / "src/data/narrationV4.json").read_text(encoding="utf-8"))
+for world in DATA["worlds"]:
+    for group in ("3", "5"):
+        for question in world["levels"][group]:
+            assert "questions/" + question["id"] in narration["clips"], question["id"]
+            if world["id"] == "warna":
+                assert "campur" not in question["prompt"].lower(), (
+                    "Abstract color-mixing prompts are retired from active preschool play"
+                )
+print("Content QA PASSED: five worlds, 38 active questions, valid choices, colors, illustrations and narrator keys")
