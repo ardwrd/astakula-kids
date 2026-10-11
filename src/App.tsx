@@ -46,9 +46,11 @@ function shuffle<T>(items: readonly T[]): T[] {
   return result
 }
 function newPlayRound(world: World): Question[] {
-  return [...shuffle(world.levels['3']), ...shuffle(world.levels['5'])].map(q => ({
-    ...q, options: shuffle(q.options),
-  }))
+  // Six unique questions per session, randomly drawn from a larger bank.
+  return [
+    ...shuffle(world.levels['3']).slice(0, 3),
+    ...shuffle(world.levels['5']).slice(0, 3),
+  ].map(q => ({ ...q, options: shuffle(q.options) }))
 }
 
 export default function App() {
