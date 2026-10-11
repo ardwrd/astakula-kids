@@ -91,8 +91,33 @@
         ],
         "5": [
           {
-            "id": "warna-5-1",
-            "prompt": "Merah dan kuning jika dicampur menjadi warna apa?",
+            "id": "warna-5-4",
+            "prompt": "Daun pada pohon biasanya berwarna apa?",
+            "options": [
+              {
+                "id": "hijau",
+                "label": "Hijau",
+                "visual": "●",
+                "color": "#61b887"
+              },
+              {
+                "id": "biru",
+                "label": "Biru",
+                "visual": "●",
+                "color": "#6396e9"
+              },
+              {
+                "id": "kuning",
+                "label": "Kuning",
+                "visual": "●",
+                "color": "#f5ca57"
+              }
+            ],
+            "answer": "hijau"
+          },
+          {
+            "id": "warna-5-5",
+            "prompt": "Wortel biasanya berwarna apa?",
             "options": [
               {
                 "id": "jingga",
@@ -101,69 +126,44 @@
                 "color": "#ed9b53"
               },
               {
-                "id": "hijau",
-                "label": "Hijau",
-                "visual": "●",
-                "color": "#61b887"
-              },
-              {
                 "id": "ungu",
                 "label": "Ungu",
                 "visual": "●",
                 "color": "#ad8cd7"
+              },
+              {
+                "id": "biru",
+                "label": "Biru",
+                "visual": "●",
+                "color": "#6396e9"
               }
             ],
             "answer": "jingga"
           },
           {
-            "id": "warna-5-2",
-            "prompt": "Biru dan kuning jika dicampur menjadi warna apa?",
+            "id": "warna-5-6",
+            "prompt": "Langit yang cerah biasanya berwarna apa?",
             "options": [
               {
-                "id": "ungu",
-                "label": "Ungu",
+                "id": "biru",
+                "label": "Biru",
                 "visual": "●",
-                "color": "#ad8cd7"
-              },
-              {
-                "id": "hijau",
-                "label": "Hijau",
-                "visual": "●",
-                "color": "#61b887"
+                "color": "#6396e9"
               },
               {
                 "id": "merah",
                 "label": "Merah",
                 "visual": "●",
                 "color": "#f16b67"
-              }
-            ],
-            "answer": "hijau"
-          },
-          {
-            "id": "warna-5-3",
-            "prompt": "Merah dan biru jika dicampur menjadi warna apa?",
-            "options": [
+              },
               {
                 "id": "hijau",
                 "label": "Hijau",
                 "visual": "●",
                 "color": "#61b887"
-              },
-              {
-                "id": "jingga",
-                "label": "Jingga",
-                "visual": "●",
-                "color": "#ed9b53"
-              },
-              {
-                "id": "ungu",
-                "label": "Ungu",
-                "visual": "●",
-                "color": "#ad8cd7"
               }
             ],
-            "answer": "ungu"
+            "answer": "biru"
           }
         ]
       }
@@ -252,6 +252,31 @@
               }
             ],
             "answer": "persegi"
+          },
+          {
+            "id": "bentuk-3-4",
+            "prompt": "Mana bentuk bintang?",
+            "options": [
+              {
+                "id": "bintang",
+                "label": "Bintang",
+                "visual": "★",
+                "color": "#a78bd1"
+              },
+              {
+                "id": "persegi",
+                "label": "Persegi",
+                "visual": "■",
+                "color": "#80adf0"
+              },
+              {
+                "id": "lingkaran",
+                "label": "Lingkaran",
+                "visual": "●",
+                "color": "#ef927f"
+              }
+            ],
+            "answer": "bintang"
           }
         ],
         "5": [
@@ -329,6 +354,31 @@
               }
             ],
             "answer": "persegi"
+          },
+          {
+            "id": "bentuk-5-4",
+            "prompt": "Bentuk apa yang mirip atap rumah?",
+            "options": [
+              {
+                "id": "segitiga",
+                "label": "Segitiga",
+                "visual": "▲",
+                "color": "#f2ba56"
+              },
+              {
+                "id": "lingkaran",
+                "label": "Lingkaran",
+                "visual": "●",
+                "color": "#ef927f"
+              },
+              {
+                "id": "persegi",
+                "label": "Persegi",
+                "visual": "■",
+                "color": "#80adf0"
+              }
+            ],
+            "answer": "segitiga"
           }
         ]
       }
@@ -408,6 +458,28 @@
               }
             ],
             "answer": "sapi"
+          },
+          {
+            "id": "hewan-3-4",
+            "prompt": "Mana gambar kelinci?",
+            "options": [
+              {
+                "id": "kelinci",
+                "label": "Kelinci",
+                "visual": "🐰"
+              },
+              {
+                "id": "ayam",
+                "label": "Ayam",
+                "visual": "🐔"
+              },
+              {
+                "id": "ikan",
+                "label": "Ikan",
+                "visual": "🐟"
+              }
+            ],
+            "answer": "kelinci"
           }
         ],
         "5": [
@@ -476,6 +548,28 @@
               }
             ],
             "answer": "kelinci"
+          },
+          {
+            "id": "hewan-5-4",
+            "prompt": "Hewan mana yang punya sirip untuk berenang?",
+            "options": [
+              {
+                "id": "ikan",
+                "label": "Ikan",
+                "visual": "🐟"
+              },
+              {
+                "id": "burung",
+                "label": "Burung",
+                "visual": "🐦"
+              },
+              {
+                "id": "kelinci",
+                "label": "Kelinci",
+                "visual": "🐰"
+              }
+            ],
+            "answer": "ikan"
           }
         ]
       }
@@ -555,6 +649,28 @@
               }
             ],
             "answer": "3"
+          },
+          {
+            "id": "angka-3-4",
+            "prompt": "Sesudah angka tiga, angka berapa?",
+            "options": [
+              {
+                "id": "4",
+                "label": "4",
+                "visual": "4"
+              },
+              {
+                "id": "5",
+                "label": "5",
+                "visual": "5"
+              },
+              {
+                "id": "2",
+                "label": "2",
+                "visual": "2"
+              }
+            ],
+            "answer": "4"
           }
         ],
         "5": [
@@ -623,6 +739,28 @@
               }
             ],
             "answer": "5"
+          },
+          {
+            "id": "angka-5-4",
+            "prompt": "Lima dikurangi satu, hasilnya berapa?",
+            "options": [
+              {
+                "id": "4",
+                "label": "4",
+                "visual": "4"
+              },
+              {
+                "id": "6",
+                "label": "6",
+                "visual": "6"
+              },
+              {
+                "id": "3",
+                "label": "3",
+                "visual": "3"
+              }
+            ],
+            "answer": "4"
           }
         ]
       }
@@ -702,6 +840,28 @@
               }
             ],
             "answer": "c"
+          },
+          {
+            "id": "huruf-3-4",
+            "prompt": "Huruf M untuk mata. Mana huruf M?",
+            "options": [
+              {
+                "id": "m",
+                "label": "M",
+                "visual": "M"
+              },
+              {
+                "id": "a",
+                "label": "A",
+                "visual": "A"
+              },
+              {
+                "id": "p",
+                "label": "P",
+                "visual": "P"
+              }
+            ],
+            "answer": "m"
           }
         ],
         "5": [
@@ -771,6 +931,28 @@
               }
             ],
             "answer": "pagi"
+          },
+          {
+            "id": "huruf-5-4",
+            "prompt": "Kata sapi dimulai dengan huruf apa?",
+            "options": [
+              {
+                "id": "s",
+                "label": "S",
+                "visual": "S"
+              },
+              {
+                "id": "p",
+                "label": "P",
+                "visual": "P"
+              },
+              {
+                "id": "m",
+                "label": "M",
+                "visual": "M"
+              }
+            ],
+            "answer": "s"
           }
         ]
       }
