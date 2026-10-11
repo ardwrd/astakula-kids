@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Generate additional Eleven v4 narration without modifying the 38 approved MP3s."""
+"""Generate additional Eleven v4 narration without modifying the 48 approved MP3s."""
 import argparse
 import hashlib
 import json
@@ -21,7 +21,7 @@ def validate():
     clips = data["clips"]
     if (data["model_id"] != "eleven_v4" or data["language_code"] != "id"
         or data["voice_id"] != "wtqqNhC5H27DEv1Ojo4B"
-        or len(clips) != 38):
+        or len(clips) != 48):
         raise ValueError("Unexpected activity voice, model or clip count")
     for name, text in clips.items():
         if not re.fullmatch(r"[a-z0-9/-]+", name) or ".." in name:
@@ -81,14 +81,14 @@ def synthesize(data, key):
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--validate", action="store_true")
-    parser.add_argument("--limit", type=int, default=38)
+    parser.add_argument("--limit", type=int, default=48)
     args = parser.parse_args()
     data = validate()
-    print("VALID: 38 scoped Indonesian Eleven v4 activity clips", flush=True)
+    print("VALID: 48 scoped Indonesian Eleven v4 activity clips", flush=True)
     if args.validate:
         return
     if not 1 <= args.limit <= len(data["clips"]):
-        parser.error("limit must be 1..38")
+        parser.error("limit must be 1..48")
     if not os.environ.get("ELEVENLABS_API_KEY"):
         sys.exit("Missing GitHub Actions secret ELEVENLABS_API_KEY")
     DEST.mkdir(parents=True, exist_ok=True)
@@ -107,7 +107,7 @@ def main():
             print("Generated:", key, flush=True)
     finally:
         manifest_for(data)
-        print("Staged:", len(json.loads(MANIFEST.read_text())["entries"]), "/38", flush=True)
+        print("Staged:", len(json.loads(MANIFEST.read_text())["entries"]), "/48", flush=True)
 
 if __name__ == "__main__":
     main()
