@@ -14,7 +14,7 @@ total = 0
 for world in DATA["worlds"]:
     for group in ("3", "5"):
         questions = world["levels"][group]
-        assert len(questions) == 3, f"Expected 3 questions in each difficulty group: {world['id']}"
+        assert 3 <= len(questions) <= 4, f"Expected a 3–4 question bank per difficulty group: {world['id']}"
         for question in questions:
             total += 1
             assert question["id"] not in question_ids, "Duplicate question ID"
@@ -40,5 +40,5 @@ for world in DATA["worlds"]:
                     assert choice.get("image") == "icons/paku.svg", (
                         "Paku must show a smooth-shaft nail illustration, not a bolt emoji"
                     )
-assert total == 30
-print("Content QA PASSED: five worlds, 30 questions, valid choices, colors and local illustrations")
+assert total == 38
+print("Content QA PASSED: five worlds, 38 active questions, valid choices, colors and local illustrations")
