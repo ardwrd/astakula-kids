@@ -8,8 +8,8 @@ ROOT = Path(__file__).resolve().parents[1]
 CONFIG = json.loads((ROOT / "src/data/audioRevision.json").read_text(encoding="utf-8"))
 KEYS = json.loads((ROOT / "src/data/audioManifest.json").read_text(encoding="utf-8"))["keys"]
 EXPECTED = set(KEYS)
-if len(EXPECTED) != 38:
-    raise SystemExit("Expected exactly 38 production audio keys")
+if len(EXPECTED) != 49:
+    raise SystemExit("Expected 49 narrator assets: 38 existing and 11 additional questions")
 
 base = CONFIG.get("basePath", "")
 revision = CONFIG.get("id")
@@ -18,7 +18,10 @@ if not CONFIG.get("approved"):
 if revision == "legacy-v2":
     if base != "audio/generated/":
         raise SystemExit("Legacy revision must use its original audio path")
-    missing = [key for key in KEYS if not (ROOT / "public" / base / (key + ".mp3")).is_file()]
+    legacy_keys = [key for key in KEYS if not key.startswith("questions/") or not (
+        key.endswith("-3-4") or key.endswith("-5-4") or
+        key.endswith("warna-5-5") or key.endswith("warna-5-6"))]
+    missing = [key for key in legacy_keys if not (ROOT / "public" / base / (key + ".mp3")).is_file()]
     if missing:
         raise SystemExit("Missing original audio: " + ", ".join(missing))
     print("Approved production audio: legacy-v2, 38/38, original files retained.")
@@ -32,10 +35,10 @@ elif revision == "indo-v4-v1":
     manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
     entries = manifest.get("entries", {})
     if (manifest.get("model") != "eleven_v4" or
-        manifest.get("generated_count") != 38 or
-        manifest.get("required_count") != 38 or
+        manifest.get("generated_count") != 49 or
+        manifest.get("required_count") != 49 or
         set(entries) != EXPECTED):
-        raise SystemExit("Cannot activate v4: candidate audio is not 38/38")
+        raise SystemExit("Cannot activate v4: candidate audio is not 49/49")
     for key in KEYS:
         path = location / (key + ".mp3")
         if not path.is_file():
@@ -43,6 +46,6 @@ elif revision == "indo-v4-v1":
         raw = path.read_bytes()
         if len(raw) < 512 or hashlib.sha256(raw).hexdigest() != entries[key]["sha256"]:
             raise SystemExit("Candidate checksum/size mismatch: " + key)
-    print("Approved production audio: indo-v4-v1, 38/38, SHA-256 valid.")
+    print("Approved production audio: indo-v4-v1, 49/49, SHA-256 valid.")
 else:
     raise SystemExit("Unrecognized audio revision: " + str(revision))
