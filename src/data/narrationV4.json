@@ -156,6 +156,50 @@
     "questions/huruf-5-3": {
       "kind": "pertanyaan",
       "text": "[curious] Ada dua suku kata: pa ... dan gi. ... Kalau digabung, jadi kata apa, ya?"
+    },
+    "questions/warna-5-4": {
+      "kind": "pertanyaan",
+      "text": "[curious] Daun pada pohon biasanya berwarna apa?"
+    },
+    "questions/warna-5-5": {
+      "kind": "pertanyaan",
+      "text": "[curious] Wortel biasanya berwarna apa?"
+    },
+    "questions/warna-5-6": {
+      "kind": "pertanyaan",
+      "text": "[curious] Langit yang cerah biasanya berwarna apa?"
+    },
+    "questions/bentuk-3-4": {
+      "kind": "pertanyaan",
+      "text": "[curious] Mana bentuk bintang?"
+    },
+    "questions/bentuk-5-4": {
+      "kind": "pertanyaan",
+      "text": "[curious] Bentuk apa yang mirip atap rumah?"
+    },
+    "questions/hewan-3-4": {
+      "kind": "pertanyaan",
+      "text": "[curious] Mana gambar kelinci?"
+    },
+    "questions/hewan-5-4": {
+      "kind": "pertanyaan",
+      "text": "[curious] Hewan mana yang punya sirip untuk berenang?"
+    },
+    "questions/angka-3-4": {
+      "kind": "pertanyaan",
+      "text": "[curious] Sesudah angka tiga, angka berapa?"
+    },
+    "questions/angka-5-4": {
+      "kind": "pertanyaan",
+      "text": "[curious] Lima dikurangi satu, hasilnya berapa?"
+    },
+    "questions/huruf-3-4": {
+      "kind": "pertanyaan",
+      "text": "[curious] Huruf M untuk mata. Mana huruf M?"
+    },
+    "questions/huruf-5-4": {
+      "kind": "pertanyaan",
+      "text": "[curious] Kata sapi dimulai dengan huruf apa?"
     }
   }
 }
