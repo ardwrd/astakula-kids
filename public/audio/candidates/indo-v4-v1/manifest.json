@@ -4,8 +4,8 @@
   "voice_id": "wtqqNhC5H27DEv1Ojo4B",
   "language_code": "id",
   "status": "APPROVED_ACTIVE",
-  "generated_count": 38,
-  "required_count": 38,
+  "generated_count": 49,
+  "required_count": 49,
   "entries": {
     "global/welcome": {
       "sha256": "874fd85d565868138754dea8b04cdbeec5d3ed106f6749378c8088a765d84897",
@@ -42,19 +42,19 @@
       "bytes": 48527,
       "kind": "perintah"
     },
-    "questions/warna-5-1": {
-      "sha256": "921126d119942a4e5f987c022c1bb5cc1f504ce84c8ccf07ccc7a9719b82f87a",
-      "bytes": 100772,
+    "questions/warna-5-4": {
+      "sha256": "99f5bfbe4c1371487504c3126b0f8e2b422d18e0ad2ce3bd6a74585a70ae496f",
+      "bytes": 51035,
       "kind": "pertanyaan"
     },
-    "questions/warna-5-2": {
-      "sha256": "82da6a717dbead58b17e91da38185a6ae395ef6af2a178e8ec3a6da1abbb0499",
-      "bytes": 102026,
+    "questions/warna-5-5": {
+      "sha256": "8e2a7e3433ee6eadc887d574a6e1fdcc0d9953e25591b3ca4d019edf9386a840",
+      "bytes": 43511,
       "kind": "pertanyaan"
     },
-    "questions/warna-5-3": {
-      "sha256": "08e22e2523fcbb8777d200a3239a09431f149fdf999944b50782355743981b1f",
-      "bytes": 100772,
+    "questions/warna-5-6": {
+      "sha256": "070f9cc9b33e69a82348e0fb2a7f17cb801eba0ea6532bbe0497ad13bff9e0d8",
+      "bytes": 51035,
       "kind": "pertanyaan"
     },
     "worlds/bentuk/intro": {
@@ -77,6 +77,11 @@
       "bytes": 48527,
       "kind": "perintah"
     },
+    "questions/bentuk-3-4": {
+      "sha256": "9ad1d24158345e0e80ca6e71670dab92fd488d5b242953132d7f5aa70f1e6899",
+      "bytes": 26793,
+      "kind": "pertanyaan"
+    },
     "questions/bentuk-5-1": {
       "sha256": "1d9197375582beb361319684d38085dfb8a1f5080f792b01d8352d0788fa37bc",
       "bytes": 76530,
@@ -90,6 +95,11 @@
     "questions/bentuk-5-3": {
       "sha256": "640ab6b1515df7e2b669c56a07aa692100c49be2a3df84a182cbd4703779de88",
       "bytes": 57304,
+      "kind": "pertanyaan"
+    },
+    "questions/bentuk-5-4": {
+      "sha256": "8fccf8dbb69ef0cf945316e8d3eb039ae820238da5b9558a1fed9b9c9c4003a0",
+      "bytes": 39332,
       "kind": "pertanyaan"
     },
     "worlds/hewan/intro": {
@@ -112,6 +122,11 @@
       "bytes": 48527,
       "kind": "perintah"
     },
+    "questions/hewan-3-4": {
+      "sha256": "3b2f59f6a0016f8da96b393c284c7039db88cd8d3078b92f8addd483d8c970fe",
+      "bytes": 29301,
+      "kind": "pertanyaan"
+    },
     "questions/hewan-5-1": {
       "sha256": "973d373819e31fd7934fd222d734586fd60ea7ccda9099afa3a3a5cfef24c427",
       "bytes": 71515,
@@ -125,6 +140,11 @@
     "questions/hewan-5-3": {
       "sha256": "04e545a91801b043d1cc5b6743989529a80bcebe9e98b21f769c485e10c4dfdd",
       "bytes": 44765,
+      "kind": "pertanyaan"
+    },
+    "questions/hewan-5-4": {
+      "sha256": "fc716c64726d25a8aeb0ca6a73ab401a9b011a6eefc3d9857096d2c40f3fd09a",
+      "bytes": 41839,
       "kind": "pertanyaan"
     },
     "worlds/angka/intro": {
@@ -147,6 +167,11 @@
       "bytes": 80292,
       "kind": "perintah"
     },
+    "questions/angka-3-4": {
+      "sha256": "b842fdfcb8e723efb02eaaf13f65cbe5aabf76a26396f10e911d6d9bc9faf4c8",
+      "bytes": 48527,
+      "kind": "pertanyaan"
+    },
     "questions/angka-5-1": {
       "sha256": "3997d89266a0496ce900ac499620780c49582852be4cb1a163189a014ba527fe",
       "bytes": 66499,
@@ -160,6 +185,11 @@
     "questions/angka-5-3": {
       "sha256": "d8dac00f6e1ec916e1df49951efd4dd538726e7409247a7e7a6e2efdcfb583ce",
       "bytes": 71515,
+      "kind": "pertanyaan"
+    },
+    "questions/angka-5-4": {
+      "sha256": "fd50d68053acc39793863f1a49b71e51b00c30b7e34fbc2516d3d4c2bcccee29",
+      "bytes": 58558,
       "kind": "pertanyaan"
     },
     "worlds/huruf/intro": {
@@ -182,6 +212,11 @@
       "bytes": 86979,
       "kind": "perintah"
     },
+    "questions/huruf-3-4": {
+      "sha256": "18645537b42b1e3895bc4c51041eb368ac5ae86649aa99777ba3c39e392ac9f4",
+      "bytes": 57304,
+      "kind": "pertanyaan"
+    },
     "questions/huruf-5-1": {
       "sha256": "e5e52e8c89fcc19a7e8637439eef68d53fda77c978c14a310463f2096c1d3b67",
       "bytes": 93248,
@@ -195,6 +230,26 @@
     "questions/huruf-5-3": {
       "sha256": "4e0416d3079c15ff6beb7af0c4b1745e54a955fe7b9c4a6bfebee1b9204b974c",
       "bytes": 114982,
+      "kind": "pertanyaan"
+    },
+    "questions/huruf-5-4": {
+      "sha256": "58f96a8dc626b7a278cdc009a1604e403ae991d4bd1ffbaef757541dd6743f85",
+      "bytes": 48527,
+      "kind": "pertanyaan"
+    },
+    "questions/warna-5-1": {
+      "sha256": "921126d119942a4e5f987c022c1bb5cc1f504ce84c8ccf07ccc7a9719b82f87a",
+      "bytes": 100772,
+      "kind": "pertanyaan"
+    },
+    "questions/warna-5-2": {
+      "sha256": "82da6a717dbead58b17e91da38185a6ae395ef6af2a178e8ec3a6da1abbb0499",
+      "bytes": 102026,
+      "kind": "pertanyaan"
+    },
+    "questions/warna-5-3": {
+      "sha256": "08e22e2523fcbb8777d200a3239a09431f149fdf999944b50782355743981b1f",
+      "bytes": 100772,
       "kind": "pertanyaan"
     }
   }
