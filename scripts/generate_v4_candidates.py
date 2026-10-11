@@ -32,9 +32,12 @@ def validate_narration():
         expected.append("worlds/" + world["id"] + "/intro")
         for age in ("3", "5"):
             expected.extend("questions/" + q["id"] for q in world["levels"][age])
+    # Keep the three previously approved color-mixing MP3s archived for rollback.
+    # They are no longer offered to children in the active question bank.
+    expected.extend(["questions/warna-5-1", "questions/warna-5-2", "questions/warna-5-3"])
     clips = data.get("clips", {})
-    if len(expected) != 38 or set(clips) != set(expected):
-        raise ValueError("Narration keys must exactly match all 38 existing app audio keys")
+    if len(expected) != 49 or len(set(expected)) != 49 or set(clips) != set(expected):
+        raise ValueError("Narration must contain 46 active/intro/global plus 3 archived audio keys")
     if data.get("model_id") != "eleven_v4" or data.get("language_code") != "id":
         raise ValueError("This candidate must target Eleven v4 in Indonesian")
     if data.get("voice_id") != VOICE_ID:
@@ -133,22 +136,22 @@ def write_manifest(narration, expected):
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--validate", action="store_true",
-                        help="Audit all 38 scripts without using API credits")
+                        help="Audit all 49 scripts without using API credits")
     parser.add_argument("--limit", type=int, default=3,
                         help="Maximum NEW clips per run; default 3")
     parser.add_argument("--keys", default="",
                         help="Optional comma-separated exact keys for targeted tests")
     args = parser.parse_args()
     data, expected = validate_narration()
-    print("VALID: 38 Indonesian v4 scripts, keys match current app.")
+    print("VALID: 49 Indonesian v4 scripts, active questions plus archived clips.")
     if args.validate:
         return
-    if not 1 <= args.limit <= 38:
-        parser.error("limit must be between 1 and 38")
+    if not 1 <= args.limit <= 49:
+        parser.error("limit must be between 1 and 49")
     selected = [x.strip() for x in args.keys.split(",") if x.strip()]
     if selected and (len(selected) != len(set(selected)) or
                      any(key not in expected for key in selected)):
-        parser.error("Every requested key must be unique and present in 38-key catalog")
+        parser.error("Every requested key must be unique and present in 49-key catalog")
     if not selected:
         selected = expected
     key = os.environ.get("ELEVENLABS_API_KEY", "")
@@ -172,7 +175,7 @@ def main():
     write_manifest(data, expected)
     print("New clips:", generated, "| Candidate total:",
           json.loads(MANIFEST.read_text(encoding="utf-8"))["generated_count"],
-          "/38. Production audio unchanged.")
+          "/49. Original clips unchanged.")
 
 
 if __name__ == "__main__":
