@@ -413,7 +413,7 @@ export function PlayActivity({ world, kind, onBack, narrate }: ActivityProps) {
       </div>
       <div className="activity-panel">
         <button className="listen-button activity-listen" type="button" onClick={listen}>Dengarkan cara bermain</button>
-        {kind === 'color' ? <ColoringActivity narrate={narrate} /> : null}
+        {kind === 'color' ? <ColoringActivity /> : null}
         {kind === 'trace' && (world === 'bentuk' || world === 'hewan' || world === 'huruf')
           ? <TraceLines world={world} narrate={narrate} /> : null}
         {kind === 'memory' ? <AnimalMemory narrate={narrate} /> : null}
