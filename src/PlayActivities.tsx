@@ -349,6 +349,7 @@ const allWords = [
 function WordBuilder({ narrate }: { narrate: ActivityProps['narrate'] }) {
   const [words, setWords] = useState(() => randomize(allWords))
   const [index, setIndex] = useState(0)
+  const [tileOrder, setTileOrder] = useState(() => randomize(words[0].parts))
   const [chosen, setChosen] = useState<string[]>([])
   const [finished, setFinished] = useState(false)
   const word = words[index]
@@ -363,9 +364,13 @@ function WordBuilder({ narrate }: { narrate: ActivityProps['narrate'] }) {
   }
   const next = () => {
     if (index === words.length - 1) { setFinished(true); return }
-    setIndex(index + 1); setChosen([])
+    setIndex(index + 1); setTileOrder(randomize(words[index + 1].parts)); setChosen([])
   }
-  const reset = () => { setWords(randomize(allWords)); setIndex(0); setChosen([]); setFinished(false) }
+  const reset = () => {
+    const fresh = randomize(allWords)
+    setWords(fresh); setIndex(0); setTileOrder(randomize(fresh[0].parts))
+    setChosen([]); setFinished(false)
+  }
   if (finished) return (
     <div className="activity-inner">
       <h2>Kata sudah dicoba semua.</h2>
@@ -381,7 +386,7 @@ function WordBuilder({ narrate }: { narrate: ActivityProps['narrate'] }) {
         {word.parts.map((part, i) => <div className={'word-slot' + (chosen[i] ? ' filled' : '')} key={part}>{chosen[i] || '· ·'}</div>)}
       </div>
       <div className="word-tiles">
-        {randomize([...word.parts]).sort((a,b)=>word.parts.indexOf(b)-word.parts.indexOf(a)).map(part => <button key={part} type="button" onClick={() => add(part)}
+        {tileOrder.map(part => <button key={part} type="button" onClick={() => add(part)}
           className="word-tile" disabled={chosen.includes(part)}>{part}</button>)}
       </div>
       <p className="activity-help" aria-live="polite">{done ? 'Jadi kata ' + word.word.toLowerCase() + '!' : 'Coba mulai dari suku kata pertama.'}</p>
