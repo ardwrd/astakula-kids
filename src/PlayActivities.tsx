@@ -1,8 +1,9 @@
 import { useEffect, useRef, useState } from 'react'
 import type { PointerEvent } from 'react'
 import { AnimalIcon } from './AnimalIcon'
+import { ColoringActivity } from './ColoringActivity'
 
-export type ActivityKind = 'mix' | 'trace' | 'memory' | 'count' | 'letters'
+export type ActivityKind = 'color' | 'trace' | 'memory' | 'count' | 'letters'
 export type ActivityWorld = 'warna' | 'bentuk' | 'hewan' | 'angka' | 'huruf'
 
 interface ActivityProps {
@@ -36,17 +37,6 @@ const traceModels: Record<'bentuk' | 'hewan' | 'huruf', TraceModel[]> = {
   ],
 }
 
-const mixOptions = [
-  { id: 'merah', label: 'Merah', color: '#eb605c' },
-  { id: 'kuning', label: 'Kuning', color: '#f5cb4c' },
-  { id: 'biru', label: 'Biru', color: '#5598dd' },
-]
-const mixes: Record<string, { name: string; color: string }> = {
-  'kuning+merah': { name: 'Jingga', color: '#f09a49' },
-  'biru+kuning': { name: 'Hijau', color: '#61af79' },
-  'biru+merah': { name: 'Ungu', color: '#a385ce' },
-}
-function mixKey(a: string, b: string) { return [a, b].sort().join('+') }
 function randomize<T>(items: T[]) {
   const arr = [...items]
   for (let i = arr.length - 1; i > 0; i--) {
@@ -56,36 +46,6 @@ function randomize<T>(items: T[]) {
   return arr
 }
 
-function MixColors({ narrate }: { narrate: ActivityProps['narrate'] }) {
-  const [selection, setSelection] = useState<string[]>([])
-  const pick = (id: string) => {
-    const next = selection.length === 2 ? [id] : selection.includes(id) ? selection : [...selection, id]
-    setSelection(next)
-    if (next.length === 2) {
-      const result = mixes[mixKey(next[0], next[1])]
-      if (result) narrate('activities/results/mix-' + result.name.toLowerCase())
-    }
-  }
-  const result = selection.length === 2 ? mixes[mixKey(selection[0], selection[1])] : null
-  return (
-    <div className="activity-inner">
-      <p className="activity-instruction">Pilih dua warna.</p>
-      <div className="paint-preview" aria-live="polite">
-        <div className="paint-slot" style={{ background: mixOptions.find(c => c.id === selection[0])?.color || '#f1eee8' }}>{selection[0] || '1'}</div>
-        <span className="paint-operation">+</span>
-        <div className="paint-slot" style={{ background: mixOptions.find(c => c.id === selection[1])?.color || '#f1eee8' }}>{selection[1] || '2'}</div>
-        <span className="paint-operation">=</span>
-        <div className="paint-slot paint-result" style={{ background: result?.color || '#f1eee8' }}>{result?.name || '?'}</div>
-      </div>
-      <div className="paint-choices">
-        {mixOptions.map(c => <button key={c.id} type="button" className="paint-choice" onClick={() => pick(c.id)}
-          style={{ background: c.color }} aria-label={'Pilih ' + c.label}><span>{c.label}</span></button>)}
-      </div>
-      <p className="activity-help" aria-live="polite">{result ? 'Jadi warna ' + result.name.toLowerCase() + '. Mau campur lagi?' : selection.length === 1 ? 'Pilih warna berbeda.' : 'Sentuh warna yang kamu suka.'}</p>
-      <button type="button" className="quiet-button" onClick={() => setSelection([])}>Ulangi campuran</button>
-    </div>
-  )
-}
 
 function TraceLines({ world, narrate }: { world: 'bentuk' | 'hewan' | 'huruf'; narrate: ActivityProps['narrate'] }) {
   const models = traceModels[world]
@@ -345,7 +305,7 @@ export function PlayActivity({ world, kind, onBack, narrate }: ActivityProps) {
   const cue = kind === 'trace' ? 'trace-' + world : kind
   const listen = () => narrate('activities/instructions/' + cue)
   const title: Record<ActivityKind, string> = {
-    mix: 'Campur warna', trace: 'Tebalkan garis', memory: 'Cari pasangan',
+    color: 'Warnai gambar', trace: 'Tebalkan garis', memory: 'Cari pasangan',
     count: 'Hitung benda', letters: 'Susun kata',
   }
   return (
@@ -356,7 +316,7 @@ export function PlayActivity({ world, kind, onBack, narrate }: ActivityProps) {
       </div>
       <div className="activity-panel">
         <button className="listen-button activity-listen" type="button" onClick={listen}>Dengarkan cara bermain</button>
-        {kind === 'mix' ? <MixColors narrate={narrate} /> : null}
+        {kind === 'color' ? <ColoringActivity narrate={narrate} /> : null}
         {kind === 'trace' && (world === 'bentuk' || world === 'hewan' || world === 'huruf')
           ? <TraceLines world={world} narrate={narrate} /> : null}
         {kind === 'memory' ? <AnimalMemory narrate={narrate} /> : null}
