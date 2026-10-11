@@ -2,265 +2,259 @@ import { useCallback, useEffect, useRef, useState } from 'react'
 import type { PointerEvent } from 'react'
 
 type Color = { name: string; hex: string }
-const palette: Color[] = [
-  { name: 'Merah', hex: '#e76a62' }, { name: 'Kuning', hex: '#f1bf48' },
-  { name: 'Biru', hex: '#629bd0' }, { name: 'Hijau', hex: '#65aa79' },
-  { name: 'Ungu', hex: '#a48ac4' }, { name: 'Jingga', hex: '#eda063' },
+type Stroke = { color: string; eraser: boolean; size: number; points: { x: number; y: number }[] }
+type Picture = { id: string; name: string }
+
+const WIDTH = 320
+const HEIGHT = 270
+const SCALE = 2
+const colors: Color[] = [
+  { name: 'Merah', hex: '#F4515B' },
+  { name: 'Kuning', hex: '#FFC83C' },
+  { name: 'Biru', hex: '#328CFA' },
+  { name: 'Hijau', hex: '#25BD78' },
+  { name: 'Ungu', hex: '#9559DF' },
+  { name: 'Jingga', hex: '#FF903F' },
+  { name: 'Pink', hex: '#F36AAC' },
+  { name: 'Cokelat', hex: '#AC7049' },
+  { name: 'Toska', hex: '#19B5BF' },
 ]
 
-type Picture = { title: string; asset: string }
-
-// CC0 coloring line art curated from Openclipart. Source/license details:
-// docs/COLORING_ASSET_SOURCES.md. One consistent large drawing per sheet.
 const pictures: Picture[] = [
-  { title: 'Kucing', asset: 'cat' },
-  { title: 'Kelinci', asset: 'rabbit' },
-  { title: 'Anjing', asset: 'dog' },
-  { title: 'Burung hantu', asset: 'owl' },
-  { title: 'Pohon', asset: 'tree' },
-  { title: 'Matahari', asset: 'sun' },
+  { id: 'cat', name: 'Kucing' },
+  { id: 'duck', name: 'Bebek' },
+  { id: 'owl', name: 'Burung hantu' },
+  { id: 'fish', name: 'Ikan' },
+  { id: 'sheep', name: 'Domba' },
+  { id: 'rabbit', name: 'Kelinci' },
 ]
 
-function shuffled<T>(values: readonly T[]) {
-  const items = [...values]
-  for (let index = items.length - 1; index > 0; index--) {
-    const other = Math.floor(Math.random() * (index + 1))
-    ;[items[index], items[other]] = [items[other], items[index]]
+function shuffle<T>(values: readonly T[]): T[] {
+  const array = [...values]
+  for (let i = array.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1))
+    ;[array[i], array[j]] = [array[j], array[i]]
   }
-  return items
+  return array
 }
 
-
-type DrawPoint = { x: number; y: number }
-type Stroke = { points: DrawPoint[]; color: string; size: number; eraser: boolean }
-
-export function ColoringActivity({ narrate }: { narrate: (key: string, queued?: boolean) => void }) {
-  const [session, setSession] = useState<Picture[]>(() => shuffled(pictures))
+export function ColoringActivity() {
+  const [order, setOrder] = useState(() => shuffle(pictures))
   const [index, setIndex] = useState(0)
-  const [color, setColor] = useState<Color>(palette[0])
-  const [brushSize, setBrushSize] = useState(13)
-  const [eraser, setEraser] = useState(false)
+  const [selectedColor, setSelectedColor] = useState(colors[0].hex)
+  const [width, setWidth] = useState(15)
+  const [erasing, setErasing] = useState(false)
   const [strokeCount, setStrokeCount] = useState(0)
   const [finished, setFinished] = useState(false)
-  const picture = session[index]
-  const canvasRef = useRef<HTMLCanvasElement | null>(null)
-  const strokesRef = useRef<Stroke[]>([])
-  const workingRef = useRef<Stroke | null>(null)
-  const pointerRef = useRef<number | null>(null)
+  const canvas = useRef<HTMLCanvasElement>(null)
+  const strokes = useRef<Stroke[]>([])
+  const active = useRef<Stroke | null>(null)
+  const pointer = useRef<number | null>(null)
+  const picture = order[index]
 
-  // Artwork has a fixed 320×270 coordinate system. The canvas paints at 2x resolution
-  // and scales to the available phone width, without relying on click-to-fill.
-  const getContext = useCallback(() => {
-    const canvas = canvasRef.current
-    if (!canvas) return null
-    const context = canvas.getContext('2d')
-    if (!context) return null
-    context.setTransform(2, 0, 0, 2, 0, 0)
-    return context
+  const context = useCallback(() => {
+    const ctx = canvas.current?.getContext('2d')
+    if (!ctx) return null
+    ctx.setTransform(SCALE, 0, 0, SCALE, 0, 0)
+    return ctx
   }, [])
 
-  const draw = useCallback((stroke: Stroke) => {
-    const context = getContext()
-    if (!context || !stroke.points.length) return
-    context.save()
-    // Children paint freely like on a coloring sheet. The clear line-art
-    // image sits above the strokes to keep each illustration recognizable.
-    context.globalCompositeOperation = stroke.eraser ? 'destination-out' : 'source-over'
-    context.lineWidth = stroke.size
-    context.lineCap = 'round'
-    context.lineJoin = 'round'
-    context.strokeStyle = stroke.color
-    context.fillStyle = stroke.color
-    const [first] = stroke.points
-    context.beginPath()
-    context.arc(first.x, first.y, stroke.size / 2, 0, Math.PI * 2)
-    context.fill()
+  const drawStroke = useCallback((stroke: Stroke) => {
+    const ctx = context()
+    if (!ctx || stroke.points.length === 0) return
+    ctx.save()
+    ctx.globalCompositeOperation = stroke.eraser ? 'destination-out' : 'source-over'
+    ctx.strokeStyle = stroke.color
+    ctx.fillStyle = stroke.color
+    ctx.lineWidth = stroke.size
+    ctx.lineJoin = 'round'
+    ctx.lineCap = 'round'
+    const first = stroke.points[0]
+    // A tap produces a dot; swipes create a continuous line.
+    ctx.beginPath()
+    ctx.arc(first.x, first.y, stroke.size / 2, 0, Math.PI * 2)
+    ctx.fill()
     if (stroke.points.length > 1) {
-      context.beginPath()
-      context.moveTo(first.x, first.y)
+      ctx.beginPath()
+      ctx.moveTo(first.x, first.y)
       for (let i = 1; i < stroke.points.length; i++) {
-        context.lineTo(stroke.points[i].x, stroke.points[i].y)
+        ctx.lineTo(stroke.points[i].x, stroke.points[i].y)
       }
-      context.stroke()
+      ctx.stroke()
     }
-    context.restore()
-  }, [getContext])
+    ctx.restore()
+  }, [context])
 
-  const repaint = useCallback(() => {
-    const context = getContext()
-    if (!context) return
-    context.clearRect(0, 0, 320, 270)
-    for (const stroke of strokesRef.current) draw(stroke)
-  }, [draw, getContext])
+  const redraw = useCallback(() => {
+    const ctx = context()
+    if (!ctx) return
+    ctx.clearRect(0, 0, WIDTH, HEIGHT)
+    strokes.current.forEach(drawStroke)
+  }, [context, drawStroke])
 
-  useEffect(() => { repaint() }, [repaint, index])
+  useEffect(() => { redraw() }, [redraw, picture.id])
 
-  const pointFrom = (event: PointerEvent<HTMLCanvasElement>): DrawPoint | null => {
-    const canvas = canvasRef.current
-    if (!canvas) return null
-    const rect = canvas.getBoundingClientRect()
-    if (!rect.width || !rect.height) return null
+  const localPoint = (event: PointerEvent<HTMLCanvasElement>) => {
+    const bounds = event.currentTarget.getBoundingClientRect()
+    if (!bounds.width || !bounds.height) return null
     return {
-      x: (event.clientX - rect.left) * 320 / rect.width,
-      y: (event.clientY - rect.top) * 270 / rect.height,
+      x: (event.clientX - bounds.left) * WIDTH / bounds.width,
+      y: (event.clientY - bounds.top) * HEIGHT / bounds.height,
     }
   }
 
-  const pointerDown = (event: PointerEvent<HTMLCanvasElement>) => {
-    if (pointerRef.current !== null || (event.pointerType === 'mouse' && event.button !== 0)) return
+  const start = (event: PointerEvent<HTMLCanvasElement>) => {
+    if (pointer.current !== null || (event.pointerType === 'mouse' && event.button !== 0)) return
     event.preventDefault()
-    const point = pointFrom(event)
-    if (!point) return
-    pointerRef.current = event.pointerId
+    const at = localPoint(event)
+    if (!at) return
+    pointer.current = event.pointerId
     event.currentTarget.setPointerCapture(event.pointerId)
-    const stroke: Stroke = {
-      points: [point], color: color.hex, size: eraser ? brushSize * 1.7 : brushSize, eraser,
-    }
-    workingRef.current = stroke
-    draw(stroke)
+    const stroke: Stroke = { color: selectedColor, eraser: erasing, size: erasing ? width * 1.8 : width, points: [at] }
+    active.current = stroke
+    drawStroke(stroke)
   }
 
-  const pointerMove = (event: PointerEvent<HTMLCanvasElement>) => {
-    if (pointerRef.current !== event.pointerId || !workingRef.current) return
+  const move = (event: PointerEvent<HTMLCanvasElement>) => {
+    if (pointer.current !== event.pointerId || !active.current) return
     event.preventDefault()
-    const point = pointFrom(event)
-    if (!point) return
-    const stroke = workingRef.current
+    const at = localPoint(event)
+    if (!at) return
+    const stroke = active.current
     const previous = stroke.points[stroke.points.length - 1]
-    // Incremental painting gives immediate feedback even on older Android devices.
-    const context = getContext()
-    if (!context) return
-    context.save()
-    context.globalCompositeOperation = stroke.eraser ? 'destination-out' : 'source-over'
-    context.lineWidth = stroke.size
-    context.lineCap = 'round'
-    context.lineJoin = 'round'
-    context.strokeStyle = stroke.color
-    context.beginPath()
-    context.moveTo(previous.x, previous.y)
-    context.lineTo(point.x, point.y)
-    context.stroke()
-    context.restore()
-    stroke.points.push(point)
+    const ctx = context()
+    if (!ctx) return
+    ctx.save()
+    ctx.globalCompositeOperation = stroke.eraser ? 'destination-out' : 'source-over'
+    ctx.strokeStyle = stroke.color
+    ctx.lineWidth = stroke.size
+    ctx.lineCap = 'round'
+    ctx.lineJoin = 'round'
+    ctx.beginPath()
+    ctx.moveTo(previous.x, previous.y)
+    ctx.lineTo(at.x, at.y)
+    ctx.stroke()
+    ctx.restore()
+    stroke.points.push(at)
   }
 
-  const pointerEnd = (event: PointerEvent<HTMLCanvasElement>) => {
-    if (pointerRef.current !== event.pointerId) return
-    const stroke = workingRef.current
-    if (stroke) {
-      strokesRef.current.push(stroke)
-      setStrokeCount(strokesRef.current.length)
+  const end = (event: PointerEvent<HTMLCanvasElement>) => {
+    if (pointer.current !== event.pointerId) return
+    if (active.current) {
+      strokes.current.push(active.current)
+      setStrokeCount(strokes.current.length)
     }
-    pointerRef.current = null
-    workingRef.current = null
-    if (event.currentTarget.hasPointerCapture(event.pointerId))
-      event.currentTarget.releasePointerCapture(event.pointerId)
+    active.current = null
+    pointer.current = null
+    if (event.currentTarget.hasPointerCapture(event.pointerId)) event.currentTarget.releasePointerCapture(event.pointerId)
   }
 
   const clear = () => {
-    workingRef.current = null
-    pointerRef.current = null
-    strokesRef.current = []
+    active.current = null
+    pointer.current = null
+    strokes.current = []
     setStrokeCount(0)
-    repaint()
+    redraw()
   }
 
   const undo = () => {
-    if (!strokesRef.current.length) return
-    strokesRef.current.pop()
-    setStrokeCount(strokesRef.current.length)
-    repaint()
+    if (!strokes.current.length) return
+    strokes.current.pop()
+    setStrokeCount(strokes.current.length)
+    redraw()
   }
 
   const next = () => {
-    if (strokeCount > 0) narrate('global/correct')
-    if (index === session.length - 1) {
-      setFinished(true)
-      return
-    }
-    strokesRef.current = []
-    workingRef.current = null
-    pointerRef.current = null
-    setStrokeCount(0)
-    setIndex(previous => previous + 1)
-    setEraser(false)
+    clear()
+    setErasing(false)
+    if (index + 1 === order.length) { setFinished(true); return }
+    setIndex(current => current + 1)
   }
 
   const replay = () => {
-    strokesRef.current = []
-    workingRef.current = null
-    pointerRef.current = null
-    setStrokeCount(0)
+    clear()
     setIndex(0)
-    setSession(shuffled(pictures))
-    setEraser(false)
+    setOrder(shuffle(pictures))
     setFinished(false)
   }
 
+  if (finished) return (
+    <div className="activity-inner coloring-activity coloring-finish">
+      <h2>Sudah mencoba semua gambar.</h2>
+      <p>Ingin mewarnai lagi?</p>
+      <button className="primary-action" type="button" onClick={replay}>Mewarnai lagi</button>
+    </div>
+  )
+
   return (
     <div className="activity-inner coloring-activity">
-      {finished ? (
-        <div className="coloring-done">
-          <h2>Semua gambar sudah dicoba.</h2>
-          <p>Mau mewarnai lagi?</p>
-          <button className="primary-action" type="button" onClick={replay}>Mewarnai lagi</button>
+      <div className="trace-title">
+        <h2>{picture.name}</h2>
+        <span>{index + 1} dari {order.length}</span>
+      </div>
+      <p className="activity-instruction">Pilih krayon. Geser jari untuk mewarnai.</p>
+      <div className="coloring-sheet">
+        <canvas
+          ref={canvas}
+          width={WIDTH * SCALE}
+          height={HEIGHT * SCALE}
+          className="coloring-canvas"
+          aria-label={'Kanvas mewarnai ' + picture.name}
+          onPointerDown={start}
+          onPointerMove={move}
+          onPointerUp={end}
+          onPointerCancel={end}
+          onContextMenu={event => event.preventDefault()}
+          onDragStart={event => event.preventDefault()}
+        />
+        <img
+          src={import.meta.env.BASE_URL + 'coloring/' + picture.id + '.svg'}
+          className="coloring-lineart"
+          alt=""
+          draggable={false}
+        />
+      </div>
+      <div className="coloring-palette" role="group" aria-label="Pilih warna">
+        {colors.map(color => (
+          <button
+            type="button"
+            key={color.name}
+            className={'coloring-swatch' + (!erasing && selectedColor === color.hex ? ' selected' : '')}
+            style={{ background: color.hex }}
+            aria-pressed={!erasing && selectedColor === color.hex}
+            aria-label={'Krayon ' + color.name}
+            onClick={() => { setSelectedColor(color.hex); setErasing(false) }}
+          ><span>{color.name}</span></button>
+        ))}
+      </div>
+      <div className="coloring-toolbar">
+        <div className="brush-sizes" role="group" aria-label="Ukuran krayon">
+          {[8, 15, 25].map(size => (
+            <button
+              type="button"
+              key={size}
+              className={'brush-size' + (width === size ? ' selected' : '')}
+              aria-label={'Krayon ' + (size === 8 ? 'kecil' : size === 15 ? 'sedang' : 'besar')}
+              aria-pressed={width === size}
+              onClick={() => setWidth(size)}
+            ><span style={{ width: size, height: size }} /></button>
+          ))}
         </div>
-      ) : (
-        <>
-          <div className="trace-title">
-            <h2>{picture.title}</h2>
-            <span>{index + 1} dari {session.length}</span>
-          </div>
-          <p className="activity-instruction">Pilih krayon, lalu warnai gambar dengan jari.</p>
-          <div className="coloring-sheet">
-            <div className="coloring-page-base" aria-hidden="true" />
-            <canvas ref={canvasRef} width={640} height={540} className="coloring-canvas"
-              aria-label={'Mewarnai ' + picture.title + ' dengan jari'}
-              onPointerDown={pointerDown} onPointerMove={pointerMove}
-              onPointerUp={pointerEnd} onPointerCancel={pointerEnd}
-              onContextMenu={event => event.preventDefault()}
-              onDragStart={event => event.preventDefault()}/>
-            <img className="coloring-lineart" src={import.meta.env.BASE_URL + 'coloring/cc0-' + picture.asset + '.svg'}
-              alt="" draggable={false} aria-hidden="true" />
-
-          </div>
-          <div className="coloring-palette" role="group" aria-label="Pilih warna krayon">
-            {palette.map(option => (
-              <button key={option.name} type="button"
-                className={'coloring-swatch' + (!eraser && option.name === color.name ? ' selected' : '')}
-                style={{ backgroundColor: option.hex }}
-                onClick={() => { setColor(option); setEraser(false) }}
-                aria-pressed={!eraser && option.name === color.name}
-                aria-label={'Krayon ' + option.name}><span>{option.name}</span></button>
-            ))}
-          </div>
-          <div className="coloring-toolbar">
-            <div className="brush-sizes" role="group" aria-label="Ukuran kuas">
-              {[8, 13, 22].map(size => (
-                <button key={size} className={'brush-size' + (brushSize === size ? ' selected' : '')}
-                  type="button" aria-label={'Kuas ' + (size === 8 ? 'kecil' : size === 13 ? 'sedang' : 'besar')}
-                  aria-pressed={brushSize === size} onClick={() => setBrushSize(size)}>
-                  <span style={{ width: size, height: size }}/>
-                </button>
-              ))}
-            </div>
-            <button className={'quiet-button eraser-toggle' + (eraser ? ' selected' : '')}
-              type="button" aria-pressed={eraser} onClick={() => setEraser(value => !value)}>
-              {eraser ? 'Pakai krayon' : 'Penghapus'}
-            </button>
-            <button className="quiet-button" type="button" disabled={strokeCount === 0} onClick={undo}>Urungkan</button>
-          </div>
-          <p className="activity-help" aria-live="polite">
-            {strokeCount ? 'Bagus! Kamu bisa menambah warna atau mencoba gambar berikutnya.' : 'Warna akan mengikuti gerakan jarimu.'}
-          </p>
-          <div className="activity-actions">
-            <button className="quiet-button" type="button" disabled={strokeCount === 0} onClick={clear}>Hapus semua</button>
-            <button className="primary-action" type="button" onClick={next}>
-              {index === session.length - 1 ? 'Selesai' : 'Gambar berikutnya →'}
-            </button>
-          </div>
-        </>
-      )}
+        <button type="button" className={'quiet-button eraser-toggle' + (erasing ? ' selected' : '')}
+          onClick={() => setErasing(old => !old)} aria-pressed={erasing}>
+          {erasing ? 'Pakai krayon' : 'Penghapus'}
+        </button>
+        <button type="button" className="quiet-button" disabled={strokeCount === 0} onClick={undo}>Urungkan</button>
+      </div>
+      <p className="activity-help" aria-live="polite">
+        {strokeCount > 0 ? 'Bagus! Bebas mewarnai sesukamu.' : 'Goreskan jari di atas gambar.'}
+      </p>
+      <div className="activity-actions">
+        <button type="button" className="quiet-button" disabled={strokeCount === 0} onClick={clear}>Hapus semua</button>
+        <button type="button" className="primary-action" onClick={next}>
+          {index === order.length - 1 ? 'Selesai' : 'Gambar berikutnya →'}
+        </button>
+      </div>
     </div>
   )
 }
