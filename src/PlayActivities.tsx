@@ -419,7 +419,7 @@ export function PlayActivity({ world, kind, onBack, narrate }: ActivityProps) {
         <span>{title[kind]}</span>
       </div>
       <div className="activity-panel">
-        {!WORKSHEET_KIN.some(item => item === kind) && <button className="listen-button activity-listen" type="button" onClick={listen}>Dengarkan cara bermain</button>}
+        {!WORKSHEET_KINDS.some(item => item === kind) && <button className="listen-button activity-listen" type="button" onClick={listen}>Dengarkan cara bermain</button>}
         {kind === 'color' ? <ColoringActivity /> : null}
         {kind === 'trace' && (world === 'bentuk' || world === 'hewan' || world === 'huruf')
           ? <TraceLines world={world} narrate={narrate} /> : null}
