@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 270" aria-labelledby="picture-title">
+  <title id="picture-title">Balon</title>
+  <g fill="none" stroke="#24282f" stroke-width="6" stroke-linecap="round" stroke-linejoin="round">
+    <ellipse cx="160" cy="107" rx="63" ry="73"/>
+    <path d="M153 180 L167 180 L160 193 Z"/>
+    <path d="M160 193 C140 209 179 220 158 245"/>
+  </g>
+</svg>

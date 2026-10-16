@@ -9,7 +9,7 @@
 - Dunia Angka
 - Dunia Huruf
 
-Each world has **several ways to play**, rather than five copies of the same quiz. Dunia Warna now offers **coloring six recognizable pictures** (house, flower, fish, balloons, car, and tree), replacing abstract color mixing. Dunia Bentuk, Hewan, and Huruf have finger-tracing activities. Dunia Hewan also offers matching pairs; Dunia Angka has randomized counting; Dunia Huruf has seven shuffled two-syllable words. Tracing prevents long-press text selection, no longer locks drawing after early completion, and checks coverage across the whole guide rather than a low partial threshold.
+Each world has **several ways to play**, rather than five copies of the same quiz. Dunia Warna now offers **coloring six large, low-detail original outlines** (balloon, sun, fish, flower, house, and car), replacing abstract color mixing. The six SVG drawings use the same 320×270 viewport and rounded, 6px outlines, with matching canvas coordinates for finger coloring. Dunia Bentuk, Hewan, and Huruf have finger-tracing activities. Dunia Hewan also offers matching pairs; Dunia Angka has randomized counting; Dunia Huruf has seven shuffled two-syllable words. Tracing prevents long-press text selection, no longer locks drawing after early completion, and checks coverage across the whole guide rather than a low partial threshold.
 
 The quiz bank contains **38 active questions across five worlds** (6 in Warna, 8 in each other world), with **six unique questions randomly selected per session**. The three former color-mixing quiz prompts are no longer in active content. Replaying always requires explicit action; no game loops automatically. The question groups still provide a gentle internal learning progression without showing ages.
 

@@ -1,26 +1,32 @@
-# Sumber gambar mewarnai — Astakula Kids
+# Media mewarnai — standar ilustrasi Astakula Kids
 
-## Gambar yang dipakai sekarang
+## Paket aktif (16 Oktober 2026)
 
-Permainan **Warnai gambar** memakai enam gambar SVG hitam-putih yang disimpan lokal di `public/coloring/`. Berkas aslinya berasal dari koleksi publik [pflajsman/coloring-book](https://github.com/pflajsman/coloring-book), yang menyimpan clipart dari Openclipart. Metadata pada keenam sumber mengacu ke Openclipart atau dedikasi domain publik **CC0**.
+Enam ilustrasi di `public/coloring/` dibuat khusus untuk proyek ini dengan bentuk dasar SVG (bukan salinan dari worksheet Instagram). Urutan sesi pertama: **Balon → Matahari → Ikan → Bunga → Rumah → Mobil**. Sesi selanjutnya dapat diacak saat anak memilih **Mewarnai lagi**.
 
-| Gambar | Aset lokal | Sumber SVG |
+| Gambar | File aktif | Karakteristik |
 |---|---|---|
-| Kucing | `cat.svg` | [cat.svg](https://github.com/pflajsman/coloring-book/blob/main/public/templates/cat.svg) |
-| Bebek | `duck.svg` | [duck.svg](https://github.com/pflajsman/coloring-book/blob/main/public/templates/duck.svg) |
-| Burung hantu | `owl.svg` | [owl.svg](https://github.com/pflajsman/coloring-book/blob/main/public/templates/owl.svg) |
-| Ikan | `fish.svg` | [fish.svg](https://github.com/pflajsman/coloring-book/blob/main/public/templates/fish.svg) |
-| Domba | `sheep.svg` | [sheep.svg](https://github.com/pflajsman/coloring-book/blob/main/public/templates/sheep.svg) |
-| Kelinci | `rabbit.svg` | [rabbit.svg](https://github.com/pflajsman/coloring-book/blob/main/public/templates/rabbit.svg) |
+| Balon | `balloon.svg` | Satu bidang utama, sedikit garis |
+| Matahari | `sun.svg` | Lingkaran besar dan sinar sederhana |
+| Ikan | `fish.svg` | Badan oval, ekor, mata, satu sirip |
+| Bunga | `flower.svg` | Kelopak besar, pusat, batang, dua daun |
+| Rumah | `house.svg` | Atap, dinding, pintu, dua jendela |
+| Mobil | `car.svg` | Badan, dua jendela, roda besar |
 
-Enam file tambahan bernama `cc0-cat.svg`, `cc0-dog.svg`, `cc0-owl.svg`, `cc0-rabbit.svg`, `cc0-tree.svg`, dan `cc0-sun.svg` juga tersimpan di direktori yang sama sebagai alternatif gambar, tetapi belum ditampilkan dalam pilihan mewarnai aktif.
+Aturan aset aktif:
 
-**Lisensi:** sumber-sumber yang dipilih adalah clipart Openclipart yang dipublikasikan di bawah [CC0/Public Domain](https://creativecommons.org/publicdomain/zero/1.0/). Jangan menganggap semua file dari repository asal memiliki lisensi yang sama; periksa setiap karya baru sebelum dipakai.
+- Semua SVG memiliki **viewBox 0 0 320 270**, latar transparan, dan outline `#24282f` dengan **stroke-width 6** serta `round` cap/join.
+- Tidak ada tekstur, garis bulu/sisik, bayangan, gradient, gambar raster, skrip, ataupun tautan runtime.
+- Elemen utama cukup besar untuk anak usia 3–5 tahun; satu gambar per sesi agar layar ponsel tidak padat.
+- Kanvas mewarnai dan overlay SVG *harus* memakai koordinat dan rasio yang sama (tanpa padding gambar). Warna digores dengan jari pada kanvas; garis tetap terlihat di atas warna.
+- Validasi otomatis: `scripts/validate_coloring_assets.py` dijalankan oleh CI build dan deploy.
 
-## Integrasi
+## Aset lama
 
-- SVG disajikan sebagai gambar lokal dan hanya berfungsi sebagai garis pandu di atas canvas.
-- Anak memilih krayon lalu **menggores dengan jari**. Warna tidak lagi langsung memenuhi bidang saat diketuk.
-- Pemilihan warna, ukuran krayon, penghapus, urungkan, dan hapus semua tersedia tanpa backend.
-- Berkas SVG aktif tidak memuat script atau external runtime. Deklarasi DOCTYPE dan metadata lama dihilangkan saat penyalinan.
-- UI tetap tanpa iklan, akun, maupun unggahan gambar anak.
+Sebelumnya digunakan clipart `cat.svg`, `duck.svg`, `owl.svg`, `fish.svg`, `sheep.svg`, dan `rabbit.svg` dari [pflajsman/coloring-book](https://github.com/pflajsman/coloring-book) / Openclipart (metadata sumber CC0/Public Domain). Aset-asset rumit tersebut **tidak lagi digunakan**. File `fish.svg` telah ditulis ulang; lainnya dihapus dari bundle aktif dan masih dapat ditinjau dalam riwayat Git.
+
+Enam aset eksperimen `cc0-*.svg` tetap tersimpan sebagai bahan evaluasi, **tidak ditampilkan dalam pilihan aktif**. Periksa ulang asal/lisensi sebelum dipakai dalam konten publik.
+
+## Kualitas UX
+
+Tetap mendukung sembilan warna, tiga ukuran krayon, penghapus, urungkan, hapus semua, dan gambar berikutnya. Tidak memerlukan akun, iklan, backend, atau pengumpulan data anak. Perlu QA fisik pada Android/iOS sebelum rilis final.

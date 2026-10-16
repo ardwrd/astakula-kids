@@ -23,6 +23,7 @@ jobs:
       - run: python3 scripts/validate_active_audio.py
       - run: python3 scripts/validate_activity_audio.py
       - run: python3 scripts/validate_kids_content.py
+      - run: python3 scripts/validate_coloring_assets.py
       - run: npm run build
         env:
           GITHUB_PAGES: 'true'

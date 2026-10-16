@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 270" aria-labelledby="picture-title">
+  <title id="picture-title">Matahari</title>
+  <g fill="none" stroke="#24282f" stroke-width="6" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="160" cy="135" r="64"/>
+    <path d="M160 29 V51 M160 219 V243 M54 135 H76 M244 135 H266 M85 59 L101 75 M219 195 L235 211 M235 59 L219 75 M101 195 L85 211"/>
+  </g>
+</svg>

@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 270" aria-labelledby="picture-title">
+  <title id="picture-title">Mobil</title>
+  <g fill="none" stroke="#24282f" stroke-width="6" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M52 132 H100 L126 91 H213 L240 132 H269 Q278 132 278 145 V197 H42 V148 Q42 132 52 132 Z"/>
+    <path d="M118 132 L137 101 H163 V132 Z"/>
+    <path d="M173 101 H208 L228 132 H173 Z"/>
+    <circle cx="91" cy="197" r="24" fill="white"/>
+    <circle cx="229" cy="197" r="24" fill="white"/>
+  </g>
+</svg>

@@ -528,7 +528,9 @@ body { background: var(--kids-paper); }
 }
 .coloring-lineart {
   z-index: 2; pointer-events: none; object-fit: contain;
-  mix-blend-mode: multiply; user-select: none; -webkit-user-select: none;
+  /* SVG and drawing canvas share one 320x270 coordinate system. */
+  padding: 0; mix-blend-mode: multiply;
+  user-select: none; -webkit-user-select: none;
   -webkit-user-drag: none;
 }
 .coloring-activity { color: #263953; }

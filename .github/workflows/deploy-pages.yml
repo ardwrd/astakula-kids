@@ -36,6 +36,7 @@ jobs:
           python3 scripts/validate_active_audio.py
           python3 scripts/validate_activity_audio.py
           python3 scripts/validate_kids_content.py
+          python3 scripts/validate_coloring_assets.py
       - name: Build static site
         run: npm run build
         env:

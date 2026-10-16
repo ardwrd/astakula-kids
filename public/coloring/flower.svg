@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 270" aria-labelledby="picture-title">
+  <title id="picture-title">Bunga</title>
+  <g fill="none" stroke="#24282f" stroke-width="6" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M160 47 C183 35 204 50 205 74 C237 75 249 102 230 123 C242 150 223 169 193 164 C175 193 143 187 131 166 C102 174 83 151 93 128 C68 104 89 79 114 78 C118 51 139 42 160 47 Z"/>
+    <circle cx="160" cy="117" r="28"/>
+    <path d="M160 185 V244"/>
+    <path d="M160 218 C126 185 111 201 126 226 C137 239 151 238 160 234"/>
+    <path d="M160 231 C197 201 217 209 199 233 C185 248 173 245 160 244"/>
+  </g>
+</svg>

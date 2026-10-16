@@ -20,13 +20,14 @@ const colors: Color[] = [
   { name: 'Toska', hex: '#19B5BF' },
 ]
 
+// First play starts with the simplest outlines; replays can vary the order.
 const pictures: Picture[] = [
-  { id: 'cat', name: 'Kucing' },
-  { id: 'duck', name: 'Bebek' },
-  { id: 'owl', name: 'Burung hantu' },
+  { id: 'balloon', name: 'Balon' },
+  { id: 'sun', name: 'Matahari' },
   { id: 'fish', name: 'Ikan' },
-  { id: 'sheep', name: 'Domba' },
-  { id: 'rabbit', name: 'Kelinci' },
+  { id: 'flower', name: 'Bunga' },
+  { id: 'house', name: 'Rumah' },
+  { id: 'car', name: 'Mobil' },
 ]
 
 function shuffle<T>(values: readonly T[]): T[] {
@@ -39,7 +40,7 @@ function shuffle<T>(values: readonly T[]): T[] {
 }
 
 export function ColoringActivity() {
-  const [order, setOrder] = useState(() => shuffle(pictures))
+  const [order, setOrder] = useState(() => [...pictures])
   const [index, setIndex] = useState(0)
   const [selectedColor, setSelectedColor] = useState(colors[0].hex)
   const [width, setWidth] = useState(15)
@@ -192,7 +193,7 @@ export function ColoringActivity() {
         <h2>{picture.name}</h2>
         <span>{index + 1} dari {order.length}</span>
       </div>
-      <p className="activity-instruction">Pilih krayon. Geser jari untuk mewarnai.</p>
+      <p className="activity-instruction">Pilih warna, lalu usapkan jari pada gambar.</p>
       <div className="coloring-sheet">
         <canvas
           ref={canvas}
