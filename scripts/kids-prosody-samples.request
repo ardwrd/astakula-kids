@@ -1,0 +1,4 @@
+2026-10-16 — generate 3 role-specific expressive narration samples with Eleven v4.
+Use existing narrator and catalog public/audio/previews/indo-v4-kids-prosody-02/samples.json.
+Do not overwrite production MP3s or the slow samples. Display them on the existing
+public/audio/candidates/indo-v4-v1/index.html page only. No new HTML page.
