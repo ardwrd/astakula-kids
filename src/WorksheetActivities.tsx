@@ -1,4 +1,4 @@
-import { useMemo, useRef, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import type { CSSProperties, PointerEvent } from 'react'
 import './worksheet.css'
 
@@ -23,7 +23,7 @@ function Finished({ title, onReplay }: { title: string; onReplay: () => void }) 
   return <div className="worksheet-finish">
     <div className="worksheet-finish-art" aria-hidden="true">✓</div>
     <h2>{title}</h2>
-    <p>Mau mencoba lagi?</p>
+    <p>Mau main lagi?</p>
     <button className="primary-action" type="button" onClick={onReplay}>Main lagi</button>
   </div>
 }
@@ -45,6 +45,14 @@ function VowelColors({ narrate }: { narrate: Narrate }) {
   const target = targetOrder[painted.length]
   const current = vowels.find(item => item.letter === target)
   const completed = painted.length === letters.length
+  const announcedFirst = useRef(false)
+
+  useEffect(() => {
+    if (!announcedFirst.current) {
+      announcedFirst.current = true
+      narrate('activities/vowel/' + targetOrder[0], true)
+    }
+  }, [narrate, targetOrder])
 
   function select(index: number) {
     if (painted.includes(index) || completed) return
@@ -56,23 +64,26 @@ function VowelColors({ narrate }: { narrate: Narrate }) {
     setMistake(false)
     setPainted(old => [...old, index])
     if (painted.length + 1 === letters.length) narrate('global/correct')
+    else narrate('activities/vowel/' + targetOrder[painted.length + 1])
   }
 
   function replay() {
     setLetters(shuffle(['a', 'a', 'i', 'u', 'e', 'o']))
-    setTargetOrder(shuffle(['a', 'a', 'i', 'u', 'e', 'o']))
+    const fresh = shuffle(['a', 'a', 'i', 'u', 'e', 'o'] as Vowel[])
+    setTargetOrder(fresh)
     setPainted([])
     setMistake(false)
+    narrate('activities/vowel/' + fresh[0])
   }
 
-  if (completed) return <Finished title="Semua huruf sudah berwarna!" onReplay={replay} />
+  if (completed) return <Finished title="Hore, semua huruf berwarna!" onReplay={replay} />
   return <div className="worksheet-body">
     <Progress step={painted.length + 1} total={letters.length} />
-    <h2>Warnai huruf vokal</h2>
-    <p className="worksheet-instruction">Cari huruf <strong>{target.toUpperCase()}</strong>, lalu sentuh kotaknya.</p>
+    <h2>Ayo warnai huruf!</h2>
+    <p className="worksheet-instruction">Cari huruf <strong>{target.toUpperCase()}</strong>. Sentuh, ya!</p>
     <div className="worksheet-color-hint">
       <span className="worksheet-target-color" style={{ background: current?.color }} aria-hidden="true" />
-      <span>Huruf <strong>{target.toUpperCase()}</strong> berwarna <strong>{current?.name}</strong>.</span>
+      <span>Warnai huruf <strong>{target.toUpperCase()}</strong> dengan warna <strong>{current?.name}</strong>.</span>
     </div>
     <div className="worksheet-vowels" role="group" aria-label="Kotak huruf">
       {letters.map((letter, index) => {
@@ -84,7 +95,7 @@ function VowelColors({ narrate }: { narrate: Narrate }) {
           disabled={filled} onClick={() => select(index)}>{letter}</button>
       })}
     </div>
-    <p className="worksheet-feedback" role="status">{mistake ? 'Coba cari huruf ' + target.toUpperCase() + ' yang lain.' : 'Sentuh hurufnya untuk memberi warna.'}</p>
+    <p className="worksheet-feedback" role="status">{mistake ? 'Coba cari huruf ' + target.toUpperCase() + ' yang lain.' : 'Ayo sentuh hurufnya!'}</p>
   </div>
 }
 
@@ -125,17 +136,17 @@ function DiceMatch({ narrate }: { narrate: Narrate }) {
   function next() { setStep(old => old + 1); setCorrect(false); setMistake(false) }
   function replay() { setRounds(shuffle([1, 2, 3, 4, 5, 6])); setStep(0); setCorrect(false); setMistake(false) }
 
-  if (step === rounds.length) return <Finished title="Hebat, semua dadu sudah dihitung!" onReplay={replay} />
+  if (step === rounds.length) return <Finished title="Hore, dadu selesai dihitung!" onReplay={replay} />
   return <div className="worksheet-body">
     <Progress step={step + 1} total={rounds.length} />
-    <h2>Berapa titiknya?</h2>
-    <p className="worksheet-instruction">Hitung titik pada dadu, lalu pilih angkanya.</p>
+    <h2>Ada berapa titik?</h2>
+    <p className="worksheet-instruction">Yuk, hitung titik di dadu!</p>
     <div className="worksheet-dice-stage"><DiceFace count={answer} /></div>
     <div className="worksheet-number-options">
       {options.map(number => <button type="button" key={number} className={'worksheet-number-option' + (correct && number === answer ? ' is-correct' : '')}
         disabled={correct} onClick={() => select(number)}>{number}</button>)}
     </div>
-    <p className="worksheet-feedback" role="status">{correct ? 'Benar! Ada ' + answer + ' titik.' : mistake ? 'Hitung lagi titiknya, ya.' : 'Pilih satu angka di bawah dadu.'}</p>
+    <p className="worksheet-feedback" role="status">{correct ? 'Benar! Ada ' + answer + ' titik.' : mistake ? 'Hitung lagi titiknya, ya.' : 'Sentuh angka yang benar, ya.'}</p>
     {correct && <button className="primary-action worksheet-next" type="button" onClick={next}>{step === rounds.length - 1 ? 'Selesai' : 'Dadu berikutnya →'}</button>}
   </div>
 }
@@ -164,6 +175,14 @@ function ConnectDots({ narrate }: { narrate: Narrate }) {
   const [mistake, setMistake] = useState(false)
   const pattern = rounds[step]
   const complete = visited.length === 6
+  const announcedFirst = useRef(false)
+
+  useEffect(() => {
+    if (!announcedFirst.current) {
+      announcedFirst.current = true
+      narrate('activities/count/' + pattern[0], true)
+    }
+  }, [narrate, pattern])
 
   function visit(value: number) {
     const already = visitedRef.current
@@ -177,6 +196,7 @@ function ConnectDots({ narrate }: { narrate: Narrate }) {
     setVisited(next)
     setMistake(false)
     if (next.length === 6) narrate('global/correct')
+    else narrate('activities/count/' + pattern[next.length])
   }
 
   function hitPoint(event: PointerEvent<HTMLDivElement>) {
@@ -204,14 +224,24 @@ function ConnectDots({ narrate }: { narrate: Narrate }) {
     if (event.currentTarget.hasPointerCapture(event.pointerId)) event.currentTarget.releasePointerCapture(event.pointerId)
   }
   function resetRoute() { visitedRef.current = []; setVisited([]); setMistake(false) }
-  function next() { resetRoute(); setStep(old => old + 1) }
-  function replay() { resetRoute(); setRounds(shuffle(patterns)); setStep(0) }
-  if (step === rounds.length) return <Finished title="Semua jalur berhasil dibuat!" onReplay={replay} />
+  function next() {
+    resetRoute()
+    narrate('activities/count/' + rounds[step + 1][0])
+    setStep(old => old + 1)
+  }
+  function replay() {
+    resetRoute()
+    const fresh = shuffle(patterns)
+    setRounds(fresh)
+    setStep(0)
+    narrate('activities/count/' + fresh[0][0])
+  }
+  if (step === rounds.length) return <Finished title="Hore, semua titik tersambung!" onReplay={replay} />
 
   return <div className="worksheet-body">
     <Progress step={step + 1} total={rounds.length} />
-    <h2>Hubungkan titik warna</h2>
-    <p className="worksheet-instruction">Ikuti urutan angka. Tarik jari atau sentuh titik satu per satu.</p>
+    <h2>Ayo sambungkan titik!</h2>
+    <p className="worksheet-instruction">Sentuh titik sesuai urutan angka. Boleh juga tarik jarimu!</p>
     <div className="worksheet-route-list" aria-label={'Urutan ' + pattern.join(', ')}>
       {pattern.map((number, i) => <span key={i} className={'worksheet-route-number' + (i < visited.length ? ' is-done' : '')}>
         {number}{i < pattern.length - 1 && <span className="worksheet-route-arrow" aria-hidden="true">→</span>}
@@ -230,9 +260,9 @@ function ConnectDots({ narrate }: { narrate: Narrate }) {
         style={{ left: dot.x / 320 * 100 + '%', top: dot.y / 212 * 100 + '%', background: dot.color }}
         aria-label={'Titik nomor ' + dot.value} onClick={() => visit(dot.value)}>{dot.value}</button>)}
     </div>
-    <p className="worksheet-feedback" role="status">{complete ? 'Jalur selesai!' : mistake ? 'Ikuti angka ' + pattern[visited.length] + ' dulu.' : 'Cari titik nomor ' + pattern[visited.length] + '.'}</p>
+    <p className="worksheet-feedback" role="status">{complete ? 'Hore, sudah tersambung!' : mistake ? 'Cari angka ' + pattern[visited.length] + ' dulu, ya.' : 'Cari titik nomor ' + pattern[visited.length] + '.'}</p>
     <div className="worksheet-actions">
-      <button className="quiet-button" type="button" onClick={resetRoute}>Ulangi garis</button>
+      <button className="quiet-button" type="button" onClick={resetRoute}>Hapus garis</button>
       {complete && <button className="primary-action" type="button" onClick={next}>{step === rounds.length - 1 ? 'Selesai' : 'Jalur berikutnya →'}</button>}
     </div>
   </div>
@@ -267,16 +297,16 @@ function NumberPaint({ narrate }: { narrate: Narrate }) {
   function resetBoard() { setFilled([]); setSelected(null); setMistake(false) }
   function next() { resetBoard(); setStep(old => old + 1) }
   function replay() { resetBoard(); setBoards(shuffle(numberBoards)); setStep(0) }
-  if (step === boards.length) return <Finished title="Kotak angkanya penuh warna!" onReplay={replay} />
+  if (step === boards.length) return <Finished title="Hore, semua kotak berwarna!" onReplay={replay} />
 
   return <div className="worksheet-body">
     <Progress step={step + 1} total={boards.length} />
-    <h2>Warnai kotak angka</h2>
-    <p className="worksheet-instruction">Pilih warna yang bernomor sama dengan kotaknya.</p>
+    <h2>Ayo warnai kotak!</h2>
+    <p className="worksheet-instruction">Pilih warna, lalu cari angka yang sama.</p>
     <div className="worksheet-paint-palette" role="group" aria-label="Pilih warna berdasarkan angka">
       {numberPalette.map(entry => <button type="button" key={entry.value} className={'worksheet-paint-swatch' + (selected === entry.value ? ' is-selected' : '')}
         style={{ background: entry.color }} aria-label={'Nomor ' + entry.value + ', warna ' + entry.name}
-        aria-pressed={selected === entry.value} onClick={() => { setSelected(entry.value); setMistake(false) }}>{entry.value}</button>)}
+        aria-pressed={selected === entry.value} onClick={() => { setSelected(entry.value); setMistake(false); narrate('activities/count/' + entry.value) }}>{entry.value}</button>)}
     </div>
     <div className="worksheet-number-board" role="group" aria-label="Empat kotak angka">
       {current.map((number, index) => {
@@ -287,9 +317,9 @@ function NumberPaint({ narrate }: { narrate: Narrate }) {
           aria-label={'Kotak angka ' + number + (isFilled ? ', sudah diwarnai' : '')} onClick={() => colorCell(index)}>{number}</button>
       })}
     </div>
-    <p className="worksheet-feedback" role="status">{complete ? 'Semua kotak sudah cocok!' : mistake ? selected === null ? 'Pilih warna dulu, ya.' : 'Cari kotak dengan angka yang sama.' : selected === null ? 'Sentuh satu warna di atas.' : 'Sekarang sentuh kotak angka ' + selected + '.'}</p>
+    <p className="worksheet-feedback" role="status">{complete ? 'Semua kotak sudah cocok!' : mistake ? selected === null ? 'Pilih warna dulu, ya.' : 'Cari kotak dengan angka yang sama.' : selected === null ? 'Pilih satu warna dulu, ya.' : 'Ayo cari kotak angka ' + selected + '.'}</p>
     <div className="worksheet-actions">
-      <button className="quiet-button" type="button" onClick={resetBoard}>Ulangi</button>
+      <button className="quiet-button" type="button" onClick={resetBoard}>Hapus warna</button>
       {complete && <button className="primary-action" type="button" onClick={next}>{step === boards.length - 1 ? 'Selesai' : 'Kotak berikutnya →'}</button>}
     </div>
   </div>
@@ -338,11 +368,11 @@ function VeggieBaskets({ narrate }: { narrate: Narrate }) {
   }
   function next() { setStep(old => old + 1); setCorrect(false); setMistake(false) }
   function replay() { setRounds(shuffle(basketRounds)); setStep(0); setCorrect(false); setMistake(false) }
-  if (step === rounds.length) return <Finished title="Semua keranjang sudah dihitung!" onReplay={replay} />
+  if (step === rounds.length) return <Finished title="Hore, keranjangnya selesai!" onReplay={replay} />
   return <div className="worksheet-body">
     <Progress step={step + 1} total={rounds.length} />
-    <h2>Jumlahkan sayurnya</h2>
-    <p className="worksheet-instruction">Setiap sayur punya angka. Jumlahkan dua angka di keranjang.</p>
+    <h2>Yuk, hitung sayurnya!</h2>
+    <p className="worksheet-instruction">Setiap sayur punya angka. Berapa semuanya?</p>
     <div className="worksheet-veggie-key" aria-label="Nilai setiap sayur">
       {vegetables.map(item => <div className="worksheet-veggie-key-item" key={item.id}>
         <VegetableIcon id={item.id} /><strong>{item.value}</strong><span>{item.name}</span>
@@ -360,7 +390,7 @@ function VeggieBaskets({ narrate }: { narrate: Narrate }) {
       {options.map(number => <button type="button" key={number} className={'worksheet-number-option' + (correct && number === answer ? ' is-correct' : '')}
         disabled={correct} onClick={() => select(number)}>{number}</button>)}
     </div>
-    <p className="worksheet-feedback" role="status">{correct ? 'Benar, hasilnya ' + answer + '!' : mistake ? 'Coba jumlahkan lagi.' : 'Berapa hasil penjumlahannya?'}</p>
+    <p className="worksheet-feedback" role="status">{correct ? 'Benar, hasilnya ' + answer + '!' : mistake ? 'Ayo, hitung lagi!' : 'Berapa semuanya, ya?'}</p>
     {correct && <button className="primary-action worksheet-next" type="button" onClick={next}>{step === rounds.length - 1 ? 'Selesai' : 'Keranjang berikutnya →'}</button>}
   </div>
 }

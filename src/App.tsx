@@ -3,7 +3,6 @@ import type { CSSProperties } from 'react'
 import rawContent from './data/content.json'
 import { useNarrator } from './useNarrator'
 import { PlayActivity } from './PlayActivities'
-import { WORKSHEET_KINDS } from './WorksheetActivities'
 import { AnimalIcon } from './AnimalIcon'
 import { WorldArt } from './WorldArt'
 import { ActivityArt } from './ActivityArt'
@@ -17,7 +16,7 @@ type Mode = ActivityKind | 'quiz' | null
 const activityChoices: Record<string, { kind: Exclude<Mode, null>; title: string; detail: string }[]> = {
   warna: [
     { kind: 'color', title: 'Warnai gambar', detail: 'Warnai gambar dengan jarimu.' },
-    { kind: 'number-paint', title: 'Kotak angka', detail: 'Warnai kotak dengan angka yang cocok.' },
+    { kind: 'number-paint', title: 'Kotak warna', detail: 'Pilih warna dan cari angkanya.' },
     { kind: 'quiz', title: 'Tebak warna', detail: 'Cari warna yang disebutkan.' },
   ],
   bentuk: [
@@ -31,14 +30,14 @@ const activityChoices: Record<string, { kind: Exclude<Mode, null>; title: string
   ],
   angka: [
     { kind: 'count', title: 'Hitung benda', detail: 'Sentuh bendanya satu per satu.' },
-    { kind: 'dice-match', title: 'Hitung dadu', detail: 'Cocokkan titik dadu dengan angkanya.' },
-    { kind: 'connect-dots', title: 'Hubungkan titik', detail: 'Ikuti urutan angka dengan jarimu.' },
-    { kind: 'veggie-baskets', title: 'Keranjang sayur', detail: 'Jumlahkan angka dari dua sayur.' },
+    { kind: 'dice-match', title: 'Hitung dadu', detail: 'Ada berapa titik di dadu?' },
+    { kind: 'connect-dots', title: 'Sambung titik', detail: 'Sambungkan titik sesuai angka.' },
+    { kind: 'veggie-baskets', title: 'Hitung sayur', detail: 'Lihat angka pada sayur.' },
     { kind: 'quiz', title: 'Tebak angka', detail: 'Pilih angka yang cocok.' },
   ],
   huruf: [
     { kind: 'trace', title: 'Tebalkan huruf', detail: 'Tulis huruf mengikuti garis.' },
-    { kind: 'vowel-colors', title: 'Warna huruf', detail: 'Cari huruf vokal dan warnai.' },
+    { kind: 'vowel-colors', title: 'Warnai huruf', detail: 'Cari huruf A, I, U, E, O.' },
     { kind: 'letters', title: 'Susun kata', detail: 'Gabungkan dua suku kata.' },
     { kind: 'quiz', title: 'Tebak huruf', detail: 'Kenali huruf dan kata.' },
   ],
@@ -107,9 +106,7 @@ export default function App() {
       setRound(questions)
       setStep(0)
       play('questions/' + questions[0].id)
-    } else if (!WORKSHEET_KINDS.some(kind => kind === next)) {
-      // New worksheet games have clear on-screen prompts and reuse only approved
-      // success/retry clips; never request a missing or mismatched voice key.
+    } else {
       const cue = next === 'trace' ? 'trace-' + world.id : next
       play('activities/instructions/' + cue)
     }
@@ -204,8 +201,8 @@ export default function App() {
             </nav>
             {roundFinished ? (
               <div className="session-finish-panel">
-                <h1>Sudah selesai satu sesi.</h1>
-                <p>Mau main lagi atau mencoba permainan lain?</p>
+                <h1>Hore, selesai!</h1>
+                <p>Mau main lagi atau pilih permainan lain?</p>
                 <div className="session-actions">
                   <button className="continue-button" type="button" onClick={() => startMode('quiz')}>Main lagi</button>
                   <button className="secondary-button" type="button" onClick={backToWorld}>Pilih permainan lain</button>
@@ -220,7 +217,7 @@ export default function App() {
                   <h1>{currentQuestion.prompt}</h1>
                   <button className="listen-button" type="button"
                     onClick={() => play('questions/' + currentQuestion.id)}>
-                    <span aria-hidden="true">♪</span> Dengarkan lagi
+                    <span aria-hidden="true">♪</span> Dengar lagi
                   </button>
                 </div>
                 <div className="answer-grid" aria-label="Pilihan jawaban">

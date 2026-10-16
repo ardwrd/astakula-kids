@@ -406,11 +406,11 @@ export function PlayActivity({ world, kind, onBack, narrate }: ActivityProps) {
   const title: Record<ActivityKind, string> = {
     color: 'Warnai gambar', trace: 'Tebalkan garis', memory: 'Cari pasangan',
     count: 'Hitung benda', letters: 'Susun kata',
-    'vowel-colors': 'Warna huruf',
+    'vowel-colors': 'Warnai huruf',
     'dice-match': 'Hitung dadu',
-    'connect-dots': 'Hubungkan titik',
-    'number-paint': 'Kotak angka',
-    'veggie-baskets': 'Keranjang sayur',
+    'connect-dots': 'Sambung titik',
+    'number-paint': 'Kotak warna',
+    'veggie-baskets': 'Hitung sayur',
   }
   return (
     <section className="activity-screen" aria-label={title[kind]}>
@@ -419,7 +419,7 @@ export function PlayActivity({ world, kind, onBack, narrate }: ActivityProps) {
         <span>{title[kind]}</span>
       </div>
       <div className="activity-panel">
-        {!WORKSHEET_KINDS.some(item => item === kind) && <button className="listen-button activity-listen" type="button" onClick={listen}>Dengarkan cara bermain</button>}
+        <button className="listen-button activity-listen" type="button" onClick={listen}>Dengar petunjuk</button>
         {kind === 'color' ? <ColoringActivity /> : null}
         {kind === 'trace' && (world === 'bentuk' || world === 'hewan' || world === 'huruf')
           ? <TraceLines world={world} narrate={narrate} /> : null}
