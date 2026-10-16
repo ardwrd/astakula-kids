@@ -1,8 +1,8 @@
 {
   "voice_id": "wtqqNhC5H27DEv1Ojo4B",
   "model_id": "eleven_v4",
-  "required_count": 48,
-  "generated_count": 48,
+  "required_count": 58,
+  "generated_count": 58,
   "entries": {
     "instructions/mix": {
       "sha256": "48301ea40966e49c64fe849aa20786027ddd3fd7466feb8c2c2f7ab62268c5b8",
@@ -195,6 +195,46 @@
     "results/word-topi": {
       "sha256": "ea331cf8bc25226978061824a2a8da91ec0feb87bcd85412f1a954a6508ec65b",
       "bytes": 52288
+    },
+    "instructions/vowel-colors": {
+      "sha256": "88611a6f43d4875c3b5580ce14f7acbf0b1fd4bc92a3b45204f1015bbe2c053e",
+      "bytes": 91994
+    },
+    "instructions/dice-match": {
+      "sha256": "245f51d88837f62e12f9a015b462367da9ee876abd050bd82d55942b2bb16db5",
+      "bytes": 80291
+    },
+    "instructions/connect-dots": {
+      "sha256": "8b6ff09b0f4e09649606a104e554acba1077fd24b3d04fec0ffe438306988b7c",
+      "bytes": 100771
+    },
+    "instructions/number-paint": {
+      "sha256": "b8690b8cbdb4d0579fac6e745837c2f77b3fb9467536979e074371c0d52a094e",
+      "bytes": 70260
+    },
+    "instructions/veggie-baskets": {
+      "sha256": "e977a1f5ca1b46b003123bf43e6171aeed2bfd21186ee1c68365bad2fbcc16ce",
+      "bytes": 84470
+    },
+    "vowel/a": {
+      "sha256": "68233ace5dcf2b417e65e13aa169f6fbfe171dd443c70fe9774d4b1dbbeb682b",
+      "bytes": 35569
+    },
+    "vowel/i": {
+      "sha256": "5dfb4f632e35d2eb8c4685080fea38515668d1cb9c0c9b2bc6340f8dc672ec0f",
+      "bytes": 34315
+    },
+    "vowel/u": {
+      "sha256": "3d8ce06b7511be1360204b84c8ee8708b60da9f04b6628db018e3ebeb13e1a58",
+      "bytes": 35569
+    },
+    "vowel/e": {
+      "sha256": "1e7ec68e6850c329c4b4f019026191f0143d267ac25e55f1b1545ba4facfb9a0",
+      "bytes": 34315
+    },
+    "vowel/o": {
+      "sha256": "81d77a4e2fbf7fcb5ee144ce39185c45fa659fc0120250fd181d259672f0c508",
+      "bytes": 35569
     }
   }
 }
