@@ -1,0 +1,60 @@
+name: Generate expressive 3 narration samples
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'scripts/kids-prosody-samples.request'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: astakula-kids-prosody-preview
+  cancel-in-progress: false
+
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Validate sample scripts
+        run: python scripts/generate_kids_prosody_samples.py --validate
+      - name: Generate three non-destructive MP3 previews
+        env:
+          ELEVENLABS_API_KEY: ${{ secrets.ELEVENLABS_API_KEY }}
+        run: python scripts/generate_kids_prosody_samples.py
+      - name: Back up MP3 previews
+        if: ${{ always() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: astakula-kids-prosody-previews
+          path: public/audio/previews/indo-v4-kids-prosody-02
+          if-no-files-found: warn
+          retention-days: 14
+      - name: Commit audition assets
+        if: ${{ success() || failure() }}
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add public/audio/previews/indo-v4-kids-prosody-02/*.mp3 public/audio/previews/indo-v4-kids-prosody-02/manifest.json 2>/dev/null || true
+          if ! git diff --cached --quiet; then
+            git commit -m 'assets(audio): add expressive narration audition samples'
+            for attempt in 1 2 3 4 5; do
+              git fetch origin main
+              git rebase origin/main
+              if git push origin HEAD:main; then
+                echo 'Audition files saved.'
+                exit 0
+              fi
+              sleep 3
+            done
+            echo 'Unable to save audition files.'
+            exit 1
+          fi
+          echo 'No new previews to commit.'

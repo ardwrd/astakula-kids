@@ -1,0 +1,26 @@
+{
+  "version": "kid-friendly-prosody-02",
+  "model_id": "eleven_v4",
+  "voice_id": "wtqqNhC5H27DEv1Ojo4B",
+  "language_code": "id",
+  "samples": [
+    {
+      "id": "instruksi-dadu",
+      "title": "Instruksi",
+      "purpose": "Tenang saat mengarahkan; beri anak waktu berpikir.",
+      "text": "[warmly] Yuk, lihat dadunya. [gently] Ada berapa titik, ya? ... Ayo, kita hitung sama-sama."
+    },
+    {
+      "id": "pertanyaan-warna",
+      "title": "Pertanyaan",
+      "purpose": "Rasa penasaran, nada akhir bertanya, jeda tidak berlebihan.",
+      "text": "[curious] Coba lihat warna-warna ini. ... Yang mana warna biru, ya?"
+    },
+    {
+      "id": "pujian",
+      "title": "Pujian",
+      "purpose": "Respons pendek, spontan, ceria; jangan dilambatkan.",
+      "text": "[happily] Hore, benar! Hebat sekali!"
+    }
+  ]
+}
