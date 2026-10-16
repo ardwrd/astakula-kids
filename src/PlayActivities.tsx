@@ -2,8 +2,10 @@ import { useEffect, useRef, useState } from 'react'
 import type { PointerEvent } from 'react'
 import { AnimalIcon } from './AnimalIcon'
 import { ColoringActivity } from './ColoringActivity'
+import { WORKSHEET_KINDS, WorksheetGame } from './WorksheetActivities'
+import type { WorksheetKind } from './WorksheetActivities'
 
-export type ActivityKind = 'color' | 'trace' | 'memory' | 'count' | 'letters'
+export type ActivityKind = 'color' | 'trace' | 'memory' | 'count' | 'letters' | WorksheetKind
 export type ActivityWorld = 'warna' | 'bentuk' | 'hewan' | 'angka' | 'huruf'
 
 interface ActivityProps {
@@ -404,6 +406,11 @@ export function PlayActivity({ world, kind, onBack, narrate }: ActivityProps) {
   const title: Record<ActivityKind, string> = {
     color: 'Warnai gambar', trace: 'Tebalkan garis', memory: 'Cari pasangan',
     count: 'Hitung benda', letters: 'Susun kata',
+    'vowel-colors': 'Warna huruf',
+    'dice-match': 'Hitung dadu',
+    'connect-dots': 'Hubungkan titik',
+    'number-paint': 'Kotak angka',
+    'veggie-baskets': 'Keranjang sayur',
   }
   return (
     <section className="activity-screen" aria-label={title[kind]}>
@@ -412,13 +419,14 @@ export function PlayActivity({ world, kind, onBack, narrate }: ActivityProps) {
         <span>{title[kind]}</span>
       </div>
       <div className="activity-panel">
-        <button className="listen-button activity-listen" type="button" onClick={listen}>Dengarkan cara bermain</button>
+        {!WORKSHEET_KIN.some(item => item === kind) && <button className="listen-button activity-listen" type="button" onClick={listen}>Dengarkan cara bermain</button>}
         {kind === 'color' ? <ColoringActivity /> : null}
         {kind === 'trace' && (world === 'bentuk' || world === 'hewan' || world === 'huruf')
           ? <TraceLines world={world} narrate={narrate} /> : null}
         {kind === 'memory' ? <AnimalMemory narrate={narrate} /> : null}
         {kind === 'count' ? <Counting narrate={narrate} /> : null}
         {kind === 'letters' ? <WordBuilder narrate={narrate} /> : null}
+        {WORKSHEET_KINDS.some(item => item === kind) ? <WorksheetGame kind={kind as WorksheetKind} narrate={narrate} /> : null}
       </div>
     </section>
   )

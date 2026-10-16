@@ -3,6 +3,7 @@ import type { CSSProperties } from 'react'
 import rawContent from './data/content.json'
 import { useNarrator } from './useNarrator'
 import { PlayActivity } from './PlayActivities'
+import { WORKSHEET_KINDS } from './WorksheetActivities'
 import { AnimalIcon } from './AnimalIcon'
 import { WorldArt } from './WorldArt'
 import { ActivityArt } from './ActivityArt'
@@ -16,6 +17,7 @@ type Mode = ActivityKind | 'quiz' | null
 const activityChoices: Record<string, { kind: Exclude<Mode, null>; title: string; detail: string }[]> = {
   warna: [
     { kind: 'color', title: 'Warnai gambar', detail: 'Warnai gambar dengan jarimu.' },
+    { kind: 'number-paint', title: 'Kotak angka', detail: 'Warnai kotak dengan angka yang cocok.' },
     { kind: 'quiz', title: 'Tebak warna', detail: 'Cari warna yang disebutkan.' },
   ],
   bentuk: [
@@ -29,10 +31,14 @@ const activityChoices: Record<string, { kind: Exclude<Mode, null>; title: string
   ],
   angka: [
     { kind: 'count', title: 'Hitung benda', detail: 'Sentuh bendanya satu per satu.' },
+    { kind: 'dice-match', title: 'Hitung dadu', detail: 'Cocokkan titik dadu dengan angkanya.' },
+    { kind: 'connect-dots', title: 'Hubungkan titik', detail: 'Ikuti urutan angka dengan jarimu.' },
+    { kind: 'veggie-baskets', title: 'Keranjang sayur', detail: 'Jumlahkan angka dari dua sayur.' },
     { kind: 'quiz', title: 'Tebak angka', detail: 'Pilih angka yang cocok.' },
   ],
   huruf: [
     { kind: 'trace', title: 'Tebalkan huruf', detail: 'Tulis huruf mengikuti garis.' },
+    { kind: 'vowel-colors', title: 'Warna huruf', detail: 'Cari huruf vokal dan warnai.' },
     { kind: 'letters', title: 'Susun kata', detail: 'Gabungkan dua suku kata.' },
     { kind: 'quiz', title: 'Tebak huruf', detail: 'Kenali huruf dan kata.' },
   ],
@@ -101,7 +107,9 @@ export default function App() {
       setRound(questions)
       setStep(0)
       play('questions/' + questions[0].id)
-    } else {
+    } else if (!WORKSHEET_KINDS.some(kind => kind === next)) {
+      // New worksheet games have clear on-screen prompts and reuse only approved
+      // success/retry clips; never request a missing or mismatched voice key.
       const cue = next === 'trace' ? 'trace-' + world.id : next
       play('activities/instructions/' + cue)
     }
