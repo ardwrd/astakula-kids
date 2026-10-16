@@ -1,0 +1,22 @@
+{
+  "version": "kid-friendly-tempo-01",
+  "voice_id": "wtqqNhC5H27DEv1Ojo4B",
+  "model_id": "eleven_v4",
+  "required_count": 3,
+  "generated_count": 3,
+  "entries": {
+    "instruksi-dadu": {
+      "bytes": 95755,
+      "sha256": "b1f95a8f9c9e09486097c4e40be1f2a6786e04392f9c554bd1f85b1a26aad4d1"
+    },
+    "pertanyaan-warna": {
+      "bytes": 84470,
+      "sha256": "7391d8005cb7bd13539e47a8a855bae41fde1acef36a61e059669c08b9d05f34"
+    },
+    "pujian": {
+      "bytes": 77783,
+      "sha256": "323436412650aaa40c83a5a9154d18726a0a0c624e445cf2ea46926557a2fb57"
+    }
+  },
+  "purpose": "Audition only; production audio untouched."
+}
