@@ -1,0 +1,60 @@
+name: Generate three kid-paced voice samples
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'scripts/kids-slow-samples.request'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: astakula-kids-tempo-preview
+  cancel-in-progress: false
+
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Validate three scripts
+        run: python scripts/generate_kids_slow_samples.py --validate
+      - name: Generate preview MP3s
+        env:
+          ELEVENLABS_API_KEY: ${{ secrets.ELEVENLABS_API_KEY }}
+        run: python scripts/generate_kids_slow_samples.py
+      - name: Back up audition files
+        if: ${{ always() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: kids-tempo-preview
+          path: public/audio/previews/indo-v4-kids-tempo-01/
+          if-no-files-found: warn
+          retention-days: 14
+      - name: Commit generated preview MP3s
+        if: ${{ success() || failure() }}
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add public/audio/previews/indo-v4-kids-tempo-01/*.mp3 public/audio/previews/indo-v4-kids-tempo-01/manifest.json 2>/dev/null || true
+          if ! git diff --cached --quiet; then
+            git commit -m 'assets(audio): add three kid-paced Eleven v4 previews'
+            for attempt in 1 2 3 4 5; do
+              git fetch origin main
+              git rebase origin/main
+              if git push origin HEAD:main; then
+                echo 'Preview MP3s committed.'
+                exit 0
+              fi
+              sleep 3
+            done
+            echo 'Unable to publish previews after safe retries.'
+            exit 1
+          fi
+          echo 'No new preview assets.'

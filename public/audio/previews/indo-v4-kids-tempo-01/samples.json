@@ -1,0 +1,32 @@
+{
+  "version": "kid-friendly-tempo-01",
+  "model_id": "eleven_v4",
+  "voice_id": "wtqqNhC5H27DEv1Ojo4B",
+  "language_code": "id",
+  "samples": [
+    {
+      "id": "instruksi-dadu",
+      "title": "Instruksi permainan",
+      "context": "Permainan hitung dadu",
+      "original": "../../activities/indo-v4-v1/instructions/dice-match.mp3",
+      "originalText": "[gently] Lihat dadu ini. Ada berapa titik? Yuk, hitung satu per satu.",
+      "text": "[gently] [slowly] Lihat dadu ini. [pause] Ada berapa titik? [pause] Yuk, kita hitung satu per satu."
+    },
+    {
+      "id": "pertanyaan-warna",
+      "title": "Pertanyaan",
+      "context": "Mencari warna biru",
+      "original": "../../candidates/indo-v4-v1/questions/warna-3-2.mp3",
+      "originalText": "[curious] Coba lihat baik-baik. ... Warna biru yang mana, ya?",
+      "text": "[curious] [slowly] Coba lihat baik-baik. [pause] Warna biru... yang mana, ya?"
+    },
+    {
+      "id": "pujian",
+      "title": "Pujian",
+      "context": "Jawaban yang benar",
+      "original": "../../candidates/indo-v4-v1/global/correct.mp3",
+      "originalText": "[happily] Iya, benar! Wah, hebat sekali!",
+      "text": "[warmly] [slowly] Iya, benar! [pause] Wah, hebat sekali!"
+    }
+  ]
+}
