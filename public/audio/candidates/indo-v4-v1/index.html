@@ -11,7 +11,7 @@
 <h1>Perbandingan narator Eleven v4</h1>
 <p class="muted">Bandingkan rekaman lama dengan narator Eleven v4 yang sudah disetujui dan digunakan di permainan. Semua 38 rekaman versi baru tersedia untuk didengarkan. Teks pembelajaran yang tampil di permainan tidak berubah.</p>
 <p class="note">Narator aktif Eleven v4 diputar pada tempo asli (1x). Rekaman lama tetap disimpan sebagai cadangan dan dimainkan pada tempo 0,85x hanya untuk perbandingan.</p>
-<section class="item" aria-labelledby="kid-samples-title"><h2 id="kid-samples-title">Uji tempo, intonasi, dan ritme</h2><p class="muted">Dengarkan tiga versi di sini: rekaman aktif, percobaan terlalu pelan, dan kandidat dengan ritme yang disesuaikan. Instruksi tenang, pertanyaan penasaran, pujian tetap ceria. Audio utama belum diganti.</p><div id="kid-tempo-samples">Memuat tiga sampel…</div></section>
+<section class="item" aria-labelledby="kid-samples-title"><h2 id="kid-samples-title">Uji tempo, intonasi, dan ritme</h2><p class="muted">Dengarkan tiga versi di halaman ini: rekaman aktif, percobaan terlalu pelan, dan kandidat ritme natural yang baru selesai dibuat. Instruksi tenang, pertanyaan penasaran, pujian tetap ceria. Tidak ada perubahan pada audio permainan utama.</p><div id="kid-tempo-samples">Memuat tiga sampel…</div></section>
 <div id="status" aria-live="polite">Memuat status sampel…</div>
 <div class="filters" id="filters"></div><section id="list"></section>
 <p class="muted">Kredit audio: <a href="https://elevenlabs.io/" rel="noopener noreferrer" target="_blank">ElevenLabs</a>. Sampel dari akun Free hanya untuk penggunaan nonkomersial sesuai ketentuan penyedia.</p>
@@ -37,7 +37,7 @@
      const natural=x.spoken.replace(/\[[^\]]+\]\s*/g,'');
      return '<article class="item"><div class="top"><strong>'+safe(x.display)+'</strong><span class="meta">'+safe(x.world)+' · '+safe(x.age==='Semua'?'Semua usia':'Usia '+x.age)+' · '+safe(x.kind)+'</span></div>'+
        '<div class="spoken"><small class="muted">Naskah yang akan diucapkan</small><div>'+safe(natural)+'</div></div>'+
-       '<div class="paired"><div class="player"><b>Cadangan · Multilingual v2 (0,85x)</b><audio controls preload="none" data-old src="'+old+'"></audio><small>Rekaman produksi saat ini.</small></div>'+
+       '<div class="paired"><div class="player"><b>Cadangan · Multilingual v2 (0,85x)</b><audio controls preload="none" data-old src="'+old+'"></audio><small>Rekaman lama untuk perbandingan.</small></div>'+
        '<div class="player"><b>Aktif · Eleven v4 (1x)</b>'+(available?'<audio controls preload="none" src="'+fresh+'"></audio>':'<div class="unready">Belum digenerasi — menunggu validasi bertahap.</div>')+'<small>Narasi Eleven v4 yang digunakan aplikasi saat ini.</small></div></div></article>';
    }).join('');
    area.querySelectorAll('audio[data-old]').forEach(x=>x.playbackRate=.85);
