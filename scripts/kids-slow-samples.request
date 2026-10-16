@@ -1,0 +1,6 @@
+Generate exactly 3 Eleven v4 audition MP3s for Astakula Kids.
+Set: indo-v4-kids-tempo-01
+Voice: wtqqNhC5H27DEv1Ojo4B; language: Indonesian.
+Script catalog: public/audio/previews/indo-v4-kids-tempo-01/samples.json
+These are audition-only, do not modify active 49 question files or 58 activity files.
+This request triggers the isolated sample workflow.
