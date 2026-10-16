@@ -2,3 +2,5 @@ Run the authorized Eleven v4 activity narration batch. Keep 38 approved MP3s unt
 Retry: regenerate the 22 narrated interaction clips and safely rebase generated assets before pushing.
 Retry complete 22-clip batch after GitHub concurrent-push failure; upload Actions backup and rebase before saving.
 2026-10-11: user approved a kid-friendly coloring activity, new letters, shapes, animals and syllables. Generate only 10 missing Eleven v4 activity clips, leave prior approved 38+38 intact; validate 48/48.
+
+2026-10-16: generate only 10 new worksheet narration clips (five instructions and five vowel cues) with the approved Eleven v4 voice; retain existing 48 clips unchanged. Safe to resume if quota stops a batch.

@@ -51,6 +51,16 @@
     "results/word-dasi": "[happily] Da, si. Jadi kata dasi!",
     "results/word-kota": "[happily] Ko, ta. Jadi kata kota!",
     "results/word-tali": "[happily] Ta, li. Jadi kata tali!",
-    "results/word-topi": "[happily] To, pi. Jadi kata topi!"
+    "results/word-topi": "[happily] To, pi. Jadi kata topi!",
+    "instructions/vowel-colors": "[warmly] Ayo warnai huruf! Dengarkan hurufnya, lalu sentuh yang sama di layar.",
+    "instructions/dice-match": "[gently] Lihat dadu ini. Ada berapa titik? Yuk, hitung satu per satu.",
+    "instructions/connect-dots": "[warmly] Ayo sambungkan titik! Sentuh angka yang disebutkan, lalu lanjut ke angka berikutnya.",
+    "instructions/number-paint": "[gently] Pilih satu warna, lalu cari kotak dengan angka yang sama.",
+    "instructions/veggie-baskets": "[warmly] Yuk, hitung sayurnya! Lihat angka di setiap sayur. Berapa semuanya?",
+    "vowel/a": "[gently] Ayo cari huruf A.",
+    "vowel/i": "[gently] Ayo cari huruf I.",
+    "vowel/u": "[gently] Ayo cari huruf U.",
+    "vowel/e": "[gently] Ayo cari huruf E.",
+    "vowel/o": "[gently] Ayo cari huruf O."
   }
 }
