@@ -1,0 +1,22 @@
+{
+  "version": "kid-friendly-prosody-02",
+  "model_id": "eleven_v4",
+  "voice_id": "wtqqNhC5H27DEv1Ojo4B",
+  "required_count": 3,
+  "generated_count": 3,
+  "entries": {
+    "instruksi-dadu": {
+      "sha256": "a1e2f4507229c97d5fe17881419609bb95745687504e12cacffb74fb1ec71b7e",
+      "bytes": 97009
+    },
+    "pertanyaan-warna": {
+      "sha256": "d92e3be7e4e89963fe9e6cfedcdcdeaa27be245dd93c32bc5feb6a112f702728",
+      "bytes": 69006
+    },
+    "pujian": {
+      "sha256": "1daf3df7c1afdc9b2037f7d0887da27b0eb8440f88afb91c82ab5891a5b5ad55",
+      "bytes": 53541
+    }
+  },
+  "production_replacement": false
+}
