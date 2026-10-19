@@ -1,0 +1,70 @@
+{
+  "version": "indo-v4-adaptive-v2",
+  "model_id": "eleven_v4",
+  "voice_id": "wtqqNhC5H27DEv1Ojo4B",
+  "required_count": 104,
+  "generated_count": 10,
+  "approved": false,
+  "entries": {
+    "global/welcome": {
+      "sha256": "2977150355c925beefbe388ccb16dd05efba887ce9d876498d5a1ed6032812bf",
+      "bytes": 69006,
+      "text_sha256": "4c5ae1224a59026fd19a283391accd1c480b7026d4995a2cf83492ad2727c7b6",
+      "role": "welcome"
+    },
+    "global/correct": {
+      "sha256": "1daf3df7c1afdc9b2037f7d0887da27b0eb8440f88afb91c82ab5891a5b5ad55",
+      "bytes": 53541,
+      "text_sha256": "a1c11ccb993514290068285795e0d61eef0a29cc3571e8b30b419461325da54f",
+      "role": "praise"
+    },
+    "global/retry": {
+      "sha256": "330bef86a06c1925ef1ad5ea84c361a671458b369ef64ec3a129c0e4d9444cef",
+      "bytes": 70260,
+      "text_sha256": "1ac96ce4785615a50fc18981242e766f19aec43b5495cf488e9052dd49fc09ed",
+      "role": "retry"
+    },
+    "questions/warna-3-2": {
+      "sha256": "d92e3be7e4e89963fe9e6cfedcdcdeaa27be245dd93c32bc5feb6a112f702728",
+      "bytes": 69006,
+      "text_sha256": "ffe51753e38c394d2daf5db2fad6a2c33e3c47357179ef9f615b9847954302a8",
+      "role": "question"
+    },
+    "questions/angka-3-1": {
+      "sha256": "748894e30b3f44d9b3891eebbdbc4713e1a8db5239f0512fd6595a86473b1518",
+      "bytes": 89486,
+      "text_sha256": "995aca8539f77645c0f4f4532086c700f1072db242ad7e82066b3d7a62ae28f6",
+      "role": "instruction"
+    },
+    "questions/huruf-3-1": {
+      "sha256": "179ce8c331fbaa9063ec09758ae6af1c5e7315b87cc8405ad1351e1fffea8538",
+      "bytes": 86978,
+      "text_sha256": "f7a260f3b30bc6eea8a01f71d09d08223eba68e1047a52043d899f2578daab5c",
+      "role": "instruction"
+    },
+    "activities/instructions/dice-match": {
+      "sha256": "a1e2f4507229c97d5fe17881419609bb95745687504e12cacffb74fb1ec71b7e",
+      "bytes": 97009,
+      "text_sha256": "1659e03cb65f3215c9eea0cb62b77bd6a0bcb5c6d2c288c5ac98ae2c05ac1f65",
+      "role": "instruction"
+    },
+    "activities/instructions/number-paint": {
+      "sha256": "2af839a60c02e899b0b93ca74415a2bd1262351e6c14aabe3562185385c495b0",
+      "bytes": 89486,
+      "text_sha256": "49787b7f94f8e70cef22d744355bcf54cafeb37abeedcc2c50439a4f5e170816",
+      "role": "instruction"
+    },
+    "activities/instructions/connect-dots": {
+      "sha256": "fe360e45aafe659ec6f65e2c7fccfd3c2adb800a9540c1fc07f0ea3ac0b28baf",
+      "bytes": 70260,
+      "text_sha256": "02f01eb5377fcab1c4823bc33f4fe49d9b1c591b6c6b6a770e6129033dcbf3ab",
+      "role": "instruction"
+    },
+    "activities/results/memory-match": {
+      "sha256": "8585c787250db7f51a409cbc6d6dfa077fa323a2319a7b55c32b7f02dd5f0d93",
+      "bytes": 41838,
+      "text_sha256": "40a72833509319b4931aa8315b1e6d74fb559727608dfc1a2d98496197e1dc6a",
+      "role": "praise"
+    }
+  }
+}
