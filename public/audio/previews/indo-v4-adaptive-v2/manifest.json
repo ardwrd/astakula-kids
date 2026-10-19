@@ -3,7 +3,7 @@
   "model_id": "eleven_v4",
   "voice_id": "wtqqNhC5H27DEv1Ojo4B",
   "required_count": 104,
-  "generated_count": 10,
+  "generated_count": 20,
   "approved": false,
   "entries": {
     "global/welcome": {
@@ -65,6 +65,66 @@
       "bytes": 41838,
       "text_sha256": "40a72833509319b4931aa8315b1e6d74fb559727608dfc1a2d98496197e1dc6a",
       "role": "praise"
+    },
+    "worlds/warna/intro": {
+      "sha256": "082f93eedf5d7ff92df695fa5c4a549314bd113f02edbf05d6f87540326da523",
+      "bytes": 90740,
+      "text_sha256": "3c6b69996785ee1be0ab52d986c176b1c39823bae1fda1b811053f8003f27bbc",
+      "role": "intro"
+    },
+    "questions/warna-3-1": {
+      "sha256": "9acceda340fe42812d7027b1e22ba8f6dab602106dd03d933f62314927eda7de",
+      "bytes": 36823,
+      "text_sha256": "17b281d4f871997ae162b24f26f17f3f6bcfc084be4d93c3794a100ea87c2b0a",
+      "role": "instruction"
+    },
+    "questions/warna-3-3": {
+      "sha256": "7e7a6a25860d92d5bc62139fb8b49d53fe492e3bf9d24e6406d3a838ae9c5f3a",
+      "bytes": 47272,
+      "text_sha256": "751a161cb64ba4219e4f9d6bc97503f16336e708f37eb3d526fbb7f406fb703e",
+      "role": "instruction"
+    },
+    "worlds/bentuk/intro": {
+      "sha256": "beae276a1d76f58adbc700c89c6bff936c52cf28299ace04faa2780d67f5fa41",
+      "bytes": 127938,
+      "text_sha256": "1e71ef0475a7a0f9b6b55ae715a2b84558a3a37f67d18d046dcd14a01e910c78",
+      "role": "intro"
+    },
+    "questions/bentuk-3-1": {
+      "sha256": "dc789a2cc2690cb1ce41b6bfd4fcab62a5c468defafe666edb05cf81b62f0bcc",
+      "bytes": 35569,
+      "text_sha256": "aedfb4c8d2694463376b43dc61e1c59a9efc62a276b5de462e2730d9a79bf316",
+      "role": "instruction"
+    },
+    "questions/bentuk-3-2": {
+      "sha256": "9b8cfbe5f0b58fb5bc25c29ecb0ea8c7d04cde333587c1dcc6f8f9ee77d5f8be",
+      "bytes": 69006,
+      "text_sha256": "54e59d5865d190bcfb80795c5411bb34ef5648e4ade2a754b15eec6cf5466938",
+      "role": "question"
+    },
+    "questions/bentuk-3-3": {
+      "sha256": "e44ade210ea8b00eb9ad43497f1606484cd79d1f964bcf69cf0db0010b0b346c",
+      "bytes": 47272,
+      "text_sha256": "177023e784f0f7c4fa543b059085bd85d4169964178538b54dad74f734c69299",
+      "role": "instruction"
+    },
+    "questions/bentuk-5-1": {
+      "sha256": "929854d0444623140092d7a08c37d20881826ad964eea85f9d14703c6a5e88e9",
+      "bytes": 69006,
+      "text_sha256": "f55a59a8d2a795471ad3a307be969bad545d1b6d7fe679676fc1073c98f4d650",
+      "role": "question"
+    },
+    "questions/bentuk-5-2": {
+      "sha256": "1f40ef7c13241cc777eecf781e715b102582b3fbd16d0d725251fece5fa8c4b9",
+      "bytes": 61065,
+      "text_sha256": "de2ff89e2572b7fb4dea5f7fc1b2ba90cc2dbe672446a6a914d9e0aabd7b6204",
+      "role": "question"
+    },
+    "questions/bentuk-5-3": {
+      "sha256": "20afd99d10da62308c872d5ae919bad82dc56a3deca111496d940a2c4b4b2679",
+      "bytes": 54795,
+      "text_sha256": "8490d6c7af476ce48813ea886686601f6812b18e820b64cdd978dfc027970739",
+      "role": "question"
     }
   }
 }
