@@ -3,7 +3,7 @@
   "model_id": "eleven_v4",
   "voice_id": "wtqqNhC5H27DEv1Ojo4B",
   "required_count": 104,
-  "generated_count": 20,
+  "generated_count": 30,
   "approved": false,
   "entries": {
     "global/welcome": {
@@ -125,6 +125,66 @@
       "bytes": 54795,
       "text_sha256": "8490d6c7af476ce48813ea886686601f6812b18e820b64cdd978dfc027970739",
       "role": "question"
+    },
+    "worlds/hewan/intro": {
+      "sha256": "1d2c547c198afacc820c4c4cc13eb0040bcda94ab5db104a87c37ebfb74dd22f",
+      "bytes": 100771,
+      "text_sha256": "027c43e48da396591c9102f0bc4cc1821ce9bfe65506c45cc25756a9fe34a849",
+      "role": "intro"
+    },
+    "questions/hewan-3-1": {
+      "sha256": "8b80e5f79b562396cd7e0c0596e08809bb02709f9cd49f35447b2af71d0a6cc7",
+      "bytes": 57303,
+      "text_sha256": "34aafc79d17381aa7493f98515aa5e2265242961e27c4bb40a9db7cfe0043f72",
+      "role": "question"
+    },
+    "questions/hewan-3-2": {
+      "sha256": "dd00b249be292e23e6f8a8deffd1d580aafbb542cfa26247310cb2b84ce7aff0",
+      "bytes": 63990,
+      "text_sha256": "ab1346f7e66212c42e77dd102b95219d40e630b15659e79bd9d04d09bb602bd4",
+      "role": "question"
+    },
+    "questions/hewan-3-3": {
+      "sha256": "e965dc04ae128934e230b247f426e518c1c5666e25969a07248b47b1c93e7594",
+      "bytes": 48526,
+      "text_sha256": "fb065d3d0429f7eb57843a826cc3625301f32047620c5507e5f2ab10013d05f1",
+      "role": "instruction"
+    },
+    "questions/hewan-5-1": {
+      "sha256": "3492845053544d81192786169774f54c738e053a2bd07b4b59488b177411c131",
+      "bytes": 70260,
+      "text_sha256": "2bb14aafeaa35bd43911a4868c4917b88fa07bd7919b395648b75599e5775c35",
+      "role": "question"
+    },
+    "questions/hewan-5-2": {
+      "sha256": "50d71c7fb8fdc35647141089d26aec946a9800da8b6e310833843f37ff7e668e",
+      "bytes": 51034,
+      "text_sha256": "2ed10c54c1d620211b22b1dfd84196c6f383f626166230ec406a599237095e30",
+      "role": "question"
+    },
+    "questions/hewan-5-3": {
+      "sha256": "e7504960a14a5b0cfdbfe83af5175c7ce07fcbbc2ab6d321a2aff2e4f59af656",
+      "bytes": 47272,
+      "text_sha256": "e94517869ab481941b61e329eb6307ff72b7edeb56f8afae2a1bcec0c45658f0",
+      "role": "question"
+    },
+    "worlds/angka/intro": {
+      "sha256": "d5086adaf8bf6b4a58c3469e6e89a9a9b41fd8c2897d55896a1fe240c5be7c64",
+      "bytes": 84470,
+      "text_sha256": "b67df2cb698757184acf3e47c21c6f3eb2bc6c31f6df19cf05fcffb3e08aeafa",
+      "role": "intro"
+    },
+    "questions/angka-3-2": {
+      "sha256": "65cc1655d65438a8f932bedac89a44a2e1dfa9cabef9851349be9dcc8be27843",
+      "bytes": 71514,
+      "text_sha256": "33e7b36ce01dba21005826810c2d1b229af21f67acd2acdd6dbefaf68bf61ba4",
+      "role": "instruction"
+    },
+    "questions/angka-3-3": {
+      "sha256": "279a039eee7d74514aefa0cea04c5b0e8b8207c52c97fbafb844137b07d892f7",
+      "bytes": 80291,
+      "text_sha256": "be238d9fe14cbffa5722a619f2c375c771a2a34b3beb583f31f7006a08b81396",
+      "role": "instruction"
     }
   }
 }
