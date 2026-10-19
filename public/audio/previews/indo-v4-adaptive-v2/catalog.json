@@ -1,0 +1,956 @@
+{
+  "version": "indo-v4-adaptive-v2",
+  "model_id": "eleven_v4",
+  "voice_id": "wtqqNhC5H27DEv1Ojo4B",
+  "language_code": "id",
+  "approval_status": "REVIEW_ONLY",
+  "active_quiz_count": 46,
+  "active_activity_count": 58,
+  "archived_excluded": [
+    "questions/warna-5-1",
+    "questions/warna-5-2",
+    "questions/warna-5-3"
+  ],
+  "batch_limit": 10,
+  "clips": [
+    {
+      "key": "global/welcome",
+      "source": "quiz",
+      "role": "welcome",
+      "label": "Halo, Petualang Kecil! Ayo belajar sambil bermain!",
+      "delivery": "Sambutan",
+      "text": "[warmly] Halo, petualang kecil! Yuk, kita belajar sambil bermain.",
+      "original": "../../candidates/indo-v4-v1/global/welcome.mp3"
+    },
+    {
+      "key": "global/correct",
+      "source": "quiz",
+      "role": "praise",
+      "label": "Hebat! Jawabanmu tepat!",
+      "delivery": "Pujian",
+      "text": "[happily] Hore, benar! Hebat sekali!",
+      "original": "../../candidates/indo-v4-v1/global/correct.mp3",
+      "seed": "pujian"
+    },
+    {
+      "key": "global/retry",
+      "source": "quiz",
+      "role": "retry",
+      "label": "Hampir benar. Coba lagi, yuk!",
+      "delivery": "Dukungan",
+      "text": "[gently] Belum tepat, ya. Tidak apa-apa. Yuk, coba lagi.",
+      "original": "../../candidates/indo-v4-v1/global/retry.mp3"
+    },
+    {
+      "key": "questions/warna-3-2",
+      "source": "quiz",
+      "role": "question",
+      "label": "Di mana warna biru?",
+      "delivery": "Pertanyaan",
+      "text": "[curious] Coba lihat warna-warna ini. ... Yang mana warna biru, ya?",
+      "original": "../../candidates/indo-v4-v1/questions/warna-3-2.mp3",
+      "seed": "pertanyaan-warna"
+    },
+    {
+      "key": "questions/angka-3-1",
+      "source": "quiz",
+      "role": "instruction",
+      "label": "Ada satu apel: 🍎. Pilih angka satu!",
+      "delivery": "Instruksi",
+      "text": "[gently] Lihat, ada satu apel. ... Sekarang, coba pilih angka satu, ya.",
+      "original": "../../candidates/indo-v4-v1/questions/angka-3-1.mp3"
+    },
+    {
+      "key": "questions/huruf-3-1",
+      "source": "quiz",
+      "role": "instruction",
+      "label": "Huruf A untuk apel. Mana huruf A?",
+      "delivery": "Instruksi",
+      "text": "[gently] Kata apel dimulai dengan huruf A. ... Ayo, cari huruf A.",
+      "original": "../../candidates/indo-v4-v1/questions/huruf-3-1.mp3"
+    },
+    {
+      "key": "activities/instructions/dice-match",
+      "source": "activity",
+      "role": "instruction",
+      "label": "instructions · dice match",
+      "delivery": "Instruksi",
+      "text": "[warmly] Yuk, lihat dadunya. [gently] Ada berapa titik, ya? ... Ayo, kita hitung sama-sama.",
+      "original": "../../activities/indo-v4-v1/instructions/dice-match.mp3",
+      "seed": "instruksi-dadu"
+    },
+    {
+      "key": "activities/instructions/number-paint",
+      "source": "activity",
+      "role": "instruction",
+      "label": "instructions · number paint",
+      "delivery": "Instruksi",
+      "text": "[gently] Pilih warna dulu, ya. ... Lalu, cari kotak dengan angka yang sama.",
+      "original": "../../activities/indo-v4-v1/instructions/number-paint.mp3"
+    },
+    {
+      "key": "activities/instructions/connect-dots",
+      "source": "activity",
+      "role": "instruction",
+      "label": "instructions · connect dots",
+      "delivery": "Instruksi",
+      "text": "[warmly] Ayo, sambungkan titiknya! ... Ikuti angka satu per satu, ya.",
+      "original": "../../activities/indo-v4-v1/instructions/connect-dots.mp3"
+    },
+    {
+      "key": "activities/results/memory-match",
+      "source": "activity",
+      "role": "praise",
+      "label": "results · memory match",
+      "delivery": "Pujian",
+      "text": "[happily] Yeay! Ketemu pasangannya!",
+      "original": "../../activities/indo-v4-v1/results/memory-match.mp3"
+    },
+    {
+      "key": "worlds/warna/intro",
+      "source": "quiz",
+      "role": "intro",
+      "label": "Selamat datang di Dunia Warna! Siap menemukan warna?",
+      "delivery": "Pengantar",
+      "text": "[warmly] Selamat datang di Dunia Warna! ... Yuk, kita cari warna-warna di sekitar kita.",
+      "original": "../../candidates/indo-v4-v1/worlds/warna/intro.mp3"
+    },
+    {
+      "key": "questions/warna-3-1",
+      "source": "quiz",
+      "role": "instruction",
+      "label": "Sentuh warna merah!",
+      "delivery": "Instruksi",
+      "text": "[gently] Coba sentuh warna merah, ya.",
+      "original": "../../candidates/indo-v4-v1/questions/warna-3-1.mp3"
+    },
+    {
+      "key": "questions/warna-3-3",
+      "source": "quiz",
+      "role": "instruction",
+      "label": "Coba temukan warna kuning!",
+      "delivery": "Instruksi",
+      "text": "[gently] Sekarang, cari warna kuning, yuk.",
+      "original": "../../candidates/indo-v4-v1/questions/warna-3-3.mp3"
+    },
+    {
+      "key": "worlds/bentuk/intro",
+      "source": "quiz",
+      "role": "intro",
+      "label": "Selamat datang di Dunia Bentuk! Ayo kenali bentuk-bentuk!",
+      "delivery": "Pengantar",
+      "text": "[warmly] Selamat datang di Dunia Bentuk! ... Ada lingkaran, segitiga, dan banyak bentuk lainnya. Yuk, kita bermain!",
+      "original": "../../candidates/indo-v4-v1/worlds/bentuk/intro.mp3"
+    },
+    {
+      "key": "questions/bentuk-3-1",
+      "source": "quiz",
+      "role": "instruction",
+      "label": "Pilih bentuk lingkaran!",
+      "delivery": "Instruksi",
+      "text": "[gently] Coba pilih bentuk lingkaran, ya.",
+      "original": "../../candidates/indo-v4-v1/questions/bentuk-3-1.mp3"
+    },
+    {
+      "key": "questions/bentuk-3-2",
+      "source": "quiz",
+      "role": "question",
+      "label": "Mana yang berbentuk segitiga?",
+      "delivery": "Pertanyaan",
+      "text": "[curious] Dari gambar-gambar ini ... yang mana bentuk segitiga?",
+      "original": "../../candidates/indo-v4-v1/questions/bentuk-3-2.mp3"
+    },
+    {
+      "key": "questions/bentuk-3-3",
+      "source": "quiz",
+      "role": "instruction",
+      "label": "Sentuh bentuk persegi!",
+      "delivery": "Instruksi",
+      "text": "[gently] Sekarang, sentuh bentuk persegi, yuk.",
+      "original": "../../candidates/indo-v4-v1/questions/bentuk-3-3.mp3"
+    },
+    {
+      "key": "questions/bentuk-5-1",
+      "source": "quiz",
+      "role": "question",
+      "label": "Bentuk apa yang memiliki tiga sisi?",
+      "delivery": "Pertanyaan",
+      "text": "[curious] Ada bentuk yang punya tiga sisi. ... Bentuk apa, ya?",
+      "original": "../../candidates/indo-v4-v1/questions/bentuk-5-1.mp3"
+    },
+    {
+      "key": "questions/bentuk-5-2",
+      "source": "quiz",
+      "role": "question",
+      "label": "Bentuk mana yang tidak memiliki sudut?",
+      "delivery": "Pertanyaan",
+      "text": "[curious] Coba pikirkan. ... Bentuk mana yang tidak punya sudut?",
+      "original": "../../candidates/indo-v4-v1/questions/bentuk-5-2.mp3"
+    },
+    {
+      "key": "questions/bentuk-5-3",
+      "source": "quiz",
+      "role": "question",
+      "label": "Bentuk mana yang memiliki empat sisi sama panjang?",
+      "delivery": "Pertanyaan",
+      "text": "[curious] Bentuk mana yang punya empat sisi sama panjang, ya?",
+      "original": "../../candidates/indo-v4-v1/questions/bentuk-5-3.mp3"
+    },
+    {
+      "key": "worlds/hewan/intro",
+      "source": "quiz",
+      "role": "intro",
+      "label": "Selamat datang di Dunia Hewan! Yuk, bertemu teman satwa!",
+      "delivery": "Pengantar",
+      "text": "[warmly] Selamat datang di Dunia Hewan! ... Yuk, kita bertemu hewan-hewan lucu dan mengenal mereka.",
+      "original": "../../candidates/indo-v4-v1/worlds/hewan/intro.mp3"
+    },
+    {
+      "key": "questions/hewan-3-1",
+      "source": "quiz",
+      "role": "question",
+      "label": "Hewan mana yang bernama kucing?",
+      "delivery": "Pertanyaan",
+      "text": "[curious] Lihat hewan-hewan ini. ... Yang mana kucing, ya?",
+      "original": "../../candidates/indo-v4-v1/questions/hewan-3-1.mp3"
+    },
+    {
+      "key": "questions/hewan-3-2",
+      "source": "quiz",
+      "role": "question",
+      "label": "Mana gambar ayam?",
+      "delivery": "Pertanyaan",
+      "text": "[curious] Coba cari gambar ayam. ... Ayamnya yang mana, ya?",
+      "original": "../../candidates/indo-v4-v1/questions/hewan-3-2.mp3"
+    },
+    {
+      "key": "questions/hewan-3-3",
+      "source": "quiz",
+      "role": "instruction",
+      "label": "Sentuh gambar sapi!",
+      "delivery": "Instruksi",
+      "text": "[gently] Sekarang, sentuh gambar sapi, ya.",
+      "original": "../../candidates/indo-v4-v1/questions/hewan-3-3.mp3"
+    },
+    {
+      "key": "questions/hewan-5-1",
+      "source": "quiz",
+      "role": "question",
+      "label": "Hewan mana yang hidup di dalam air?",
+      "delivery": "Pertanyaan",
+      "text": "[curious] Dari hewan-hewan ini ... mana yang hidup di dalam air, ya?",
+      "original": "../../candidates/indo-v4-v1/questions/hewan-5-1.mp3"
+    },
+    {
+      "key": "questions/hewan-5-2",
+      "source": "quiz",
+      "role": "question",
+      "label": "Hewan mana yang memiliki sayap dan bisa terbang?",
+      "delivery": "Pertanyaan",
+      "text": "[curious] Hewan mana yang punya sayap dan bisa terbang?",
+      "original": "../../candidates/indo-v4-v1/questions/hewan-5-2.mp3"
+    },
+    {
+      "key": "questions/hewan-5-3",
+      "source": "quiz",
+      "role": "question",
+      "label": "Hewan mana yang memiliki telinga panjang?",
+      "delivery": "Pertanyaan",
+      "text": "[curious] Hewan mana yang punya telinga panjang, ya?",
+      "original": "../../candidates/indo-v4-v1/questions/hewan-5-3.mp3"
+    },
+    {
+      "key": "worlds/angka/intro",
+      "source": "quiz",
+      "role": "intro",
+      "label": "Selamat datang di Dunia Angka! Yuk, berhitung bersama!",
+      "delivery": "Pengantar",
+      "text": "[warmly] Selamat datang di Dunia Angka! ... Kita hitung bersama, pelan-pelan, ya.",
+      "original": "../../candidates/indo-v4-v1/worlds/angka/intro.mp3"
+    },
+    {
+      "key": "questions/angka-3-2",
+      "source": "quiz",
+      "role": "instruction",
+      "label": "Ada dua bintang: ⭐ ⭐. Pilih angka dua!",
+      "delivery": "Instruksi",
+      "text": "[gently] Lihat, ada dua bintang. ... Coba pilih angka dua, ya.",
+      "original": "../../candidates/indo-v4-v1/questions/angka-3-2.mp3"
+    },
+    {
+      "key": "questions/angka-3-3",
+      "source": "quiz",
+      "role": "instruction",
+      "label": "Ada tiga bola: ⚽ ⚽ ⚽. Pilih angka tiga!",
+      "delivery": "Instruksi",
+      "text": "[gently] Lihat, ada tiga bola. ... Sekarang, pilih angka tiga, yuk.",
+      "original": "../../candidates/indo-v4-v1/questions/angka-3-3.mp3"
+    },
+    {
+      "key": "questions/angka-5-1",
+      "source": "quiz",
+      "role": "question",
+      "label": "Dua ditambah tiga hasilnya berapa?",
+      "delivery": "Pertanyaan",
+      "text": "[curious] Dua ditambah tiga ... hasilnya berapa, ya?",
+      "original": "../../candidates/indo-v4-v1/questions/angka-5-1.mp3"
+    },
+    {
+      "key": "questions/angka-5-2",
+      "source": "quiz",
+      "role": "question",
+      "label": "Empat ditambah dua hasilnya berapa?",
+      "delivery": "Pertanyaan",
+      "text": "[curious] Empat ditambah dua ... hasilnya berapa, ya?",
+      "original": "../../candidates/indo-v4-v1/questions/angka-5-2.mp3"
+    },
+    {
+      "key": "questions/angka-5-3",
+      "source": "quiz",
+      "role": "question",
+      "label": "Delapan dikurangi tiga hasilnya berapa?",
+      "delivery": "Pertanyaan",
+      "text": "[curious] Delapan dikurangi tiga ... hasilnya berapa, ya?",
+      "original": "../../candidates/indo-v4-v1/questions/angka-5-3.mp3"
+    },
+    {
+      "key": "worlds/huruf/intro",
+      "source": "quiz",
+      "role": "intro",
+      "label": "Selamat datang di Dunia Huruf! Ayo bermain dengan abjad!",
+      "delivery": "Pengantar",
+      "text": "[warmly] Selamat datang di Dunia Huruf! ... Yuk, dengarkan bunyi huruf dan temukan jawabannya.",
+      "original": "../../candidates/indo-v4-v1/worlds/huruf/intro.mp3"
+    },
+    {
+      "key": "questions/huruf-3-2",
+      "source": "quiz",
+      "role": "instruction",
+      "label": "Huruf B untuk bola. Mana huruf B?",
+      "delivery": "Instruksi",
+      "text": "[gently] Kata bola dimulai dengan huruf B. ... Sekarang, cari huruf B, yuk.",
+      "original": "../../candidates/indo-v4-v1/questions/huruf-3-2.mp3"
+    },
+    {
+      "key": "questions/huruf-3-3",
+      "source": "quiz",
+      "role": "instruction",
+      "label": "Huruf C untuk cicak. Mana huruf C?",
+      "delivery": "Instruksi",
+      "text": "[gently] Kata cicak dimulai dengan huruf C. ... Coba sentuh huruf C, ya.",
+      "original": "../../candidates/indo-v4-v1/questions/huruf-3-3.mp3"
+    },
+    {
+      "key": "questions/huruf-5-1",
+      "source": "quiz",
+      "role": "question",
+      "label": "Kata bola diawali dengan huruf apa?",
+      "delivery": "Pertanyaan",
+      "text": "[curious] Dengarkan kata ini ... bola. ... Kata bola diawali huruf apa, ya?",
+      "original": "../../candidates/indo-v4-v1/questions/huruf-5-1.mp3"
+    },
+    {
+      "key": "questions/huruf-5-2",
+      "source": "quiz",
+      "role": "question",
+      "label": "Kata mata dimulai dengan huruf apa?",
+      "delivery": "Pertanyaan",
+      "text": "[curious] Dengarkan kata ini ... mata. ... Huruf pertama pada kata mata itu apa, ya?",
+      "original": "../../candidates/indo-v4-v1/questions/huruf-5-2.mp3"
+    },
+    {
+      "key": "questions/huruf-5-3",
+      "source": "quiz",
+      "role": "question",
+      "label": "Suku kata PA dan GI membentuk kata apa?",
+      "delivery": "Pertanyaan",
+      "text": "[curious] Ada dua suku kata: pa ... dan gi. ... Kalau digabung, jadi kata apa, ya?",
+      "original": "../../candidates/indo-v4-v1/questions/huruf-5-3.mp3"
+    },
+    {
+      "key": "questions/warna-5-4",
+      "source": "quiz",
+      "role": "question",
+      "label": "questions/warna-5-4",
+      "delivery": "Pertanyaan",
+      "text": "[curious] Daun pada pohon biasanya berwarna apa?",
+      "original": "../../candidates/indo-v4-v1/questions/warna-5-4.mp3"
+    },
+    {
+      "key": "questions/warna-5-5",
+      "source": "quiz",
+      "role": "question",
+      "label": "questions/warna-5-5",
+      "delivery": "Pertanyaan",
+      "text": "[curious] Wortel biasanya berwarna apa?",
+      "original": "../../candidates/indo-v4-v1/questions/warna-5-5.mp3"
+    },
+    {
+      "key": "questions/warna-5-6",
+      "source": "quiz",
+      "role": "question",
+      "label": "questions/warna-5-6",
+      "delivery": "Pertanyaan",
+      "text": "[curious] Langit yang cerah biasanya berwarna apa?",
+      "original": "../../candidates/indo-v4-v1/questions/warna-5-6.mp3"
+    },
+    {
+      "key": "questions/bentuk-3-4",
+      "source": "quiz",
+      "role": "question",
+      "label": "questions/bentuk-3-4",
+      "delivery": "Pertanyaan",
+      "text": "[curious] Mana bentuk bintang?",
+      "original": "../../candidates/indo-v4-v1/questions/bentuk-3-4.mp3"
+    },
+    {
+      "key": "questions/bentuk-5-4",
+      "source": "quiz",
+      "role": "question",
+      "label": "questions/bentuk-5-4",
+      "delivery": "Pertanyaan",
+      "text": "[curious] Bentuk apa yang mirip atap rumah?",
+      "original": "../../candidates/indo-v4-v1/questions/bentuk-5-4.mp3"
+    },
+    {
+      "key": "questions/hewan-3-4",
+      "source": "quiz",
+      "role": "question",
+      "label": "questions/hewan-3-4",
+      "delivery": "Pertanyaan",
+      "text": "[curious] Mana gambar kelinci?",
+      "original": "../../candidates/indo-v4-v1/questions/hewan-3-4.mp3"
+    },
+    {
+      "key": "questions/hewan-5-4",
+      "source": "quiz",
+      "role": "question",
+      "label": "questions/hewan-5-4",
+      "delivery": "Pertanyaan",
+      "text": "[curious] Hewan mana yang punya sirip untuk berenang?",
+      "original": "../../candidates/indo-v4-v1/questions/hewan-5-4.mp3"
+    },
+    {
+      "key": "questions/angka-3-4",
+      "source": "quiz",
+      "role": "question",
+      "label": "questions/angka-3-4",
+      "delivery": "Pertanyaan",
+      "text": "[curious] Sesudah angka tiga, angka berapa?",
+      "original": "../../candidates/indo-v4-v1/questions/angka-3-4.mp3"
+    },
+    {
+      "key": "questions/angka-5-4",
+      "source": "quiz",
+      "role": "question",
+      "label": "questions/angka-5-4",
+      "delivery": "Pertanyaan",
+      "text": "[curious] Lima dikurangi satu, hasilnya berapa?",
+      "original": "../../candidates/indo-v4-v1/questions/angka-5-4.mp3"
+    },
+    {
+      "key": "questions/huruf-3-4",
+      "source": "quiz",
+      "role": "question",
+      "label": "questions/huruf-3-4",
+      "delivery": "Pertanyaan",
+      "text": "[curious] Huruf M untuk mata. Mana huruf M?",
+      "original": "../../candidates/indo-v4-v1/questions/huruf-3-4.mp3"
+    },
+    {
+      "key": "questions/huruf-5-4",
+      "source": "quiz",
+      "role": "question",
+      "label": "questions/huruf-5-4",
+      "delivery": "Pertanyaan",
+      "text": "[curious] Kata sapi dimulai dengan huruf apa?",
+      "original": "../../candidates/indo-v4-v1/questions/huruf-5-4.mp3"
+    },
+    {
+      "key": "activities/instructions/mix",
+      "source": "activity",
+      "role": "instruction",
+      "label": "instructions · mix",
+      "delivery": "Instruksi",
+      "text": "[gently] Pilih dua warna berbeda. Lihat warna apa yang muncul.",
+      "original": "../../activities/indo-v4-v1/instructions/mix.mp3"
+    },
+    {
+      "key": "activities/instructions/trace-bentuk",
+      "source": "activity",
+      "role": "instruction",
+      "label": "instructions · trace bentuk",
+      "delivery": "Instruksi",
+      "text": "[gently] Ayo ikuti garisnya dengan jari. ... Pelan-pelan, ya.",
+      "original": "../../activities/indo-v4-v1/instructions/trace-bentuk.mp3"
+    },
+    {
+      "key": "activities/instructions/trace-hewan",
+      "source": "activity",
+      "role": "instruction",
+      "label": "instructions · trace hewan",
+      "delivery": "Instruksi",
+      "text": "[gently] Yuk, tebalkan gambar hewannya. ... Ikuti garisnya, ya.",
+      "original": "../../activities/indo-v4-v1/instructions/trace-hewan.mp3"
+    },
+    {
+      "key": "activities/instructions/trace-huruf",
+      "source": "activity",
+      "role": "instruction",
+      "label": "instructions · trace huruf",
+      "delivery": "Instruksi",
+      "text": "[gently] Yuk, tebalkan huruf ini. ... Mulai dari ujung garis, ya.",
+      "original": "../../activities/indo-v4-v1/instructions/trace-huruf.mp3"
+    },
+    {
+      "key": "activities/instructions/memory",
+      "source": "activity",
+      "role": "instruction",
+      "label": "instructions · memory",
+      "delivery": "Instruksi",
+      "text": "[warmly] Buka dua kartu, yuk. ... Cari gambar hewan yang sama.",
+      "original": "../../activities/indo-v4-v1/instructions/memory.mp3"
+    },
+    {
+      "key": "activities/instructions/count",
+      "source": "activity",
+      "role": "instruction",
+      "label": "instructions · count",
+      "delivery": "Instruksi",
+      "text": "[gently] Sentuh lingkarannya satu per satu. ... Yuk, kita hitung bersama.",
+      "original": "../../activities/indo-v4-v1/instructions/count.mp3"
+    },
+    {
+      "key": "activities/instructions/letters",
+      "source": "activity",
+      "role": "instruction",
+      "label": "instructions · letters",
+      "delivery": "Instruksi",
+      "text": "[warmly] Yuk, susun dua suku kata. ... Mulai dari yang pertama, ya.",
+      "original": "../../activities/indo-v4-v1/instructions/letters.mp3"
+    },
+    {
+      "key": "activities/results/mix-jingga",
+      "source": "activity",
+      "role": "praise",
+      "label": "results · mix jingga",
+      "delivery": "Pujian",
+      "text": "[happily] Merah dan kuning menjadi jingga!",
+      "original": "../../activities/indo-v4-v1/results/mix-jingga.mp3"
+    },
+    {
+      "key": "activities/results/mix-hijau",
+      "source": "activity",
+      "role": "praise",
+      "label": "results · mix hijau",
+      "delivery": "Pujian",
+      "text": "[happily] Biru dan kuning menjadi hijau!",
+      "original": "../../activities/indo-v4-v1/results/mix-hijau.mp3"
+    },
+    {
+      "key": "activities/results/mix-ungu",
+      "source": "activity",
+      "role": "praise",
+      "label": "results · mix ungu",
+      "delivery": "Pujian",
+      "text": "[happily] Merah dan biru menjadi ungu!",
+      "original": "../../activities/indo-v4-v1/results/mix-ungu.mp3"
+    },
+    {
+      "key": "activities/results/word-pagi",
+      "source": "activity",
+      "role": "praise",
+      "label": "results · word pagi",
+      "delivery": "Pujian",
+      "text": "[happily] Pa, gi. Jadi kata pagi!",
+      "original": "../../activities/indo-v4-v1/results/word-pagi.mp3"
+    },
+    {
+      "key": "activities/results/word-bola",
+      "source": "activity",
+      "role": "praise",
+      "label": "results · word bola",
+      "delivery": "Pujian",
+      "text": "[happily] Bo, la. Jadi kata bola!",
+      "original": "../../activities/indo-v4-v1/results/word-bola.mp3"
+    },
+    {
+      "key": "activities/results/word-mata",
+      "source": "activity",
+      "role": "praise",
+      "label": "results · word mata",
+      "delivery": "Pujian",
+      "text": "[happily] Ma, ta. Jadi kata mata!",
+      "original": "../../activities/indo-v4-v1/results/word-mata.mp3"
+    },
+    {
+      "key": "activities/results/trace-complete",
+      "source": "activity",
+      "role": "praise",
+      "label": "results · trace complete",
+      "delivery": "Pujian",
+      "text": "[happily] Bagus! Kamu sudah mengikuti garisnya.",
+      "original": "../../activities/indo-v4-v1/results/trace-complete.mp3"
+    },
+    {
+      "key": "activities/results/memory-complete",
+      "source": "activity",
+      "role": "praise",
+      "label": "results · memory complete",
+      "delivery": "Pujian",
+      "text": "[happily] Semua pasangan sudah ketemu!",
+      "original": "../../activities/indo-v4-v1/results/memory-complete.mp3"
+    },
+    {
+      "key": "activities/count/1",
+      "source": "activity",
+      "role": "short",
+      "label": "count · 1",
+      "delivery": "Bunyi pendek",
+      "text": "Satu.",
+      "original": "../../activities/indo-v4-v1/count/1.mp3"
+    },
+    {
+      "key": "activities/count/2",
+      "source": "activity",
+      "role": "short",
+      "label": "count · 2",
+      "delivery": "Bunyi pendek",
+      "text": "Dua.",
+      "original": "../../activities/indo-v4-v1/count/2.mp3"
+    },
+    {
+      "key": "activities/count/3",
+      "source": "activity",
+      "role": "short",
+      "label": "count · 3",
+      "delivery": "Bunyi pendek",
+      "text": "Tiga.",
+      "original": "../../activities/indo-v4-v1/count/3.mp3"
+    },
+    {
+      "key": "activities/count/4",
+      "source": "activity",
+      "role": "short",
+      "label": "count · 4",
+      "delivery": "Bunyi pendek",
+      "text": "Empat.",
+      "original": "../../activities/indo-v4-v1/count/4.mp3"
+    },
+    {
+      "key": "activities/count/5",
+      "source": "activity",
+      "role": "short",
+      "label": "count · 5",
+      "delivery": "Bunyi pendek",
+      "text": "Lima.",
+      "original": "../../activities/indo-v4-v1/count/5.mp3"
+    },
+    {
+      "key": "activities/count/6",
+      "source": "activity",
+      "role": "short",
+      "label": "count · 6",
+      "delivery": "Bunyi pendek",
+      "text": "Enam.",
+      "original": "../../activities/indo-v4-v1/count/6.mp3"
+    },
+    {
+      "key": "activities/instructions/trace-dots",
+      "source": "activity",
+      "role": "instruction",
+      "label": "instructions · trace dots",
+      "delivery": "Instruksi",
+      "text": "[gently] Sekarang sentuh titik yang menyala, satu per satu.",
+      "original": "../../activities/indo-v4-v1/instructions/trace-dots.mp3"
+    },
+    {
+      "key": "activities/trace/lingkaran",
+      "source": "activity",
+      "role": "short",
+      "label": "trace · lingkaran",
+      "delivery": "Bunyi pendek",
+      "text": "Lingkaran.",
+      "original": "../../activities/indo-v4-v1/trace/lingkaran.mp3"
+    },
+    {
+      "key": "activities/trace/segitiga",
+      "source": "activity",
+      "role": "short",
+      "label": "trace · segitiga",
+      "delivery": "Bunyi pendek",
+      "text": "Segitiga.",
+      "original": "../../activities/indo-v4-v1/trace/segitiga.mp3"
+    },
+    {
+      "key": "activities/trace/bintang",
+      "source": "activity",
+      "role": "short",
+      "label": "trace · bintang",
+      "delivery": "Bunyi pendek",
+      "text": "Bintang.",
+      "original": "../../activities/indo-v4-v1/trace/bintang.mp3"
+    },
+    {
+      "key": "activities/trace/rumah",
+      "source": "activity",
+      "role": "short",
+      "label": "trace · rumah",
+      "delivery": "Bunyi pendek",
+      "text": "Rumah.",
+      "original": "../../activities/indo-v4-v1/trace/rumah.mp3"
+    },
+    {
+      "key": "activities/trace/ikan",
+      "source": "activity",
+      "role": "short",
+      "label": "trace · ikan",
+      "delivery": "Bunyi pendek",
+      "text": "Ikan.",
+      "original": "../../activities/indo-v4-v1/trace/ikan.mp3"
+    },
+    {
+      "key": "activities/trace/kucing",
+      "source": "activity",
+      "role": "short",
+      "label": "trace · kucing",
+      "delivery": "Bunyi pendek",
+      "text": "Kucing.",
+      "original": "../../activities/indo-v4-v1/trace/kucing.mp3"
+    },
+    {
+      "key": "activities/trace/kelinci",
+      "source": "activity",
+      "role": "short",
+      "label": "trace · kelinci",
+      "delivery": "Bunyi pendek",
+      "text": "Kelinci.",
+      "original": "../../activities/indo-v4-v1/trace/kelinci.mp3"
+    },
+    {
+      "key": "activities/trace/a",
+      "source": "activity",
+      "role": "short",
+      "label": "trace · a",
+      "delivery": "Bunyi pendek",
+      "text": "Huruf A.",
+      "original": "../../activities/indo-v4-v1/trace/a.mp3"
+    },
+    {
+      "key": "activities/trace/b",
+      "source": "activity",
+      "role": "short",
+      "label": "trace · b",
+      "delivery": "Bunyi pendek",
+      "text": "Huruf B.",
+      "original": "../../activities/indo-v4-v1/trace/b.mp3"
+    },
+    {
+      "key": "activities/trace/c",
+      "source": "activity",
+      "role": "short",
+      "label": "trace · c",
+      "delivery": "Bunyi pendek",
+      "text": "Huruf C.",
+      "original": "../../activities/indo-v4-v1/trace/c.mp3"
+    },
+    {
+      "key": "activities/trace/m",
+      "source": "activity",
+      "role": "short",
+      "label": "trace · m",
+      "delivery": "Bunyi pendek",
+      "text": "Huruf M.",
+      "original": "../../activities/indo-v4-v1/trace/m.mp3"
+    },
+    {
+      "key": "activities/trace/p",
+      "source": "activity",
+      "role": "short",
+      "label": "trace · p",
+      "delivery": "Bunyi pendek",
+      "text": "Huruf P.",
+      "original": "../../activities/indo-v4-v1/trace/p.mp3"
+    },
+    {
+      "key": "activities/animals/kucing",
+      "source": "activity",
+      "role": "short",
+      "label": "animals · kucing",
+      "delivery": "Bunyi pendek",
+      "text": "Ini kucing.",
+      "original": "../../activities/indo-v4-v1/animals/kucing.mp3"
+    },
+    {
+      "key": "activities/animals/sapi",
+      "source": "activity",
+      "role": "short",
+      "label": "animals · sapi",
+      "delivery": "Bunyi pendek",
+      "text": "Ini sapi.",
+      "original": "../../activities/indo-v4-v1/animals/sapi.mp3"
+    },
+    {
+      "key": "activities/animals/ayam",
+      "source": "activity",
+      "role": "short",
+      "label": "animals · ayam",
+      "delivery": "Bunyi pendek",
+      "text": "Ini ayam.",
+      "original": "../../activities/indo-v4-v1/animals/ayam.mp3"
+    },
+    {
+      "key": "activities/instructions/color",
+      "source": "activity",
+      "role": "instruction",
+      "label": "instructions · color",
+      "delivery": "Instruksi",
+      "text": "[gently] Pilih warna, lalu sentuh bagian gambar yang ingin kamu warnai.",
+      "original": "../../activities/indo-v4-v1/instructions/color.mp3"
+    },
+    {
+      "key": "activities/trace/persegi",
+      "source": "activity",
+      "role": "short",
+      "label": "trace · persegi",
+      "delivery": "Bunyi pendek",
+      "text": "Persegi.",
+      "original": "../../activities/indo-v4-v1/trace/persegi.mp3"
+    },
+    {
+      "key": "activities/trace/hati",
+      "source": "activity",
+      "role": "short",
+      "label": "trace · hati",
+      "delivery": "Bunyi pendek",
+      "text": "Hati.",
+      "original": "../../activities/indo-v4-v1/trace/hati.mp3"
+    },
+    {
+      "key": "activities/trace/burung",
+      "source": "activity",
+      "role": "short",
+      "label": "trace · burung",
+      "delivery": "Bunyi pendek",
+      "text": "Burung.",
+      "original": "../../activities/indo-v4-v1/trace/burung.mp3"
+    },
+    {
+      "key": "activities/trace/d",
+      "source": "activity",
+      "role": "short",
+      "label": "trace · d",
+      "delivery": "Bunyi pendek",
+      "text": "Huruf D.",
+      "original": "../../activities/indo-v4-v1/trace/d.mp3"
+    },
+    {
+      "key": "activities/trace/o",
+      "source": "activity",
+      "role": "short",
+      "label": "trace · o",
+      "delivery": "Bunyi pendek",
+      "text": "Huruf O.",
+      "original": "../../activities/indo-v4-v1/trace/o.mp3"
+    },
+    {
+      "key": "activities/results/word-dasi",
+      "source": "activity",
+      "role": "praise",
+      "label": "results · word dasi",
+      "delivery": "Pujian",
+      "text": "[happily] Da, si. Jadi kata dasi!",
+      "original": "../../activities/indo-v4-v1/results/word-dasi.mp3"
+    },
+    {
+      "key": "activities/results/word-kota",
+      "source": "activity",
+      "role": "praise",
+      "label": "results · word kota",
+      "delivery": "Pujian",
+      "text": "[happily] Ko, ta. Jadi kata kota!",
+      "original": "../../activities/indo-v4-v1/results/word-kota.mp3"
+    },
+    {
+      "key": "activities/results/word-tali",
+      "source": "activity",
+      "role": "praise",
+      "label": "results · word tali",
+      "delivery": "Pujian",
+      "text": "[happily] Ta, li. Jadi kata tali!",
+      "original": "../../activities/indo-v4-v1/results/word-tali.mp3"
+    },
+    {
+      "key": "activities/results/word-topi",
+      "source": "activity",
+      "role": "praise",
+      "label": "results · word topi",
+      "delivery": "Pujian",
+      "text": "[happily] To, pi. Jadi kata topi!",
+      "original": "../../activities/indo-v4-v1/results/word-topi.mp3"
+    },
+    {
+      "key": "activities/instructions/vowel-colors",
+      "source": "activity",
+      "role": "instruction",
+      "label": "instructions · vowel colors",
+      "delivery": "Instruksi",
+      "text": "[warmly] Ayo warnai huruf! ... Dengarkan hurufnya, lalu sentuh huruf yang sama.",
+      "original": "../../activities/indo-v4-v1/instructions/vowel-colors.mp3"
+    },
+    {
+      "key": "activities/instructions/veggie-baskets",
+      "source": "activity",
+      "role": "instruction",
+      "label": "instructions · veggie baskets",
+      "delivery": "Instruksi",
+      "text": "[warmly] Yuk, lihat sayurnya. ... Setiap sayur punya angka. Berapa jumlahnya, ya?",
+      "original": "../../activities/indo-v4-v1/instructions/veggie-baskets.mp3"
+    },
+    {
+      "key": "activities/vowel/a",
+      "source": "activity",
+      "role": "short",
+      "label": "vowel · a",
+      "delivery": "Bunyi pendek",
+      "text": "Ayo cari huruf A.",
+      "original": "../../activities/indo-v4-v1/vowel/a.mp3"
+    },
+    {
+      "key": "activities/vowel/i",
+      "source": "activity",
+      "role": "short",
+      "label": "vowel · i",
+      "delivery": "Bunyi pendek",
+      "text": "Ayo cari huruf I.",
+      "original": "../../activities/indo-v4-v1/vowel/i.mp3"
+    },
+    {
+      "key": "activities/vowel/u",
+      "source": "activity",
+      "role": "short",
+      "label": "vowel · u",
+      "delivery": "Bunyi pendek",
+      "text": "Ayo cari huruf U.",
+      "original": "../../activities/indo-v4-v1/vowel/u.mp3"
+    },
+    {
+      "key": "activities/vowel/e",
+      "source": "activity",
+      "role": "short",
+      "label": "vowel · e",
+      "delivery": "Bunyi pendek",
+      "text": "Ayo cari huruf E.",
+      "original": "../../activities/indo-v4-v1/vowel/e.mp3"
+    },
+    {
+      "key": "activities/vowel/o",
+      "source": "activity",
+      "role": "short",
+      "label": "vowel · o",
+      "delivery": "Bunyi pendek",
+      "text": "Ayo cari huruf O.",
+      "original": "../../activities/indo-v4-v1/vowel/o.mp3"
+    }
+  ]
+}

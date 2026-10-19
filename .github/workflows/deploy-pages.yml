@@ -35,6 +35,7 @@ jobs:
           python3 scripts/generate_v4_candidates.py --validate
           python3 scripts/validate_active_audio.py
           python3 scripts/validate_activity_audio.py
+          python3 scripts/generate_kids_adaptive_voice.py --validate
           python3 scripts/validate_kids_content.py
           python3 scripts/validate_coloring_assets.py
       - name: Build static site
