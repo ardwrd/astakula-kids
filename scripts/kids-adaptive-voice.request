@@ -1,5 +1,6 @@
-Astakula Kids adaptive narrator v2 — start bounded review batch 1 (19 Oct 2026).
-Generate at most 10 preview clips, reuse 3 previously approved samples bit-for-bit.
-Use approved Eleven v4 voice id wtqqNhC5H27DEv1Ojo4B and Indonesian language.
-Candidates only; DO NOT change production audio, official revision pointer, or original scripts.
-Render the first batch on the existing /audio/candidates/indo-v4-v1/index.html page.
+Astakula Kids adaptive narrator v2 — bounded review batch 2 (19 October 2026).
+Continue from the verified 10/104 staged MP3s and generate at most 10 more preview clips.
+Keep Eleven v4 narrator wtqqNhC5H27DEv1Ojo4B, in Indonesian.
+Respect natural prosody: slow enough for instructions, curious questions, spontaneous lively praise.
+Reuse already staged candidates; do not overwrite active MP3s or change src/data/audioRevision.json.
+Show the candidates on the existing audio sample page, not a new page.
