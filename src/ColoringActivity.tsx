@@ -150,7 +150,20 @@ export function ColoringActivity() {
     if (event.currentTarget.hasPointerCapture(event.pointerId)) event.currentTarget.releasePointerCapture(event.pointerId)
   }
 
+  // Interrupted gestures (system gesture, lost capture, touch cancellation) are
+  // not completed strokes. Remove the preview ink without affecting undo history.
+  const cancel = (event: PointerEvent<HTMLCanvasElement>) => {
+    if (pointer.current !== event.pointerId) return
+    active.current = null
+    pointer.current = null
+    if (event.currentTarget.hasPointerCapture(event.pointerId)) event.currentTarget.releasePointerCapture(event.pointerId)
+    redraw()
+  }
+
   const clear = () => {
+    if (pointer.current !== null && canvas.current?.hasPointerCapture(pointer.current)) {
+      canvas.current.releasePointerCapture(pointer.current)
+    }
     active.current = null
     pointer.current = null
     strokes.current = []
@@ -204,7 +217,8 @@ export function ColoringActivity() {
           onPointerDown={start}
           onPointerMove={move}
           onPointerUp={end}
-          onPointerCancel={end}
+          onPointerCancel={cancel}
+          onLostPointerCapture={cancel}
           onContextMenu={event => event.preventDefault()}
           onDragStart={event => event.preventDefault()}
         />
